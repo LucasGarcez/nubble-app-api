@@ -2,7 +2,6 @@ import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 
 import IBaseRepository, {
   ContextParams,
-  ModelClause,
   ModelType,
   PaginateContractType,
   PaginateParams,

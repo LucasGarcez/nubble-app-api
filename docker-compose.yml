@@ -1,39 +1,6 @@
 version: '3.8'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: base-acl-api
-    restart: always
-    ports:
-      - '8080:3333'
-    depends_on:
-      - postgres
-      - redis
-    env_file:
-      - .env
-    environment:
-      PORT: ${PORT}
-      HOST: ${HOST}
-      NODE_ENV: ${NODE_ENV}
-      APP_KEY: ${APP_KEY}
-      DRIVE_DISK: ${DRIVE_DISK}
 
-      DB_CONNECTION: ${DB_CONNECTION}
-      PG_HOST: postgres
-      PG_PORT: ${PG_PORT}
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      PG_DB_NAME: ${PG_DB_NAME}
-
-      REDIS_CONNECTION: ${REDIS_CONNECTION}
-      REDIS_HOST: redis
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-
-    networks:
-      - app-network
 
   postgres:
     image: postgres:latest
@@ -57,25 +24,3 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
-
-  redis:
-    image: redis:latest
-    restart: always
-    container_name: base-acl-redis
-    command: redis-server --requirepass redis
-    environment:
-      - REDIS_REPLICATION_MODE=master
-    ports:
-      - '6379:6379'
-    expose:
-      - 6379
-    volumes:
-      - dbredis:/var/lib/redis/data
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
-volumes:
-  database:
-  dbredis:

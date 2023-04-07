@@ -7,12 +7,12 @@ export const StoreUserSchema = schema.create({
   ]),
   last_name: schema.string({ escape: true, trim: true }, [rules.minLength(4), rules.maxLength(80)]),
   username: schema.string({ escape: true, trim: true }, [
-    rules.requiredIfNotExists('email'),
+    rules.requiredIfNotExists('username'),
     rules.unique({ table: 'users', column: 'username', whereNot: { is_deleted: true } }),
   ]),
   email: schema.string({ escape: true, trim: true }, [
     rules.email(),
-    rules.requiredIfNotExists('username'),
+    rules.requiredIfNotExists('email'),
     rules.unique({ table: 'users', column: 'email', whereNot: { is_deleted: true } }),
   ]),
   password: schema.string({ escape: true, trim: true }, [rules.confirmed()]),

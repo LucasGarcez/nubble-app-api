@@ -1,23 +1,8 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import {
-  column,
-  beforeSave,
-  computed,
-  manyToMany,
-  ManyToMany,
-  scope,
-  afterFind,
-  afterFetch,
-  afterPaginate,
-  ModelQueryBuilderContract,
-  beforeCreate,
-} from '@ioc:Adonis/Lucid/Orm'
-import { container } from 'tsyringe'
+import { column, beforeSave, computed, scope, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
 
 import BaseModel from 'App/Shared/Models/BaseModel'
-import Role from 'App/Modules/Accounts/Models/Role'
-import { RoleServices } from 'App/Modules/Accounts/Services/Admin'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -82,17 +67,6 @@ export default class User extends BaseModel {
     if (user.$dirty.password) user.password = await Hash.make(user.password)
   }
 
-  @afterFind()
-  public static async loadRolesOnGet(user: User): Promise<void> {
-    await user.load('roles', (builder) => builder.orderBy('slug'))
-  }
-
-  @afterFetch()
-  @afterPaginate()
-  public static async loadRolesOnPaginate(users: Array<User>): Promise<void> {
-    for (const user of users) await user.load('roles', (builder) => builder.orderBy('slug'))
-  }
-
   @beforeCreate()
   public static async attachUserName(user: User): Promise<void> {
     if (!user.username) {
@@ -111,14 +85,6 @@ export default class User extends BaseModel {
    * ------------------------------------------------------
    * - define User model relationships
    */
-  @manyToMany(() => Role, {
-    localKey: 'id',
-    pivotForeignKey: 'user_id',
-    relatedKey: 'id',
-    pivotRelatedForeignKey: 'role_id',
-    pivotTable: 'users_roles',
-  })
-  public roles: ManyToMany<typeof Role>
 
   /**
    * ------------------------------------------------------
@@ -136,22 +102,9 @@ export default class User extends BaseModel {
     return query.whereRaw(`(${sql})`)
   })
 
-  public static hideRoot = scope((query: ModelQueryBuilderContract<typeof Role>) =>
-    query.andWhereNot('username', 'root')
-  )
-
   /**
    * ------------------------------------------------------
    * Misc
    * ------------------------------------------------------
    */
-  public isRole(name: string): boolean {
-    return !!this.roles.find((role) => role.name === name)
-  }
-
-  public async attachRoleByName(this, name: string): Promise<void> {
-    const roleServices = container.resolve(RoleServices)
-    const { id: roleId } = await roleServices.getByName(name)
-    await this.related('roles').attach([roleId])
-  }
 }

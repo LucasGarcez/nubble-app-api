@@ -2,13 +2,12 @@ import { injectable, inject } from 'tsyringe'
 import { DateTime } from 'luxon'
 import crypto from 'crypto'
 
-import { IRole } from 'App/Modules/Accounts/Interfaces/IRole'
 import { IUser } from 'App/Modules/Accounts/Interfaces/IUser'
 import User from 'App/Modules/Accounts/Models/User'
 import { PaginateContractType } from 'App/Shared/Interfaces/BaseInterface'
 
 import NotFoundException from 'App/Shared/Exceptions/NotFoundException'
-import BadRequestException from 'App/Shared/Exceptions/BadRequestException'
+
 
 import { UsersDefault } from 'App/Modules/Accounts/Defaults'
 import DTOs = IUser.DTOs
@@ -17,9 +16,7 @@ import DTOs = IUser.DTOs
 export default class UserServices {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUser.Repository,
-    @inject('RolesRepository')
-    private rolesRepository: IRole.Repository
+    private usersRepository: IUser.Repository
   ) {}
 
   public async list({
@@ -32,7 +29,6 @@ export default class UserServices {
       perPage,
       scopes: (scopes) => {
         scopes.searchQueryScope(search)
-        scopes.hideRoot()
       },
     })
   }
@@ -44,11 +40,9 @@ export default class UserServices {
   }
 
   public async store(data: DTOs.Store): Promise<User> {
-    const { roles, ...userDto } = data
-    if (!roles) throw new BadRequestException('Role is required.')
+    const { ...userDto } = data
 
     const user = await this.usersRepository.store(userDto)
-    user.related('roles').attach(roles)
 
     return user.refresh()
   }
@@ -56,14 +50,11 @@ export default class UserServices {
   public async edit(id: string, data: DTOs.Edit): Promise<User> {
     const user = await this.usersRepository.findBy('id', id)
     if (!user) throw new NotFoundException('User not found or not available.')
-    if (user.isRole('root') || user.isRole('admin'))
-      throw new BadRequestException('Can not edit this user.')
 
-    const { roles, ...userDto } = data
+    const { ...userDto } = data
 
     user.merge(userDto)
     await this.usersRepository.save(user)
-    if (roles && roles.length > 0) user.related('roles').sync(roles)
 
     return user.refresh()
   }
@@ -71,8 +62,6 @@ export default class UserServices {
   public async delete(id: string): Promise<void> {
     const user = await this.usersRepository.findBy('id', id)
     if (!user) throw new NotFoundException('User not found or not available.')
-    if (user.isRole('root') || user.isRole('admin'))
-      throw new BadRequestException('Can not delete this user.')
 
     user.merge({
       email: `deleted:${user.email}:${crypto.randomBytes(6).toString('hex')}`,
@@ -85,12 +74,13 @@ export default class UserServices {
 
   public async storeDefault(): Promise<void> {
     for (const data of UsersDefault) {
-      const { roleName, ...userDto } = data
-      const user = await this.usersRepository.findOrStore({ username: userDto.username }, userDto)
-      const role = await this.rolesRepository.pluckBy('id', {
-        like: { column: 'name', match: roleName },
-      })
-      await user.related('roles').attach(role)
+      const { ...userDto } = data
+      if (userDto.first_name) {
+        const user = await this.usersRepository.findBy(userDto.first_name, userDto)
+        if (!user) {
+          await this.usersRepository.store(userDto)
+        }
+      }
     }
   }
 }
