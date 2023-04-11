@@ -4,7 +4,7 @@ services:
 
   postgres:
     image: postgres:latest
-    container_name: base-acl-postgres
+    container_name: coffstack-postgres
     healthcheck:
       test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U', 'postgres']
       timeout: 45s
