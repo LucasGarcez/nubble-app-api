@@ -10,7 +10,7 @@ export default class PostComments extends BaseSchema {
         table.increments('id')
 
         table.text('message').notNullable()
-        table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
+        table.uuid('user_id').unsigned().references('users.id').onDelete('CASCADE')
         table.integer('post_id').unsigned().references('posts.id').onDelete('CASCADE')
 
         table.boolean('is_deleted').defaultTo(false)

@@ -8,8 +8,6 @@ import { PaginateContractType } from 'App/Shared/Interfaces/BaseInterface'
 
 import NotFoundException from 'App/Shared/Exceptions/NotFoundException'
 
-
-import { UsersDefault } from 'App/Modules/Accounts/Defaults'
 import DTOs = IUser.DTOs
 
 @injectable()
@@ -17,7 +15,7 @@ export default class UserServices {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUser.Repository
-  ) {}
+  ) { }
 
   public async list({
     page = 1,
@@ -72,15 +70,4 @@ export default class UserServices {
     await this.usersRepository.save(user)
   }
 
-  public async storeDefault(): Promise<void> {
-    for (const data of UsersDefault) {
-      const { ...userDto } = data
-      if (userDto.first_name) {
-        const user = await this.usersRepository.findBy(userDto.first_name, userDto)
-        if (!user) {
-          await this.usersRepository.store(userDto)
-        }
-      }
-    }
-  }
 }

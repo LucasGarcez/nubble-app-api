@@ -10,12 +10,7 @@ export default class Posts extends BaseSchema {
         table.increments('id')
 
         table.text('text')
-        table
-          .integer('user_id')
-          .unsigned()
-          .references('users.id')
-          .onDelete('CASCADE')
-          .onDelete('CASCADE')
+        table.uuid('user_id').unsigned().references('users.id').onDelete('CASCADE')
 
         table.boolean('is_deleted').defaultTo(false)
 
