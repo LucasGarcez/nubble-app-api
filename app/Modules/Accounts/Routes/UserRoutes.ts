@@ -10,10 +10,12 @@ Route.group(() => {
   Route.delete('/:id', new UsersController().delete).as('users.delete')
 })
   .prefix('users')
-  .middleware(['auth', 'acl:root,Admin,user,guest'])
+  .middleware(['auth:api', 'refreshToken'])
 
 /** public routes */
 Route.group(() => {
   Route.post('/register', new AuthController().register).as('auth.register')
   Route.post('/login', new AuthController().login).as('auth.login')
 })
+
+Route.post('/refresh-token', 'AuthController.refreshToken')

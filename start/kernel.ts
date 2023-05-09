@@ -1,13 +1,4 @@
-/*
-|--------------------------------------------------------------------------
-| Application middleware
-|--------------------------------------------------------------------------
-|
-| This file is used to define middleware for HTTP requests. You can register
-| middleware as a `closure` or an IoC container binding. The bindings are
-| preferred, since they keep this file clean.
-|
-*/
+// start/kernel.ts
 
 import Server from '@ioc:Adonis/Core/Server'
 
@@ -31,13 +22,10 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 | or middleware function and key is the alias. Later you can use these
 | alias on individual routes. For example:
 |
-| { auth: () => import('App/Middleware/Auth') }
 |
-| and then use it as follows
-|
-| Route.get('dashboard', 'UserController.dashboard').middleware('auth')
-|
-*/
+*/ // start/kernel.ts
+
 Server.middleware.registerNamed({
   auth: () => import('App/Shared/Middleware/Auth'),
+  refreshToken: () => import('App/Shared/Middleware/RefreshTokenMiddleware'),
 })

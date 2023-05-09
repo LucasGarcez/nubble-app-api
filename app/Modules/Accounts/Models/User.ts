@@ -48,6 +48,12 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public is_deleted: boolean
 
+  @column()
+  public rememberMeToken?: string
+
+  @column.dateTime()
+  public rememberMeTokenCreatedAt?: DateTime
+
   @column.dateTime({ autoCreate: true, serializeAs: null })
   public created_at: DateTime
 
@@ -101,6 +107,18 @@ export default class User extends BaseModel {
 
     return query.whereRaw(`(${sql})`)
   })
+
+  public static async findByValidRefreshToken(refreshToken: string): Promise<User | null> {
+    const maxAge = 1000 * 60 * 60 * 24 * 30
+    const validFrom = DateTime.local().minus({ milliseconds: maxAge }).toSQL()
+
+    const user = await this.query()
+      .where('remember_me_token', refreshToken)
+      .andWhere('remember_me_token_created_at', '>', validFrom)
+      .first()
+
+    return user
+  }
 
   /**
    * ------------------------------------------------------

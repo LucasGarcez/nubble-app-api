@@ -26,5 +26,3 @@ Route.get('/health', async ({ response }) => {
 
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
-
-import 'App/Modules/Accounts/Routes/UserRoutes'
