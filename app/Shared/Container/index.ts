@@ -1,7 +1,7 @@
 import { container, delay } from 'tsyringe'
 
-import { IUser } from 'App/Modules/Accounts/Interfaces/IUser'
-import UsersRepository from 'App/Modules/Accounts/Repositories/UsersRepository'
+import { IUser } from 'App/Interfaces/IUser'
+import UsersRepository from 'App/Repositories/UsersRepository'
 
 container.registerSingleton<IUser.Repository>(
   'UsersRepository',

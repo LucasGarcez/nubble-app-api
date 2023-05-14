@@ -2,14 +2,12 @@ import { injectable, inject } from 'tsyringe'
 import { DateTime } from 'luxon'
 import crypto from 'crypto'
 
-import { IUser } from 'App/Modules/Accounts/Interfaces/IUser'
-import User from 'App/Modules/Accounts/Models/User'
+import { IUser } from 'App/Interfaces/IUser'
+import User from 'App/Models/User'
 import { PaginateContractType } from 'App/Shared/Interfaces/BaseInterface'
 
 import NotFoundException from 'App/Shared/Exceptions/NotFoundException'
 
-
-import { UsersDefault } from 'App/Modules/Accounts/Defaults'
 import DTOs = IUser.DTOs
 
 @injectable()
@@ -70,17 +68,5 @@ export default class UserServices {
       deleted_at: DateTime.now(),
     })
     await this.usersRepository.save(user)
-  }
-
-  public async storeDefault(): Promise<void> {
-    for (const data of UsersDefault) {
-      const { ...userDto } = data
-      if (userDto.first_name) {
-        const user = await this.usersRepository.findBy(userDto.first_name, userDto)
-        if (!user) {
-          await this.usersRepository.store(userDto)
-        }
-      }
-    }
   }
 }

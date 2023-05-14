@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 import { container } from 'tsyringe'
 
-import { UserServices } from 'App/Modules/Accounts/Services/User'
+import { UserServices } from 'App/Services/User'
 
 export default class extends BaseSchema {
   public async up() {

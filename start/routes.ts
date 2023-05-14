@@ -29,7 +29,7 @@ Route.get('/health', async ({ response }) => {
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
 
-import 'App/Modules/Accounts/Routes/UserRoutes'
+import 'App/Routes/UserRoutes'
 
 // returns swagger in YAML
 Route.get('/swagger', async () => {

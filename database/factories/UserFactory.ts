@@ -1,6 +1,6 @@
 import Factory from '@ioc:Adonis/Lucid/Factory'
 
-import User from 'App/Modules/Accounts/Models/User'
+import User from 'App/Models/User'
 
 export default Factory.define(User, ({ faker }) => {
   return {
