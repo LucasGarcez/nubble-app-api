@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import { LoginSchema, StoreUserSchema } from 'App/Validators/User'
+import { LoginSchema, StoreUserSchema } from 'App/Validators/UserValidator'
 
 import AuthorizationException from 'App/Shared/Exceptions/AuthorizationException'
 import UsersRepository from 'App/Repositories/UsersRepository'

@@ -4,7 +4,8 @@ import User from 'App//Models/User'
 
 export default class UsersRepository
   extends BaseRepository<typeof User>
-  implements IUser.Repository {
+  implements IUser.Repository
+{
   constructor() {
     super(User)
   }

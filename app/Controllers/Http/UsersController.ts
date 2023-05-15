@@ -1,9 +1,9 @@
 import { container } from 'tsyringe'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import { EditUserSchema } from 'App/Validators/User'
+import { EditUserSchema } from 'App/Validators/UserValidator'
 
-import { UserServices } from 'App/Services/User'
+import { UserServices } from 'App/Services'
 
 export default class UsersController {
   public async list({ request, response }: HttpContextContract): Promise<void> {
