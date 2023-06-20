@@ -1,8 +1,17 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, computed, scope, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  computed,
+  scope,
+  beforeCreate,
+  hasMany,
+  HasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 
 import BaseModel from 'App/Shared/Models/BaseModel'
+import Message from './Message'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -92,11 +101,22 @@ export default class User extends BaseModel {
    * - define User model relationships
    */
 
+  @hasMany(() => Message)
+  public messages: HasMany<typeof Message>
+
   /**
    * ------------------------------------------------------
    * Query Scopes
    * ------------------------------------------------------
    */
+
+  /**
+   * Get all messages received by the user
+   */
+  public async receivedMessages(): Promise<Message[]> {
+    return Message.query().where('recipient_id', this.id)
+  }
+
   public static searchQueryScope = scope((query, search) => {
     const fields = ['first_name', 'last_name', 'username', 'email']
     let sql = ''
