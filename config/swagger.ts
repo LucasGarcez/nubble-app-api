@@ -4,6 +4,7 @@ export default {
   version: '1.0.0',
   tagIndex: 2,
   ignore: ['/swagger', '/docs', '/v1', '/health'],
+  snakeCase: true,
   common: {
     parameters: {
       sortable: [

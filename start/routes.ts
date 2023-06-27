@@ -30,6 +30,8 @@ Route.get('/health', async ({ response }) => {
 })
 
 import 'App/Routes/UserRoutes'
+import 'App/Routes/PostRoutes'
+import 'App/Routes/MessageRoutes'
 
 // returns swagger in YAML
 Route.get('/swagger', async () => {

@@ -3,6 +3,10 @@
   "include": ["**/*"],
   "exclude": ["node_modules", "build"],
   "compilerOptions": {
+    "target": "ES5",
+    "lib": ["ES6"],
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
     "outDir": "build",
     "rootDir": "./",
     "sourceMap": true,
