@@ -1,10 +1,37 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nubble-app-api
+    restart: always
+    ports:
+      - '8080:3333'
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+      HOST: ${HOST}
+      NODE_ENV: ${NODE_ENV}
+      APP_KEY: ${APP_KEY}
+      DRIVE_DISK: ${DRIVE_DISK}
 
+      DB_CONNECTION: ${DB_CONNECTION}
+      PG_HOST: postgres
+      PG_PORT: ${PG_PORT}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_DB_NAME: ${PG_DB_NAME}
+
+    networks:
+      - app-network
 
   postgres:
     image: postgres:latest
-    container_name: coffstack-postgres
+    container_name: nubble-app-postgres
     healthcheck:
       test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U', 'postgres']
       timeout: 45s
@@ -24,3 +51,10 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  database:
