@@ -7,7 +7,7 @@ import {
   IndexPostCommentService,
   ShowPostCommentService,
   UpdatePostCommentService,
-} from 'App/Services/PostComment/Shared'
+} from 'App/Services/PostComment'
 import { PostCommentValidators } from 'App/Validators/PostCommentValidators'
 
 /** --- services --- */

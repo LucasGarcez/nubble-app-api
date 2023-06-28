@@ -6,7 +6,7 @@ import {
   DeletePostReactionService,
   IndexPostReactionService,
   UpdatePostReactionService,
-} from 'App/Services/PostReaction/Shared'
+} from 'App/Services/PostReaction'
 import { PostReactionValidators } from 'App/Validators/PostReactionValidators'
 
 /** services */

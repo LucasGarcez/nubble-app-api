@@ -3,7 +3,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { EditPostSchema, StorePostSchema } from 'App/Validators/PostValidator'
 
-import { PostServices } from 'App/Services/'
+import PostServices from 'App/Services/PostService'
 import { IPost } from 'App/Interfaces/IPost'
 import PostRepository from 'App/Repositories/PostsRepository'
 

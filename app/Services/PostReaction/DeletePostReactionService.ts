@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe'
 
-import { IPostReaction } from '../../../Interfaces/IPostReaction'
+import { IPostReaction } from '../../Interfaces/IPostReaction'
 
 @injectable()
 export class DeletePostReactionService {

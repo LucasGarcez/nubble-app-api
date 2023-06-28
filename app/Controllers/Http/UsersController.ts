@@ -3,7 +3,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { EditUserSchema } from 'App/Validators/UserValidator'
 
-import { UserServices } from 'App/Services'
+import UserServices from 'App/Services/UserServices'
 
 export default class UsersController {
   public async list({ request, response }: HttpContextContract): Promise<void> {
