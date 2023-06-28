@@ -13,7 +13,7 @@ import DTOs = IUser.DTOs
 @injectable()
 export default class UserServices {
   constructor(
-    @inject('UserRepository')
+    @inject('UsersRepository')
     private usersRepository: IUser.Repository
   ) {}
 

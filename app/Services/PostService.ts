@@ -5,7 +5,7 @@ import { PaginateContractType } from 'App/Shared/Interfaces/BaseInterface'
 
 import NotFoundException from 'App/Shared/Exceptions/NotFoundException'
 
-import DTOs = IPost.DTOs
+import DTOs = IPost.DTO
 import { IPost } from 'App/Interfaces/IPost'
 import Post from 'App/Models/Post'
 
@@ -44,7 +44,7 @@ export default class UserServices {
     return post.refresh()
   }
 
-  public async edit(id: string, data: DTOs.Edit): Promise<Post> {
+  public async edit(id: string, data: any): Promise<Post> {
     const post = await this.postRepository.findBy('id', id)
     if (!post) throw new NotFoundException('Post not found or not available.')
 
