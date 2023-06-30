@@ -130,7 +130,7 @@ export default class User extends BaseModel {
 
   public static async findByValidRefreshToken(refreshToken: string): Promise<User | null> {
     const maxAge = 1000 * 60 * 60 * 24 * 30
-    const validFrom = DateTime.local().minus({ milliseconds: maxAge }).toSQL()
+    const validFrom = DateTime.local().minus({ milliseconds: maxAge }).toString()
 
     const user = await this.query()
       .where('remember_me_token', refreshToken)

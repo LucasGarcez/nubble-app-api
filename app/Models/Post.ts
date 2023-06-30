@@ -34,15 +34,6 @@ export default class Post extends BaseModel {
   @column()
   public user_id: number
 
-  @column()
-  public timeline_category_id: number
-
-  @column()
-  public send_notification: boolean
-
-  @column()
-  public schedule_date: DateTime
-
   @column.dateTime({ autoCreate: true })
   public order_date: DateTime
 
@@ -56,16 +47,7 @@ export default class Post extends BaseModel {
   public is_fixed: boolean
 
   @column()
-  public fixed_date: DateTime
-
-  @column()
   public is_activated: boolean
-
-  @column()
-  public partner_id: number
-
-  @column()
-  public hub_event_id: number | null
 
   @column({ serializeAs: null })
   public is_deleted: boolean

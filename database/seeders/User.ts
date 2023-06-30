@@ -1,17 +1,23 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import UserServices from 'App/Services/UserServices'
-import { container } from 'tsyringe'
+import User from 'App/Models/User'
 
-export class UserSeed extends BaseSeeder {
+export default class UserSeeder extends BaseSeeder {
   public async run() {
-    const userServices = container.resolve(UserServices)
-
-    userServices.store({
-      first_name: 'Lucas',
-      last_name: 'Garcez',
-      email: 'lucasgarcez@gmail.com',
-      username: 'LucasGarcez',
-      password: 'lucasgar6',
-    })
+    await User.createMany([
+      {
+        first_name: 'Romain',
+        last_name: 'Lanz',
+        username: 'romainlanz',
+        email: 'virk@adonisjs.com',
+        password: 'secret',
+      },
+      {
+        first_name: 'John',
+        last_name: 'Doe',
+        username: 'johndoe',
+        email: 'romain@adonisjs.com',
+        password: 'supersecret',
+      },
+    ])
   }
 }

@@ -10,9 +10,6 @@ export default class CreateMessagesTable extends BaseSchema {
       table.integer('recipient_id').unsigned().notNullable()
       table.text('message').notNullable()
       table.timestamps(true)
-
-      table.foreign('sender_id').references('users.id').onDelete('CASCADE')
-      table.foreign('recipient_id').references('users.id').onDelete('CASCADE')
     })
   }
 

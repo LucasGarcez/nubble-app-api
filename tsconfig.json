@@ -3,7 +3,7 @@
   "include": ["**/*"],
   "exclude": ["node_modules", "build"],
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES6",
     "lib": ["ES6"],
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
