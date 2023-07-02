@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node ace serve --watch",
+    "docs": "node ace docs:generate",
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
