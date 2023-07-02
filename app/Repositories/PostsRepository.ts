@@ -1,3 +1,4 @@
+import { injectable } from 'tsyringe';
 import { IPost } from 'App/Interfaces/IPost'
 import { IPostContent } from 'App/Interfaces/IPostContent'
 import Post from 'App/Models/Post'
@@ -7,6 +8,7 @@ import BaseRepository from 'App/Shared/Repositories/BaseRepository'
 import MoreInteractedParams = IPost.DTO.MoreInteractedParams
 import { ContextParams } from 'App/Shared/Interfaces/BaseInterface'
 
+@injectable()
 export default class PostsRepository
   extends BaseRepository<typeof Post>
   implements IPost.Repository {

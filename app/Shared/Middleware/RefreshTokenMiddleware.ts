@@ -1,7 +1,7 @@
 // app/Shared/Middleware/RefreshTokenMiddleware.ts
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'app/Models/User'
+import User from 'App/Models/User'
 import { DateTime } from 'luxon'
 import { randomBytes } from 'crypto'
 

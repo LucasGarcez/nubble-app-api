@@ -20,6 +20,7 @@ export default class PostController {
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
     const search = request.input('search', '')
+
     const postsService = container.resolve(PostServices)
     const posts = await postsService.list({ page, perPage, search })
     return response.json(posts)

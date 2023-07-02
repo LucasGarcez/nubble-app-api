@@ -1,8 +1,8 @@
+import 'App/Services/container'
 import { container } from 'tsyringe'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { EditUserSchema } from 'App/Validators/UserValidator'
-
 import UserServices from 'App/Services/UserServices'
 
 export default class UsersController {

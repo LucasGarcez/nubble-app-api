@@ -1,11 +1,10 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import Logger from '@ioc:Adonis/Core/Logger'
 
 export default class UsersSchema extends BaseSchema {
   protected tableName = 'users'
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id').primary()
+      table.increments('id').primary()
 
       table.string('first_name', 80).notNullable()
       table.string('last_name', 80).notNullable()

@@ -7,8 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.uuid('follower_user_id').unsigned().references('users.id').onDelete('CASCADE')
-      table.uuid('followed_user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.integer('follower_user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.integer('followed_user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

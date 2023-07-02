@@ -11,7 +11,7 @@ export default class PostContents extends BaseSchema {
 
         table.text('content_url').notNullable()
 
-        table.uuid('user_id').unsigned().references('users.id').onDelete('CASCADE')
+        table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
         table.integer('post_id').unsigned().references('posts.id').onDelete('CASCADE')
 
         table.text('type').notNullable()
