@@ -1,0 +1,897 @@
+openapi: "3.0.0"
+info:
+  title: "api-coffstack"
+  version: "1.0.0"
+components:
+  responses:
+    Forbidden:
+      description: "Access token is missing or invalid"
+    Accepted:
+      description: "The request was accepted"
+    Created:
+      description: "The resource has been created"
+    NotFound:
+      description: "The resource has been created"
+    NotAcceptable:
+      description: "The resource has been created"
+  securitySchemes:
+    BearerAuth:
+      type: "http"
+      scheme: "bearer"
+  schemas:
+    Any:
+      description: "Any JSON object not defined as schema"
+    Message:
+      type: "object"
+      properties:
+        static_table_messages:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 657
+        sender_id:
+          type: "number"
+          example: 674
+        recipient_id:
+          type: "number"
+          example: 723
+        message:
+          type: "string"
+          example: "string"
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        sender:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        recipient:
+          $ref: "#/components/schemas/User"
+          example: "string"
+      description: "Model"
+    Post:
+      type: "object"
+      properties:
+        static_table_posts:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 863
+        text:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 988
+        order_date:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        status:
+          type: "string"
+          example: "string"
+        is_fixed:
+          type: "boolean"
+          example: true
+        is_activated:
+          type: "boolean"
+          example: true
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        contents:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostContent"
+            example: "string"
+        reactions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostReaction"
+            example: "string"
+        reaction_count:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostReaction"
+            example: "string"
+        comments:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostComment"
+            example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostComment:
+      type: "object"
+      properties:
+        static_table_post_comments:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 685
+        message:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 943
+        post_id:
+          type: "number"
+          example: 310
+        reply_comment_id:
+          type: "number"
+          example: 426
+        hub_event_id:
+          type: "number"
+          example: 231
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+        replied:
+          $ref: "#/components/schemas/PostComment"
+          example: "string"
+        replies:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostComment"
+            example: "string"
+        reactions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostCommentReaction"
+            example: "string"
+        reaction_count:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostCommentReaction"
+            example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostCommentReaction:
+      type: "object"
+      properties:
+        static_table_post_comment_reactions:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 76
+        emoji_type:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 189
+        post_comment_id:
+          type: "number"
+          example: 965
+        hub_event_id:
+          type: "number"
+          example: 545
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        comment:
+          $ref: "#/components/schemas/PostComment"
+          example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostContent:
+      type: "object"
+      properties:
+        static_table_post_contents:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 306
+        content_url:
+          type: "string"
+          example: "string"
+        content_thumb_url:
+          type: "string"
+          example: "string"
+        type:
+          type: "string"
+          example: "string"
+        subtype:
+          type: "string"
+          example: "string"
+        width:
+          type: "number"
+          example: 101
+        height:
+          type: "number"
+          example: 23
+        hub_event_id:
+          type: "number"
+          example: 296
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+      description: "Model"
+    PostReaction:
+      type: "object"
+      properties:
+        static_table_post_reactions:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 27
+        emoji_type:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 247
+        post_id:
+          type: "number"
+          example: 120
+        hub_event_id:
+          type: "number"
+          example: 377
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    User:
+      type: "object"
+      properties:
+        static_table_users:
+          type: "string"
+          example: "string"
+        id:
+          type: "string"
+          example: "string"
+        full_name:
+          type: "string"
+          example: "string"
+        first_name:
+          type: "string"
+          example: "John"
+        last_name:
+          type: "string"
+          example: "Doe"
+        username:
+          type: "string"
+          example: "string"
+        email:
+          type: "string"
+          example: "johndoe@example.com"
+          format: "email"
+        remember_me_token:
+          type: "string"
+          example: "string"
+        is_online:
+          type: "boolean"
+          example: true
+        remember_me_token_created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        messages:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Message"
+            example: "string"
+      description: "Model"
+paths:
+  /uploads/*:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "*"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json: {}
+      security: []
+  /users:
+    get:
+      summary: " (UsersController::list)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /users/{id}:
+    get:
+      summary: " (UsersController::get)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    put:
+      summary: " (UsersController::edit)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    delete:
+      summary: " (UsersController::delete)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /register:
+    post:
+      summary: " (AuthController::register)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json: {}
+      security: []
+      requestBody:
+        content:
+          application/json: {}
+  /login:
+    post:
+      summary: " (AuthController::login)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json: {}
+      security: []
+      requestBody:
+        content:
+          application/json: {}
+  /refresh-token:
+    post:
+      summary: " (AuthController::refreshToken)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json: {}
+      security: []
+      requestBody:
+        content:
+          application/json: {}
+  /user/post:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    post:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+  /user/post/{id}:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    put:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    delete:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /user/post_reaction:
+    post:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    put:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /user/post_reaction/{postId}:
+    delete:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "postId"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /user/post_comment:
+    post:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_COMMENT"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_COMMENT"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /user/post_comment/{commentId}:
+    delete:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "commentId"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST_COMMENT"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    put:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "commentId"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST_COMMENT"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "commentId"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST_COMMENT"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /user/post_comment_reaction:
+    post:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_COMMENT_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_COMMENT_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    put:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "POST_COMMENT_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+  /user/post_comment_reaction/{commentId}:
+    delete:
+      summary: " (route.ts)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "commentId"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "POST_COMMENT_REACTION"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /messages/list:
+    get:
+      summary: "Get a list of list (MessageController::index)"
+      description: ""
+      parameters: []
+      tags:
+        - "LIST"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /messages/{id}:
+    get:
+      summary: "Get a single instance of :id (MessageController::show)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+    put:
+      summary: "Update :id (MessageController::update)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+    delete:
+      summary: "Delete :id (MessageController::destroy)"
+      description: ""
+      parameters:
+        - in: "path"
+          name: "id"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":ID"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+  /messages:
+    post:
+      summary: " (MessageController::store)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json: {}
+tags:
+  - name: "*"
+    description: "Everything related to *"
+  - name: ":ID"
+    description: "Everything related to :ID"
+  - name: "POST"
+    description: "Everything related to POST"
+  - name: "POST_REACTION"
+    description: "Everything related to POST_REACTION"
+  - name: "POST_COMMENT"
+    description: "Everything related to POST_COMMENT"
+  - name: "POST_COMMENT_REACTION"
+    description: "Everything related to POST_COMMENT_REACTION"
+  - name: "LIST"
+    description: "Everything related to LIST"
