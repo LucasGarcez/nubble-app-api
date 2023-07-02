@@ -9,7 +9,7 @@ export default class UserSeeder extends BaseSeeder {
         last_name: 'Lanz',
         username: 'romainlanz',
         email: 'virk@adonisjs.com',
-        password: 'secret',
+        password: 'supersecret',
       },
       {
         first_name: 'John',

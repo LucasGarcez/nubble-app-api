@@ -8,11 +8,10 @@ import { IUser } from 'App/Interfaces/IUser'
 
 export default class AuthController {
   /**
-   * @custom
+   * @login
    * @summary Lorem ipsum dolor sit amet
-   * @paramPath provider - The login provider to be used - @enum(google, facebook, apple)
    * @responseBody 200 - {"token": "xxxxxxx"}
-   * @requestBody {"code": "xxxxxx"}
+   * @requestBody {"uid": "string", "password": "string"}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     const { uid, password } = await request.validate({ schema: LoginSchema })
@@ -31,7 +30,7 @@ export default class AuthController {
   }
 
   /**
-   * @custom
+   * @register
    * @summary Lorem ipsum dolor sit amet
    * @paramPath provider - The login provider to be used - @enum(google, facebook, apple)
    * @responseBody 200 - {"token": "xxxxxxx"}
