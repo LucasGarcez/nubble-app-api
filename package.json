@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.5",
+    "@faker-js/faker": "^8.0.2",
     "@japa/preset-adonis": "^1.2.0",
     "@japa/runner": "^2.2.2",
     "adonis-preset-ts": "^2.1.0",
@@ -68,6 +69,7 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.5.4",
     "source-map-support": "^0.5.21",
-    "tsyringe": "^4.8.0"
+    "tsyringe": "^4.8.0",
+    "uuid": "^9.0.0"
   }
 }

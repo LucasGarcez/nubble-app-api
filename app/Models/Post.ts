@@ -34,8 +34,8 @@ export default class Post extends BaseModel {
   @column()
   public user_id: number
 
-  @column.dateTime({ autoCreate: true })
-  public order_date: DateTime
+  // @column.dateTime({ autoCreate: true })
+  // public order_date: DateTime
 
   @computed()
   public get status() {
