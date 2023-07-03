@@ -6,6 +6,7 @@
     "dev": "node ace serve --watch",
     "docs": "node ace docs:generate",
     "reset": "node ace migration:rollback && node ace migration:run && node ace db:seed",
+
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
