@@ -18,6 +18,13 @@ export default class UserSeeder extends BaseSeeder {
         email: 'romain@adonisjs.com',
         password: 'supersecret',
       },
+      {
+        first_name: 'Austin',
+        last_name: 'Jack',
+        username: 'austin',
+        email: 'austin@adonisjs.com',
+        password: 'supersecret',
+      },
     ])
   }
 }
