@@ -1,0 +1,55 @@
+## Como rodar o projeto ?
+
+### 1. Instalar o docker
+https://docs.docker.com/engine/install/ubuntu/
+
+### 2. Rodar o docker
+```docker compose up```
+ou
+``` docker run -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres ```
+
+### 3. Instalar dependências
+``` npm install ```
+``` yarn install ```
+
+### Comandos Adicionais
+Gerar documentação swagger
+``` npm run docs```
+``` yarn docs```
+
+Resetar banco de dados e seeds
+``` npm run reset ```
+``` yarn reset ```
+
+### Rodar o projeto
+Criei o arquivo .env baseado no exemplo:
+```
+# App
+PORT=3333
+HOST=0.0.0.0
+NODE_ENV=development
+APP_KEY=nNXnQq0_HbeqMI3V2iibFcpfb_Ci2fJN
+DRIVE_DISK=local
+DB_CONNECTION=pg
+
+# Database
+PG_HOST=localhost
+PG_PORT=5432
+PG_USER=postgres
+PG_PASSWORD=123456
+PG_DB_NAME=api_coffstack_db_development
+
+# Redis
+REDIS_CONNECTION=local
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+
+```
+
+### Links
+URL da API
+http://localhost:3333
+
+URL da documentação
+http://localhost:3333/docs
