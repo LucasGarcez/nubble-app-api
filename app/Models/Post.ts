@@ -34,6 +34,12 @@ export default class Post extends BaseModel {
   @column()
   public user_id: number
 
+  @column({ columnName: 'image_url' })
+  public imageUrl: string
+
+  @column()
+  public author: object
+
   @computed()
   public get status() {
     if (!this.is_activated) return 'disabled'
