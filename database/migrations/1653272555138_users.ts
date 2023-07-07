@@ -11,6 +11,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('username', 50).notNullable().unique()
       table.string('email', 255).notNullable().unique()
       table.string('password', 180).notNullable()
+      table.string('profile_url')
 
       table.boolean('is_online').notNullable().defaultTo(false)
       table.boolean('is_blocked').notNullable().defaultTo(false)
