@@ -2,9 +2,9 @@ import BaseInterface from 'App/Shared/Interfaces/BaseInterface'
 import User from 'App/Models/User'
 
 export namespace IUser {
-  export interface Repository extends BaseInterface<typeof User>, Helpers {}
+  export interface Repository extends BaseInterface<typeof User>, Helpers { }
 
-  export interface Helpers {}
+  export interface Helpers { }
 
   export namespace DTOs {
     export type List = {
@@ -14,16 +14,16 @@ export namespace IUser {
     }
 
     export type Store = {
-      first_name: string
-      last_name: string
+      firstName: string
+      lastName: string
       username: string
       email: string
       password?: string
     }
 
     export type Edit = {
-      first_name?: string
-      last_name?: string
+      firstName?: string
+      lastName?: string
       username?: string
       email?: string
     }

@@ -19,12 +19,6 @@ import User from './User'
 export default class Post extends BaseModel {
   public static table = 'posts'
 
-  /**
-   * ------------------------------------------------------
-   * Columns
-   * ------------------------------------------------------
-   * - column typing struct
-   */
   @column({ isPrimary: true })
   public id: number
 
@@ -36,9 +30,6 @@ export default class Post extends BaseModel {
 
   @column({ columnName: 'image_url' })
   public imageUrl: string
-
-  @column()
-  public author: object
 
   @computed()
   public get status() {
@@ -64,13 +55,6 @@ export default class Post extends BaseModel {
   @column.dateTime({ serializeAs: null })
   public deleted_at: DateTime
 
-  /**
-   * ------------------------------------------------------
-   * Relationships
-   * ------------------------------------------------------
-   * - define posts model relationships
-   */
-  /** belongs-to relationships */
   @belongsTo(() => User, {
     foreignKey: 'user_id',
   })
@@ -89,17 +73,7 @@ export default class Post extends BaseModel {
   @hasMany(() => PostComment, { foreignKey: 'post_id' })
   public comments: HasMany<typeof PostComment>
 
-  /**
-   * ------------------------------------------------------
-   * Hooks
-   * ------------------------------------------------------
-   */
 
-  /**
-   * ------------------------------------------------------
-   * Query Scopes
-   * ------------------------------------------------------
-   */
   public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query
       .preload('reaction_count', (builder) =>

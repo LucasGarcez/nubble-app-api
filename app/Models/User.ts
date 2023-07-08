@@ -27,17 +27,20 @@ export default class User extends BaseModel {
 
   @computed()
   public get full_name() {
-    return `${this.first_name} ${this.last_name}`
+    return `${this.firstName} ${this.lastName}`
   }
 
-  @column()
-  public first_name: string
+  @column({ columnName: 'first_name' })
+  public firstName: string
 
-  @column()
-  public last_name: string
+  @column({ columnName: 'last_name' })
+  public lastName: string
 
   @column()
   public username: string
+
+  @column({ columnName: 'profile_url' })
+  public profileURL: string
 
   @column()
   public email: string

@@ -4,8 +4,8 @@ import User from 'App/Models/User'
 
 export default Factory.define(User, ({ faker }) => {
   return {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     username: faker.internet.userName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
