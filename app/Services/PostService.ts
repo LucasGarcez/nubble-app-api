@@ -25,6 +25,7 @@ export default class UserServices {
       perPage,
       scopes: (scopes) => {
         scopes.searchQueryScope(search);
+        scopes.loadUser()
       },
     });
   }

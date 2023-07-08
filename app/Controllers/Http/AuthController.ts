@@ -19,7 +19,11 @@ export default class AuthController {
     try {
       const token = await auth
         .use('api')
-        .attempt(email, password)
+        .attempt(email, password);
+
+      console.log(token)
+      console.log(email)
+      console.log(password)
 
       return response.json({ auth: token })
     } catch (error) {
