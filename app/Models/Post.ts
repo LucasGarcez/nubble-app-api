@@ -84,11 +84,23 @@ export default class Post extends BaseModel {
       )
   )
 
-  public static messageCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
+  public static likeCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
+    query .withCount('reactions', (builder) =>
+        builder.where('is_deleted', false).where('emoji_type', 'like') .as('like_count')
+      )
+  )
+  public static favoriteCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
+    query .withCount('reactions', (builder) =>
+        builder.where('is_deleted', false).where('emoji_type', 'favorite') .as('favorite_count')
+      )
+  )
+
+  public static commentCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query.withCount('comments', (builder) =>
-      builder.where('is_deleted', false).as('post_comments_count')
+      builder.where('is_deleted', false).as('comments_count')
     )
   )
+
 
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query.preload('user')

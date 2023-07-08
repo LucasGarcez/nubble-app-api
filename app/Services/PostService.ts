@@ -26,6 +26,10 @@ export default class UserServices {
       scopes: (scopes) => {
         scopes.searchQueryScope(search);
         scopes.loadUser()
+        scopes.likeCount()
+        scopes.favoriteCount()
+        scopes.commentCount()
+        
       },
     });
   }

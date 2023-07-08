@@ -12,7 +12,6 @@ export default class Posts extends BaseSchema {
         table.text('text')
         table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
         table.string('image_url')
-        table.jsonb('author')
         table.boolean('is_fixed').defaultTo(false)
         table.boolean('is_activated').defaultTo(true)
         table.boolean('is_deleted').defaultTo(false)
