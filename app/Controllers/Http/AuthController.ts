@@ -7,12 +7,6 @@ import UsersRepository from 'App/Repositories/UsersRepository'
 import { IUser } from 'App/Interfaces/IUser'
 
 export default class AuthController {
-  /**
-   * @login
-   * @summary Lorem ipsum dolor sit amet
-   * @responseBody 200 - {"token": "xxxxxxx"}
-   * @requestBody {"email": "string", "password": "string"}
-   */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     const { email, password } = request.only(['email', 'password']);
 
