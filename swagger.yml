@@ -1,6 +1,6 @@
 openapi: "3.0.0"
 info:
-  title: "api-coffstack"
+  title: "api-nubble"
   version: "1.0.0"
 components:
   responses:
@@ -29,13 +29,13 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 632
+          example: 399
         sender_id:
           type: "number"
-          example: 532
+          example: 96
         recipient_id:
           type: "number"
-          example: 685
+          example: 104
         message:
           type: "string"
           example: "string"
@@ -58,17 +58,16 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 9
+          example: 946
         text:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 659
-        order_date:
+          example: 175
+        image_url:
           type: "string"
-          example: "2021-03-23T16:13:08.489+01:00"
-          format: "date-time"
+          example: "string"
         status:
           type: "string"
           example: "string"
@@ -121,22 +120,22 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 382
+          example: 342
         message:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 737
+          example: 118
         post_id:
           type: "number"
-          example: 8
+          example: 141
         reply_comment_id:
           type: "number"
-          example: 28
+          example: 219
         hub_event_id:
           type: "number"
-          example: 842
+          example: 797
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -181,19 +180,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 934
+          example: 168
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 71
+          example: 195
         post_comment_id:
           type: "number"
-          example: 850
+          example: 857
         hub_event_id:
           type: "number"
-          example: 86
+          example: 790
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -220,7 +219,7 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 523
+          example: 471
         content_url:
           type: "string"
           example: "string"
@@ -235,13 +234,13 @@ components:
           example: "string"
         width:
           type: "number"
-          example: 744
+          example: 174
         height:
           type: "number"
-          example: 932
+          example: 827
         hub_event_id:
           type: "number"
-          example: 122
+          example: 79
         user:
           $ref: "#/components/schemas/User"
           example: "string"
@@ -257,19 +256,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 406
+          example: 326
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 750
+          example: 860
         post_id:
           type: "number"
-          example: 248
+          example: 404
         hub_event_id:
           type: "number"
-          example: 170
+          example: 238
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -302,11 +301,14 @@ components:
           example: "string"
         first_name:
           type: "string"
-          example: "John"
+          example: "string"
         last_name:
           type: "string"
-          example: "Doe"
+          example: "string"
         username:
+          type: "string"
+          example: "string"
+        profile_url:
           type: "string"
           example: "string"
         email:
@@ -420,34 +422,72 @@ paths:
             - "access"
   /register:
     post:
-      summary: " (AuthController::register)"
+      summary: "Lorem ipsum dolor sit amet (AuthController::register)"
       description: ""
-      parameters: []
+      parameters:
+        - in: "path"
+          name: "provider"
+          description: "The login provider to be used"
+          schema:
+            example: "google"
+            type: "string"
+            enum:
+              - "google"
+              - "facebook"
+              - "apple"
+          required: true
       tags: []
       responses:
-        201:
-          description: "Created"
+        200:
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: "object"
+              example:
+                token: "xxxxxxx"
+          description: "OK: {\"token\": \"xxxxxxx\"}"
       security: []
       requestBody:
         content:
-          application/json: {}
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            example:
+              static_table_users: "string"
+              id: "string"
+              full_name: "string"
+              first_name: "string"
+              last_name: "string"
+              username: "string"
+              profile_url: "string"
+              email: "johndoe@example.com"
+              remember_me_token: "string"
+              is_online: true
+              remember_me_token_created_at: "2021-03-23T16:13:08.489+01:00"
   /login:
     post:
-      summary: " (AuthController::login)"
+      summary: "Lorem ipsum dolor sit amet (AuthController::login)"
       description: ""
       parameters: []
       tags: []
       responses:
-        201:
-          description: "Created"
+        200:
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: "object"
+              example:
+                token: "xxxxxxx"
+          description: "OK: {\"token\": \"xxxxxxx\"}"
       security: []
       requestBody:
         content:
-          application/json: {}
+          application/json:
+            schema:
+              type: "object"
+            example:
+              email: "string"
+              password: "string"
   /refresh-token:
     post:
       summary: " (AuthController::refreshToken)"
