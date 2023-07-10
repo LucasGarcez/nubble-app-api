@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "docs": "node ace docs:generate",
+    "docker:db": "docker run -d --name nubble-database -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres",
     "reset": "node ace migration:rollback && node ace migration:run && node ace db:seed",
     "build": "node ace build --production",
     "start": "node server.js",
