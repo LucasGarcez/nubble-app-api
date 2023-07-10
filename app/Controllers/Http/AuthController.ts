@@ -21,10 +21,6 @@ export default class AuthController {
         .use('api')
         .attempt(email, password);
 
-      console.log(token)
-      console.log(email)
-      console.log(password)
-
       return response.json({ auth: token })
     } catch (error) {
       throw new AuthorizationException(

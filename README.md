@@ -20,19 +20,8 @@ docker run -d --name nubble-database -p 5432:5432 -e POSTGRES_PASSWORD=123456 po
 yarn
 ```
 
-#### Criar Banco de Dados
+#### Criar arquivo .env
 
-Conectar PostgreSQL através do beekeeper studio e criar DB com o nome de **nubble_db_development**
-
-#### Resetar banco de dados e rodar seeds
-
-```
-yarn reset
-```
-
-## Rodar o projeto
-
-#### Arquivo .env
 Criei um arquivo como o nome de `.env` na raiz do projeto:
 
 ```
@@ -51,6 +40,18 @@ PG_USER=postgres
 PG_PASSWORD=123456
 PG_DB_NAME=nubble_db_development
 ```
+
+#### Criar Banco de Dados
+
+Conectar PostgreSQL através do beekeeper studio e criar DB com o nome de **nubble_db_development**
+
+#### Resetar banco de dados e rodar seeds
+
+```
+yarn reset
+```
+
+## Rodar o projeto
 
 #### Ligar servidor
 Rode o comando abaixo para poder conectar a API, o terminal deve ficar aberto com o processo rodando o tempo todo.
