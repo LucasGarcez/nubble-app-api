@@ -2,15 +2,13 @@ import {
   belongsTo,
   BelongsTo,
   column,
-  hasMany,
-  HasMany,
+  
   ModelQueryBuilderContract,
   scope,
 } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
 import Post from 'App/Models/Post'
-import PostCommentReaction from 'App/Models/PostCommentReaction'
 import User from 'App/Models/User'
 import BaseModel from 'App/Shared/Models/BaseModel'
 
@@ -62,12 +60,6 @@ export default class PostComment extends BaseModel {
 
   @belongsTo(() => Post, { foreignKey: 'post_id' })
   public post: BelongsTo<typeof Post>
-
-  // @hasMany(() => PostCommentReaction, { foreignKey: 'post_comment_id' })
-  // public reactions: HasMany<typeof PostCommentReaction>
-
-  // @hasMany(() => PostCommentReaction, { foreignKey: 'post_comment_id' })
-  // public reaction_count: HasMany<typeof PostCommentReaction>
 
   /**
    * ------------------------------------------------------

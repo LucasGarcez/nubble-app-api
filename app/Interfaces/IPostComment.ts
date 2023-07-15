@@ -9,8 +9,6 @@ export namespace IPostComment {
     index(
       page: number,
       postId: number | null,
-      // postCommentId: number | null,
-      userId: number,
       perPage: number
     ): Promise<ModelPaginatorContract<PostComment>>
 

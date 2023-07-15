@@ -11,23 +11,12 @@ export default class PostCommentsRepository implements IPostComment.Repository {
   public async index(
     page: number,
     postId: number | null,
-    // postCommentId: number | null,
-    userId: number,
     perPage: number
   ): Promise<ModelPaginatorContract<PostComment>> {
     return PostComment.query()
       .withScopes((scopes) => {
         scopes.loadUser()
       })
-      // .withScopes((scopes) => {
-      //   scopes.loadAlreadyReact(userId)
-      // })
-      // .withScopes((scopes) => {
-      //   scopes.reactionCount()
-      // })
-      // .withScopes((scopes) => {
-      //   scopes.loadReplyCount()
-      // })
       .where({
         post_id: postId,
       })

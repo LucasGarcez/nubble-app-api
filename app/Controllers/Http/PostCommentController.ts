@@ -46,7 +46,6 @@ export default class PostCommentController {
   }
 
   public async index({ request, response }: HttpContextContract): Promise<void> {
-    const userId = request.input('user_id')
 
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
@@ -54,7 +53,7 @@ export default class PostCommentController {
 
 
     const indexService = container.resolve(IndexPostCommentService)
-    const postComment = await indexService.run(page, postId, userId, perPage)
+    const postComment = await indexService.run(page, postId, perPage)
 
     return response.json(postComment)
   }
