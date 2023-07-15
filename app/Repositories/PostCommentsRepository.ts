@@ -11,7 +11,7 @@ export default class PostCommentsRepository implements IPostComment.Repository {
   public async index(
     page: number,
     postId: number | null,
-    postCommentId: number | null,
+    // postCommentId: number | null,
     userId: number,
     perPage: number
   ): Promise<ModelPaginatorContract<PostComment>> {
@@ -19,18 +19,17 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .withScopes((scopes) => {
         scopes.loadUser()
       })
-      .withScopes((scopes) => {
-        scopes.loadAlreadyReact(userId)
-      })
-      .withScopes((scopes) => {
-        scopes.reactionCount()
-      })
-      .withScopes((scopes) => {
-        scopes.loadReplyCount()
-      })
+      // .withScopes((scopes) => {
+      //   scopes.loadAlreadyReact(userId)
+      // })
+      // .withScopes((scopes) => {
+      //   scopes.reactionCount()
+      // })
+      // .withScopes((scopes) => {
+      //   scopes.loadReplyCount()
+      // })
       .where({
         post_id: postId,
-        reply_comment_id: postCommentId,
       })
       .orderBy('id', 'desc')
       .paginate(page, perPage)
@@ -47,9 +46,9 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .withScopes((scopes) => {
         scopes.reactionCount()
       })
-      .withScopes((scopes) => {
-        scopes.loadReplyCount()
-      })
+      // .withScopes((scopes) => {
+      //   scopes.loadReplyCount()
+      // })
       .where('id', postCommentId)
       .first()
   }
