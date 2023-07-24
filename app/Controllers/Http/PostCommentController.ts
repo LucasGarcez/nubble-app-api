@@ -13,13 +13,13 @@ import { PostCommentValidators } from 'App/Validators/PostCommentValidators'
 /** --- services --- */
 
 export default class PostCommentController {
-  public async store({ request, response }: HttpContextContract): Promise<void> {
+  public async store({ request, response, auth }: HttpContextContract): Promise<void> {
     const data = await request.validate(PostCommentValidators.Store)
-    const currentUser = request.input('user')
+    const currentUser = auth.user
 
     const createService = container.resolve(CreatePostCommentService)
 
-    const postComment = await createService.run({ ...data, user_id: currentUser.id })
+    const postComment = await createService.run({ ...data, user_id: currentUser?.id?.toString() })
 
     return response.json(postComment)
   }

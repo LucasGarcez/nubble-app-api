@@ -29,12 +29,12 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .withScopes((scopes) => {
         scopes.loadUser()
       })
-      .withScopes((scopes) => {
-        scopes.loadAlreadyReact(userId)
-      })
-      .withScopes((scopes) => {
-        scopes.reactionCount()
-      })
+      // .withScopes((scopes) => {
+      //   scopes.loadAlreadyReact(userId)
+      // })
+      // .withScopes((scopes) => {
+      //   scopes.reactionCount()
+      // })
       // .withScopes((scopes) => {
       //   scopes.loadReplyCount()
       // })
