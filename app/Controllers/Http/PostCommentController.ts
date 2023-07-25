@@ -51,7 +51,6 @@ export default class PostCommentController {
     const perPage = request.input('per_page', 10)
     const postId = request.input('post_id', null)
 
-
     const indexService = container.resolve(IndexPostCommentService)
     const postComment = await indexService.run(page, postId, perPage)
 
