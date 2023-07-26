@@ -20,7 +20,7 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .where({
         post_id: postId,
       })
-      .orderBy('id', 'desc')
+      .orderBy('created_at', 'desc')
       .paginate(page, perPage)
   }
 

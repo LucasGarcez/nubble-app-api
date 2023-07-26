@@ -17,6 +17,7 @@ export class IndexPostReactionService {
     reactionType: string
   ): Promise<ModelPaginatorContract<PostReaction>> {
     try {
+      console.log(page, userId, reactionType)
       const reactions = await this.postReactionRepository.index(page, userId, reactionType)
 
       return reactions

@@ -1,0 +1,364 @@
+openapi: "3.0.0"
+info:
+  title: "api-nubble"
+  version: "1.0.0"
+components:
+  responses:
+    Forbidden:
+      description: "Access token is missing or invalid"
+    Accepted:
+      description: "The request was accepted"
+    Created:
+      description: "The resource has been created"
+    NotFound:
+      description: "The resource has been created"
+    NotAcceptable:
+      description: "The resource has been created"
+  securitySchemes:
+    BearerAuth:
+      type: "http"
+      scheme: "bearer"
+  schemas:
+    Any:
+      description: "Any JSON object not defined as schema"
+    Message:
+      type: "object"
+      properties:
+        static_table_messages:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 399
+        sender_id:
+          type: "number"
+          example: 96
+        recipient_id:
+          type: "number"
+          example: 104
+        message:
+          type: "string"
+          example: "string"
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        sender:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        recipient:
+          $ref: "#/components/schemas/User"
+          example: "string"
+      description: "Model"
+    Post:
+      type: "object"
+      properties:
+        static_table_posts:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 946
+        text:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 175
+        image_url:
+          type: "string"
+          example: "string"
+        status:
+          type: "string"
+          example: "string"
+        is_fixed:
+          type: "boolean"
+          example: true
+        is_activated:
+          type: "boolean"
+          example: true
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        contents:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostContent"
+            example: "string"
+        reactions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostReaction"
+            example: "string"
+        reaction_count:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostReaction"
+            example: "string"
+        comments:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostComment"
+            example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostComment:
+      type: "object"
+      properties:
+        static_table_post_comments:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 342
+        message:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 118
+        post_id:
+          type: "number"
+          example: 141
+        reply_comment_id:
+          type: "number"
+          example: 219
+        hub_event_id:
+          type: "number"
+          example: 797
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+        replied:
+          $ref: "#/components/schemas/PostComment"
+          example: "string"
+        replies:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostComment"
+            example: "string"
+        reactions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostCommentReaction"
+            example: "string"
+        reaction_count:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PostCommentReaction"
+            example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostCommentReaction:
+      type: "object"
+      properties:
+        static_table_post_comment_reactions:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 168
+        emoji_type:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 195
+        post_comment_id:
+          type: "number"
+          example: 857
+        hub_event_id:
+          type: "number"
+          example: 790
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        comment:
+          $ref: "#/components/schemas/PostComment"
+          example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    PostContent:
+      type: "object"
+      properties:
+        static_table_post_contents:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 471
+        content_url:
+          type: "string"
+          example: "string"
+        content_thumb_url:
+          type: "string"
+          example: "string"
+        type:
+          type: "string"
+          example: "string"
+        subtype:
+          type: "string"
+          example: "string"
+        width:
+          type: "number"
+          example: 174
+        height:
+          type: "number"
+          example: 827
+        hub_event_id:
+          type: "number"
+          example: 79
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+      description: "Model"
+    PostReaction:
+      type: "object"
+      properties:
+        static_table_post_reactions:
+          type: "string"
+          example: "string"
+        id:
+          type: "number"
+          example: 326
+        emoji_type:
+          type: "string"
+          example: "string"
+        user_id:
+          type: "number"
+          example: 860
+        post_id:
+          type: "number"
+          example: 404
+        hub_event_id:
+          type: "number"
+          example: 238
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        user:
+          $ref: "#/components/schemas/User"
+          example: "string"
+        post:
+          $ref: "#/components/schemas/Post"
+          example: "string"
+        serialize_extras_true:
+          type: "string"
+          example: "string"
+      description: "Model"
+    User:
+      type: "object"
+      properties:
+        static_table_users:
+          type: "string"
+          example: "string"
+        id:
+          type: "string"
+          example: "string"
+        full_name:
+          type: "string"
+          example: "string"
+        first_name:
+          type: "string"
+          example: "string"
+        last_name:
+          type: "string"
+          example: "string"
+        username:
+          type: "string"
+          example: "string"
+        profile_url:
+          type: "string"
+          example: "string"
+        email:
+          type: "string"
+          example: "johndoe@example.com"
+          format: "email"
+        remember_me_token:
+          type: "string"
+          example: "string"
+        is_online:
+          type: "boolean"
+          example: true
+        remember_me_token_created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        messages:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Message"
+            example: "string"
+      description: "Model"
+paths:
+  /uploads/*:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags:
+        - "*"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json: {}
+      security: []
+tags:
+  - name: "AUTH"
+    description: "Everything related to AUTH"
+  - name: "*"
+    description: "Everything related to *"
+  - name: "USER"
+    description: "Everything related to USER"
+  - name: "POST"
+    description: "Everything related to POST"
+  - name: "POST_REACTION"
+    description: "Everything related to POST_REACTION"
+  - name: "POST_COMMENT"
+    description: "Everything related to POST_COMMENT"
+  - name: "POST_COMMENT_REACTION"
+    description: "Everything related to POST_COMMENT_REACTION"
+  - name: "MESSAGE"
+    description: "Everything related to MESSAGE"

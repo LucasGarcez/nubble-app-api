@@ -14,3 +14,4 @@ Route.group(() => {
 })
 
 Route.post('/refresh-token', 'AuthController.refreshToken')
+// TODO: DOCUMENTATION OF THE REFRESH TOKEN ROUTE

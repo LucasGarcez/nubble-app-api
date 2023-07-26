@@ -1,0 +1,89 @@
+/messages/{id}:
+  get:
+    summary: "Get a single instance of :id (MessageController::show)"
+    description: "GET MESSAGE BY ID"
+    parameters:
+      - in: "path"
+        name: "id"
+        schema:
+          type: "string"
+        required: true
+    tags:
+      - "MESSAGE"
+    responses:
+      401:
+        description: "Unauthorized"
+      403:
+        description: "Forbidden"
+    security:
+      - BearerAuth:
+          - "access"
+  put:
+    summary: "Update :id (MessageController::update)"
+    description: "UPDATE MESSAGE BY ID"
+    parameters:
+      - in: "path"
+        name: "id"
+        schema:
+          type: "string"
+        required: true
+    tags:
+      - "MESSAGE"
+    responses:
+      401:
+        description: "Unauthorized"
+      403:
+        description: "Forbidden"
+    security:
+      - BearerAuth:
+          - "access"
+    requestBody:
+      content:
+        application/json:
+          schema:
+              $ref: "#/components/schemas/Message"
+          example:
+            message: "string"
+  delete:
+    summary: "Delete :id (MessageController::destroy)"
+    description: "DELETE MESSAGE BY ID"
+    parameters:
+      - in: "path"
+        name: "id"
+        schema:
+          type: "string"
+        required: true
+    tags:
+      - "MESSAGE"
+    responses:
+      401:
+        description: "Unauthorized"
+      403:
+        description: "Forbidden"
+    security:
+      - BearerAuth:
+          - "access"
+/messages:
+    post:
+      summary: " (MessageController::store)"
+      description: "CRETE A NEW MESSAGE"
+      parameters: []
+      tags: 
+        - "MESSAGE"
+      responses:
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Message"
+            example:
+              sender_id: "number"
+              recipient_id: "number"
+              message: "string"

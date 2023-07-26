@@ -1,0 +1,88 @@
+/register:
+    post:
+      summary: " (AuthController::register)"
+      description: "REGISTER A NEW USER"
+      parameters:
+        - in: "path"
+          name: "provider"
+          description: "The login provider to be used"
+          schema:
+            example: "google"
+            type: "string"
+            enum:
+              - "google"
+              - "facebook"
+              - "apple"
+          required: true
+      tags: 
+        - "AUTH"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                first_name: "string"
+                last_name: "string"
+                username: "string"
+                email: "johndoe@example.com"
+                id: "number"
+                full_name: "string"
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            example:
+              firstName: "string"
+              lastName: "string"
+              username: "string"
+              email: "johndoe@example.com"
+              password: "string"
+              password_confirmation: "string"
+/login:
+  post:
+    summary: " (AuthController::login)"
+    description: "LOGIN IN A EXISTED ACCOUNT"
+    parameters: []
+    tags: 
+      - "AUTH"
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              type: "object"
+            example:
+              user: {
+                type: "bearer",
+                token: "xxxxxxx"
+              }
+        description: "OK: {\"token\": \"xxxxxxx\"}"
+    security: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+          example:
+            email: "string"
+            password: "string"
+/refresh-token:
+    post:
+      summary: " (AuthController::refreshToken)"
+      description: ""
+      parameters: []
+      tags: 
+        - "AUTH"
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json: {}
+      security: []
+      requestBody:
+        content:
+          application/json: {}

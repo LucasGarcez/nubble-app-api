@@ -8,8 +8,10 @@ import { IPost } from 'App/Interfaces/IPost'
 import PostRepository from 'App/Repositories/PostsRepository'
 
 export default class PostController {
-  public async store({ request, response }: HttpContextContract): Promise<void> {
+  public async store({ request, response, auth }: HttpContextContract): Promise<void> {
     const postDto: IPost.DTO.Store = await request.validate({ schema: StorePostSchema })
+    const currentUser = auth.user
+    postDto.user_id = currentUser?.id
     const postsRepository = new PostRepository()
 
     const post = await postsRepository.store(postDto)

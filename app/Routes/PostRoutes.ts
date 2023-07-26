@@ -19,7 +19,7 @@ Route.group(() => {
    *  Post Reaction - Routes
    */
   Route.post('post_reaction', new PostReactionController().store)
-  Route.delete('post_reaction/x:postId', new PostReactionController().destroy)
+  Route.delete('post_reaction/:postId', new PostReactionController().destroy)
   Route.put('post_reaction', new PostReactionController().update)
   Route.get('post_reaction', new PostReactionController().index)
 

@@ -24,10 +24,10 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
-  public async update({ request, response, params }: HttpContextContract): Promise<void> {
+  public async update({ request, response, params, auth }: HttpContextContract): Promise<void> {
     const data = await request.validate(PostCommentValidators.Update)
     const { commentId } = params
-    const currentUser = request.input('user')
+    const currentUser = auth.user
 
     const updateService = container.resolve(UpdatePostCommentService)
     const postComment = await updateService.run({ ...data }, commentId, currentUser.id)
@@ -35,9 +35,9 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
-  public async show({ request, response, params }: HttpContextContract): Promise<void> {
+  public async show({ request, response, params, auth }: HttpContextContract): Promise<void> {
     const { commentId } = params
-    const currentUser = request.input('user')
+    const currentUser = auth.user
 
     const showService = container.resolve(ShowPostCommentService)
     const postComment = await showService.run(commentId, currentUser.id)
@@ -51,16 +51,15 @@ export default class PostCommentController {
     const perPage = request.input('per_page', 10)
     const postId = request.input('post_id', null)
 
-
     const indexService = container.resolve(IndexPostCommentService)
     const postComment = await indexService.run(page, postId, perPage)
 
     return response.json(postComment)
   }
 
-  public async destroy({ response, params, request }: HttpContextContract): Promise<void> {
+  public async destroy({ response, params, request, auth }: HttpContextContract): Promise<void> {
     const { commentId } = params
-    const currentUser = request.input('user')
+    const currentUser = auth.user
 
     const deleteService = container.resolve(DeletePostCommentService)
     await deleteService.run(commentId, currentUser.id)
