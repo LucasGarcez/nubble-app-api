@@ -1,16 +1,21 @@
 import Route from '@ioc:Adonis/Core/Route'
 
+/** Private  Routes */
 Route.group(() => {
-  Route.get('/users/', 'UsersController.list')
-  Route.get('/users/:id', 'UsersController.get').as('users.get')
-  Route.put('/users/:id', 'UsersController.edit').as('users.edit')
-  Route.delete('/users/:id', 'UsersController.delete').as('users.delete')
-}).middleware(['auth:api', 'refreshToken'])
+  /** Users - Routes */
+  Route.get('/', 'UsersController.list')
+  Route.get('/:id', 'UsersController.get').as('users.get')
+  Route.put('/:id', 'UsersController.edit').as('users.edit')
+  Route.delete('/:id', 'UsersController.delete').as('users.delete')
+})
+.prefix('/users')
+.middleware(['auth:api', 'refreshToken'])
 
-/** public routes */
+/** Public Routes */
 Route.group(() => {
+  /** Login - Routes */
   Route.post('/register', 'AuthController.register').as('auth.register')
   Route.post('/login', 'AuthController.login').as('auth.login')
+  Route.post('/forgot-password', 'AuthController.forgotPassword').as('auth.forgotPassword')
+  Route.post('/refresh-token', 'AuthController.refreshToken')
 })
-
-Route.post('/refresh-token', 'AuthController.refreshToken')

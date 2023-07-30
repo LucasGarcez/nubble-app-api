@@ -29,13 +29,13 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 399
+          example: 517
         sender_id:
           type: "number"
-          example: 96
+          example: 785
         recipient_id:
           type: "number"
-          example: 104
+          example: 122
         message:
           type: "string"
           example: "string"
@@ -58,13 +58,13 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 946
+          example: 437
         text:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 175
+          example: 588
         image_url:
           type: "string"
           example: "string"
@@ -120,22 +120,22 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 342
+          example: 692
         message:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 118
+          example: 135
         post_id:
           type: "number"
-          example: 141
+          example: 406
         reply_comment_id:
           type: "number"
-          example: 219
+          example: 833
         hub_event_id:
           type: "number"
-          example: 797
+          example: 249
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -180,19 +180,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 168
+          example: 961
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 195
+          example: 150
         post_comment_id:
           type: "number"
-          example: 857
+          example: 198
         hub_event_id:
           type: "number"
-          example: 790
+          example: 727
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -219,7 +219,7 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 471
+          example: 247
         content_url:
           type: "string"
           example: "string"
@@ -234,13 +234,13 @@ components:
           example: "string"
         width:
           type: "number"
-          example: 174
+          example: 544
         height:
           type: "number"
-          example: 827
+          example: 847
         hub_event_id:
           type: "number"
-          example: 79
+          example: 63
         user:
           $ref: "#/components/schemas/User"
           example: "string"
@@ -256,19 +256,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 326
+          example: 597
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 860
+          example: 189
         post_id:
           type: "number"
-          example: 404
+          example: 729
         hub_event_id:
           type: "number"
-          example: 238
+          example: 163
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -315,6 +315,12 @@ components:
           type: "string"
           example: "johndoe@example.com"
           format: "email"
+        temp_token:
+          type: "string"
+          example: "string"
+        temp_token_created_at:
+          $ref: "#/components/schemas/Date"
+          example: "string"
         remember_me_token:
           type: "string"
           example: "string"
@@ -422,7 +428,7 @@ paths:
             - "access"
   /register:
     post:
-      summary: "Lorem ipsum dolor sit amet (AuthController::register)"
+      summary: "Register endpoint (AuthController::register)"
       description: ""
       parameters:
         - in: "path"
@@ -461,12 +467,14 @@ paths:
               username: "string"
               profile_url: "string"
               email: "johndoe@example.com"
+              temp_token: "string"
+              temp_token_created_at: {}
               remember_me_token: "string"
               is_online: true
               remember_me_token_created_at: "2021-03-23T16:13:08.489+01:00"
   /login:
     post:
-      summary: "Lorem ipsum dolor sit amet (AuthController::login)"
+      summary: "Login endpoint (AuthController::login)"
       description: ""
       parameters: []
       tags: []
@@ -477,8 +485,18 @@ paths:
               schema:
                 type: "object"
               example:
-                token: "xxxxxxx"
-          description: "OK: {\"token\": \"xxxxxxx\"}"
+                auth:
+                  type: "string"
+                  token: "string"
+          description: "OK: { \"auth\": {\"type\": \"string\", \"token\": \"string\"}}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Unable to login, please check your credentials or try again later."
+          description: "Unauthorized: {\"message\": \"Unable to login, please check your credentials or try again later.\"}"
       security: []
       requestBody:
         content:
@@ -488,6 +506,38 @@ paths:
             example:
               email: "string"
               password: "string"
+  /forgot-password:
+    post:
+      summary: "Forgot Password endpoint (AuthController::forgotPassword)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Token sent to your email"
+          description: "OK: {\"message\": \"Token sent to your email\"}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                errors:
+                  - message: "User not found"
+          description: "Unauthorized: {\"errors\": [{\"message\": \"User not found\"}]}"
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+            example:
+              email: "string"
   /refresh-token:
     post:
       summary: " (AuthController::refreshToken)"
@@ -920,6 +970,18 @@ paths:
       requestBody:
         content:
           application/json: {}
+  /:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json: {}
+      security: []
 tags:
   - name: "*"
     description: "Everything related to *"

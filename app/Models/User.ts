@@ -48,6 +48,15 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
+  @column({ serializeAs: null })
+  public temp_password: string | null
+
+  @column()
+  public temp_token?: string | null
+
+  @column()
+  public temp_token_created_at?: Date | null
+
   @column()
   public remember_me_token?: string
 

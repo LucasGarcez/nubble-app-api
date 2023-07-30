@@ -1,4 +1,5 @@
 {
+  //"moduleResolution": "node",
   "extends": "adonis-preset-ts/tsconfig.json",
   "include": [
     "**/*"
@@ -36,7 +37,8 @@
       "@adonisjs/repl",
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/lucid",
-      "@adonisjs/auth"
+      "@adonisjs/auth",
+      "@adonisjs/mail"
     ]
   }
 }

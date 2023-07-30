@@ -40,6 +40,10 @@ export const EditUserSchema = schema.create({
 })
 
 export const LoginSchema = schema.create({
-  uid: schema.string({ trim: true }, []),
+  email: schema.string({ trim: true }, [rules.email()]),
   password: schema.string({ trim: true }),
+})
+
+export const ForgotPasswordSchema = schema.create({
+  email: schema.string({ trim: true }, [rules.email()]),
 })

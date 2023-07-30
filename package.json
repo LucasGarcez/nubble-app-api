@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "docs": "node ace docs:generate",
-    "docker:db": "docker run -d --name nubble-database -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres",
     "reset": "node ace migration:rollback && node ace migration:run && node ace db:seed",
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
-    "docker": "node ace migration:run && node ace db:seed && node server.js"
+    "docker": "docker exec -it nubble-web /bin/sh",
+    "dockerPostgres": "docker exec -it nubble-postgres /bin/sh"
   },
   "eslintConfig": {
     "extends": [
@@ -45,6 +45,7 @@
     "@faker-js/faker": "^8.0.2",
     "@japa/preset-adonis": "^1.2.0",
     "@japa/runner": "^2.2.2",
+    "@types/generate-password": "^1.5.1",
     "adonis-preset-ts": "^2.1.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
@@ -62,8 +63,12 @@
     "@adonisjs/auth": "^8.2.3",
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/lucid": "^18.3.0",
+    "@adonisjs/mail": "^8.2.0",
     "@adonisjs/repl": "^3.1.11",
+    "@adonisjs/view": "^6.2.0",
     "adonis-autoswagger": "^1.8.1",
+    "crypto": "^1.0.1",
+    "generate-password": "^1.7.0",
     "luxon": "^3.2.1",
     "pg": "^8.9.0",
     "phc-argon2": "^1.1.4",

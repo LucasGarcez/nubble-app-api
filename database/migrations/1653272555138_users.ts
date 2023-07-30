@@ -11,6 +11,10 @@ export default class UsersSchema extends BaseSchema {
       table.string('username', 50).notNullable().unique()
       table.string('email', 255).notNullable().unique()
       table.string('password', 180).notNullable()
+      table.string('temp_token').nullable()
+      table.string('temp_password', 180).nullable()
+      table.string('remember_me_token').nullable()
+
       table.string('profile_url')
 
       table.boolean('is_online').notNullable().defaultTo(false)
@@ -20,6 +24,7 @@ export default class UsersSchema extends BaseSchema {
       table.timestamp('created_at', { useTz: true }).notNullable()
       table.timestamp('updated_at', { useTz: true }).notNullable()
       table.timestamp('deleted_at', { useTz: true }).defaultTo(null)
+      table.timestamp('temp_token_created_at', { useTz: true }).nullable()
     })
   }
 

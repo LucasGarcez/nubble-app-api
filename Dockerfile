@@ -1,39 +1,26 @@
-FROM library/postgres
-COPY ./init.sql /docker-entrypoint-initdb.d/
+ARG NODE_IMAGE=node:16.20.1-alpine
 
-# Build AdonisJS
-FROM node:lts-alpine as builder
-# Set directory for all files
+FROM $NODE_IMAGE AS base
+RUN apk --no-cache add dumb-init make
+RUN mkdir -p /home/node && chown node:node /home/node
 WORKDIR /home/node
-# Copy over package.json files
-COPY package*.json ./
-# Absence of Python library.
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
-# Install all packages
+USER node
+RUN mkdir tmp
+
+FROM base AS dependencies
+COPY --chown=node:node ./package*.json ./
 RUN yarn
-# Copy over source code
-COPY . .
-# Build AdonisJS for production
-RUN yarn build
+COPY --chown=node:node . .
 
+FROM dependencies AS build
+RUN node ace build --production
 
-# Build final runtime container
-FROM node:lts-alpine
-# Set environment variables
-ENV NODE_ENV=development
-# Disable .env file loading
-# ENV ENV_SILENT=true
-# Set home dir
-WORKDIR /home/node
-# Copy over built files
-COPY --from=builder /home/node/build .
-# Install python3
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
-# Install only required packages
-RUN rm -rf node_modules && yarn install --frozen-lockfile --production
-# Install separately pino-pretty
-RUN yarn add pino-pretty
-# Expose port to outside world
-EXPOSE 3333
-# Start server up
-CMD [ "yarn", "docker" ]
+FROM base AS production
+ENV NODE_ENV=production
+ENV PORT=$PORT
+ENV HOST=0.0.0.0
+COPY --chown=node:node ./package*.json ./
+RUN yarn --production
+COPY --chown=node:node --from=build /home/node/build .
+EXPOSE $PORT
+CMD [ "dumb-init", "node", "server.js" ]

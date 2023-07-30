@@ -27,5 +27,14 @@ export namespace IUser {
       username?: string
       email?: string
     }
+
+    export type Login = {
+      email: string
+      password: string
+    }
+
+    export type ForgotPassword = {
+      email: string
+    }
   }
 }
