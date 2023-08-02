@@ -47,3 +47,7 @@ export const LoginSchema = schema.create({
 export const ForgotPasswordSchema = schema.create({
   email: schema.string({ trim: true }, [rules.email()]),
 })
+
+export const EditPasswordSchema = schema.create({
+  password: schema.string({ trim: true }, [rules.confirmed()]),
+})

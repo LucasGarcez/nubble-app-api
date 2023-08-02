@@ -25,6 +25,7 @@ export default class UsersSchema extends BaseSchema {
       table.timestamp('updated_at', { useTz: true }).notNullable()
       table.timestamp('deleted_at', { useTz: true }).defaultTo(null)
       table.timestamp('temp_token_created_at', { useTz: true }).nullable()
+      table.timestamp('remember_me_token_created_at', { useTz: true }).nullable()
     })
   }
 

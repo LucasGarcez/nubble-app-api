@@ -36,5 +36,9 @@ export namespace IUser {
     export type ForgotPassword = {
       email: string
     }
+
+    export type EditPassword = {
+      password: string
+    }
   }
 }

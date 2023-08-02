@@ -55,10 +55,7 @@ export default class User extends BaseModel {
   public temp_token?: string | null
 
   @column()
-  public temp_token_created_at?: Date | null
-
-  @column()
-  public remember_me_token?: string
+  public remember_me_token?: string | null
 
   @column()
   public is_online: boolean
@@ -70,10 +67,10 @@ export default class User extends BaseModel {
   public is_deleted: boolean
 
   @column()
-  public rememberMeToken?: string
+  public temp_token_created_at?: Date | null
 
   @column.dateTime()
-  public rememberMeTokenCreatedAt?: DateTime
+  public remember_me_token_created_at?: DateTime | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   public created_at: DateTime
