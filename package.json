@@ -9,9 +9,7 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write .",
-    "docker": "docker exec -it nubble-web /bin/sh",
-    "dockerPostgres": "docker exec -it nubble-postgres /bin/sh"
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [

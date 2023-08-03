@@ -1,17 +1,20 @@
 .PHONY: help
 .DEFAULT_GOAL = help
 
-CONTAINER = nubble-web
+CONTAINER = nubble
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
 docker-start: ## Iniciar Docker
 	docker compose up -d
 
-docker-down: ## Desligar Docker
+docker-build: ## Iniciar Docker com build
+	docker compose up -d --build
+
+docker-stop: ## Desligar Docker
 	docker compose down
 
 docker-rebuild-all: ## Rebuild em todos os containers
-	docker compose down && docker compose up -d --build
+	make docker-stop docker-build
 
 docker-rebuild-postgres: ## Rebuild Postgres
 	docker compose build --no-cache postgres
@@ -19,45 +22,63 @@ docker-rebuild-postgres: ## Rebuild Postgres
 docker-web-shell: ## Acessar container do Node
 	docker container exec -it $(CONTAINER)-web bash
 
-docker-postgres-shell: ## Acessar container do postgres
+docker-db-shell: ## Acessar container do postgres
 	docker container exec -it $(CONTAINER)-postgres bash
 
 ## —— Adonis 🎶 ———————————————————————————————————————————————————————————————
-adonis-watch: ## Iniciar Servidor Adonis
+watch: ## Iniciar Servidor Adonis
 	node ace serve --watch
 
-adonis-migration: ## Iniciar Migration Adonis
+migration: ## Executar Migrations
 	node ace migration:run
 
-adonis-migration-all: ## Iniciar Migration Adonis
-	node ace migration:rollback && node ace migration:run
+migration-docker: ## Executar Migrations no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make migration"
 
-adonis-migration-test: ## Iniciar Teste de Migration Adonis
+migration-test: ## Executar Teste de Migrations
 	node ace migration:run --dry-run
 
-adonis-rollback: ## Iniciar Rollback da Migration Adonis
+migration-test-docker: ## Executar Teste de Migrations no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make migration-test"
+
+rollback: ## Executar Rollback
 	node ace migration:rollback
 
-adonis-build: ## Iniciar Build Adonis
-	node ace build --production
+rollback-docker: ## Executar Rollback no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make rollback"
 
-adonis-seed-all: ## Executar todos os Seeds
+seed: ## Executar todos os Seeds
 	node ace db:seed
 
-adonis-seed-users: ## Executar Seed de User
+seed-docker: ## Executar todos os Seeds no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make seed"
+
+reset: ## Resetar banco de dados e rodar seeds
+	make rollback migration seed
+
+reset-docker: ## Resetar banco de dados e rodar seeds no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make reset"
+
+seed-users: ## Executar Seed de User
 	node ace db:seed --files "./database/seeders/01User.js"
 
-adonis-seed-post: ## Executar Seed de Post
+seed-post: ## Executar Seed de Post
 	node ace db:seed --files "./database/seeders/02Post.js"
 
-adonis-seed-post-reaction: ## Executar Seed de Post Reaction
+seed-post-reaction: ## Executar Seed de Post Reaction
 	node ace db:seed --files "./database/seeders/03PostReacton.js"
 
-adonis-seed-post-comment: ## Executar Seed de Post Comment
+seed-post-comment: ## Executar Seed de Post Comment
 	node ace db:seed --files "./database/seeders/04PostComment.js"
 
-adonis-generate-manifest: ## Gerar Manifest Adonis
+generate-manifest: ## Gerar Manifest Adonis
 	node ace generate:manifest
+
+generate-docs: ## Gerar Documentação Swagger
+	node ace docs:generate
+
+build: ## Iniciar Build Adonis
+	node ace build --production
 
 ## —— Outros 🛠️️ ———————————————————————————————————————————————————————————————
 

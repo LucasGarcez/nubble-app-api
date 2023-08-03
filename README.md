@@ -1,64 +1,60 @@
-## Configuração de Ambiente
+# Configuração de Ambiente
 
-#### Instalar o docker
+- [Docker][l-docker]
+- [NodeJs v18.17.0][l-nodejs]
+- [Adonis v5][l-adonis]
+- [Postgres v14][l-postgres]
+- [pgAdmin][l-pgadmin]
+- [Mailtip][l-mailpit]
+- [Adonis Auto Swagger][l-swagger]
 
-https://www.docker.com/
+---
 
-#### Instalar Beekeeper Studio (Community Edition)
+Aplicações | URL
+--- | ---
+App - NodeJs | <http://localhost:3333>
+Documentação - Swagger | <http://localhost:3333/docs>
+Postgres - pgAdmin | <http://localhost:8030>
+E-mail - Mailpit | <http://localhost:8040>
 
-https://github.com/beekeeper-studio/beekeeper-studio
+---
 
-#### Rodar o docker
+>1. A Aplicação NodeJs será executada dentro de um container docker chamado.
+>2. Este container irá rodar na porta(`3333`)  definida no arquivo .env ou também poderá ser executado localmente, vai da preferência do desenvolvedor.
+>3. Detalhes do banco de dados podem ser visualizados no arquivo `.env.exemplo`
 
-```
-docker run -d --name nubble-database -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres
-```
+---
 
-#### Instalar dependências
-
-```
+```shell script
+# Instalar dependências de desenvolvimento
 yarn
 ```
 
-#### Criar arquivo .env
-
-Criei um arquivo como o nome de `.env` na raiz do projeto:
-
-```
-# App
-PORT=3333
-HOST=0.0.0.0
-NODE_ENV=development
-APP_KEY=nNXnQq0_HbeqMI3V2iibFcpfb_Ci2fJN
-DRIVE_DISK=local
-DB_CONNECTION=pg
-
-# Database
-PG_HOST=localhost
-PG_PORT=5432
-PG_USER=postgres
-PG_PASSWORD=123456
-PG_DB_NAME=nubble_db_development
+```shell script
+# Iniciar containers
+make docker-start
 ```
 
-#### Criar Banco de Dados
-
-Conectar PostgreSQL através do beekeeper studio e criar DB com o nome de **nubble_db_development**
-
-#### Resetar banco de dados e rodar seeds
-
-```
-yarn reset
+```shell script
+# Iniciar containers com build
+make docker-build
 ```
 
-## Rodar o projeto
-
-#### Ligar servidor
-Rode o comando abaixo para poder conectar a API, o terminal deve ficar aberto com o processo rodando o tempo todo.
-```
-yarn dev
+```shell script
+# Resetar banco de dados e rodar seeds
+make reset-docker
 ```
 
-#### Acesse a documentação da API (Swagger)
+```shell script
+# Lista de todos os comandos disponíveis
+# Arquivo Makefile
+make help
+```
 
-http://localhost:3333/docs
+[l-docker]: https://www.docker.com
+[l-nodejs]: https://nodejs.org
+[l-adonis]: https://adonisjs.com
+[l-postgres]: https://hub.docker.com/_/postgres
+[l-pgadmin]: https://www.pgadmin.org
+[l-mailpit]: https://github.com/axllent/mailpit
+[l-swagger]: https://github.com/ad-on-is/adonis-autoswagger

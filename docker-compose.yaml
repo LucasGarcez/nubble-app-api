@@ -23,12 +23,12 @@ services:
 
   pgadmin:
     container_name: ${CONTAINER_NAME}-pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:7.5
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     ports:
-      - '80:80'
+      - '${PGADMIN_PORT:-8030}:80'
     depends_on:
       - postgres
     networks:
@@ -41,7 +41,7 @@ services:
       context: .
       target: dependencies
     ports:
-      - ${PORT}:${PORT}
+      - ${PORT:-3333}:${PORT:-3333}
       - 9229:9229
     env_file:
       - .env
@@ -66,7 +66,7 @@ services:
       - mailpit_storage:/data
     ports:
       - '${MAIL_PORT:-1025}:1025'
-      - '${MAILPIT_DASHBOARD_PORT:-8025}:8025'
+      - '${MAILPIT_DASHBOARD_PORT:-8040}:8025'
     networks:
       - backend
 

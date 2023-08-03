@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:16.20.1-alpine
+ARG NODE_IMAGE=node:18.17.0-alpine
 
 FROM $NODE_IMAGE AS base
 RUN apk --no-cache add dumb-init make
