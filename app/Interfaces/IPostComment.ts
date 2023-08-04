@@ -9,8 +9,6 @@ export namespace IPostComment {
     index(
       page: number,
       postId: number | null,
-      postCommentId: number | null,
-      userId: number,
       perPage: number
     ): Promise<ModelPaginatorContract<PostComment>>
 
@@ -19,6 +17,7 @@ export namespace IPostComment {
 
   export interface Helpers {
     findBy(indKey: string, findValue: any): Promise<PostComment | null>
+    findByEager(indKey: string, findValue: any): Promise<PostComment | null>
 
     findOrCreate(
       searchPayload: IPostComment.DTO.Update,

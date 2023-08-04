@@ -13,13 +13,13 @@ import { PostCommentValidators } from 'App/Validators/PostCommentValidators'
 /** --- services --- */
 
 export default class PostCommentController {
-  public async store({ request, response }: HttpContextContract): Promise<void> {
+  public async store({ request, response, auth }: HttpContextContract): Promise<void> {
     const data = await request.validate(PostCommentValidators.Store)
-    const currentUser = request.input('user')
+    const currentUser = auth.user
 
     const createService = container.resolve(CreatePostCommentService)
 
-    const postComment = await createService.run({ ...data, user_id: currentUser.id })
+    const postComment = await createService.run({ ...data, user_id: currentUser?.id })
 
     return response.json(postComment)
   }
@@ -46,25 +46,24 @@ export default class PostCommentController {
   }
 
   public async index({ request, response }: HttpContextContract): Promise<void> {
-    const currentUser = request.input('user')
 
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
     const postId = request.input('post_id', null)
-    const postCommentId = request.input('reply_comment_id', null)
 
     const indexService = container.resolve(IndexPostCommentService)
-    const postComment = await indexService.run(page, postId, postCommentId, currentUser.id, perPage)
+    const postComment = await indexService.run(page, postId, perPage)
 
     return response.json(postComment)
   }
 
-  public async destroy({ response, params, request }: HttpContextContract): Promise<void> {
+  public async destroy({ response, params,  auth }: HttpContextContract): Promise<void> {
     const { commentId } = params
-    const currentUser = request.input('user')
+
+    const currentUser = auth.user
 
     const deleteService = container.resolve(DeletePostCommentService)
-    await deleteService.run(commentId, currentUser.id)
+    await deleteService.run(commentId, currentUser?.id)
 
     return response.json({ message: 'Comment deleted.' })
   }

@@ -2,15 +2,13 @@ import {
   belongsTo,
   BelongsTo,
   column,
-  hasMany,
-  HasMany,
+  
   ModelQueryBuilderContract,
   scope,
 } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
 import Post from 'App/Models/Post'
-import PostCommentReaction from 'App/Models/PostCommentReaction'
 import User from 'App/Models/User'
 import BaseModel from 'App/Shared/Models/BaseModel'
 
@@ -36,9 +34,6 @@ export default class PostComment extends BaseModel {
   public post_id: number
 
   @column()
-  public reply_comment_id: number
-
-  @column()
   public hub_event_id: number | null
 
   @column({ serializeAs: null })
@@ -51,6 +46,7 @@ export default class PostComment extends BaseModel {
   public updated_at: DateTime
 
   @column.dateTime({ serializeAs: null })
+  
   public deleted_at: DateTime
 
   /**
@@ -64,18 +60,6 @@ export default class PostComment extends BaseModel {
 
   @belongsTo(() => Post, { foreignKey: 'post_id' })
   public post: BelongsTo<typeof Post>
-
-  @belongsTo(() => PostComment, { foreignKey: 'reply_comment_id' })
-  public replied: BelongsTo<typeof PostComment>
-
-  @hasMany(() => PostComment, { foreignKey: 'reply_comment_id' })
-  public replies: HasMany<typeof PostComment>
-
-  @hasMany(() => PostCommentReaction, { foreignKey: 'post_comment_id' })
-  public reactions: HasMany<typeof PostCommentReaction>
-
-  @hasMany(() => PostCommentReaction, { foreignKey: 'post_comment_id' })
-  public reaction_count: HasMany<typeof PostCommentReaction>
 
   /**
    * ------------------------------------------------------
@@ -91,45 +75,10 @@ export default class PostComment extends BaseModel {
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
     query.preload('user')
   })
-
-  public static loadReply = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-    query.preload('replied', (builder) => {
-      builder.withScopes((scopes) => {
-        scopes.loadUser()
-      })
-    })
+  public static loadPost = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
+    query.preload('post')
   })
 
-  public static loadReplyCount = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-    query.withCount('replies', (query) => {
-      query.where('is_deleted', false)
-    })
-  })
-
-  public static reactionCount = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-    query
-      .preload('reaction_count', (builder) => {
-        builder.select('emoji_type').groupBy('emoji_type', 'post_comment_id').count('*')
-      })
-      .withCount('reactions', (builder) => {
-        builder.where('is_deleted', false).as('post_reactions_count')
-      })
-  })
-
-  public static loadAlreadyReact = scope(
-    (query: ModelQueryBuilderContract<typeof PostComment>, userId: number) => {
-      query.withAggregate('reactions', (builder) => {
-        builder
-          .max('emoji_type')
-          .where('user_id', userId)
-          .where('is_deleted', false)
-          .groupBy('id', 'user_id', 'post_comment_id', 'emoji_type')
-          .orderBy('id', 'desc')
-          .limit(1)
-          .as('already_reacted')
-      })
-    }
-  )
 
   /**
    * ------------------------------------------------------
