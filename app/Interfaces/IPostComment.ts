@@ -17,6 +17,7 @@ export namespace IPostComment {
 
   export interface Helpers {
     findBy(indKey: string, findValue: any): Promise<PostComment | null>
+    findByEager(indKey: string, findValue: any): Promise<PostComment | null>
 
     findOrCreate(
       searchPayload: IPostComment.DTO.Update,

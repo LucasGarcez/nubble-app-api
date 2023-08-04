@@ -17,6 +17,9 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .withScopes((scopes) => {
         scopes.loadUser()
       })
+      .withScopes((scopes) => {
+        scopes.loadPost()
+      })
       .where({
         post_id: postId,
       })
@@ -29,15 +32,6 @@ export default class PostCommentsRepository implements IPostComment.Repository {
       .withScopes((scopes) => {
         scopes.loadUser()
       })
-      // .withScopes((scopes) => {
-      //   scopes.loadAlreadyReact(userId)
-      // })
-      // .withScopes((scopes) => {
-      //   scopes.reactionCount()
-      // })
-      // .withScopes((scopes) => {
-      //   scopes.loadReplyCount()
-      // })
       .where('id', postCommentId)
       .first()
   }
@@ -54,6 +48,17 @@ export default class PostCommentsRepository implements IPostComment.Repository {
 
   public async findBy(findKey: string, findValue: any): Promise<PostComment | null> {
     return PostComment.findBy(findKey, findValue)
+  }
+  public async findByEager(findKey: string, findValue: any): Promise<PostComment | null> {
+    return PostComment.query()
+    .withScopes((scopes) => {
+      scopes.loadUser()
+    })
+    .withScopes((scopes) => {
+      scopes.loadPost()
+    })
+    .where(findKey, findValue)
+    .first()
   }
 
   public async findOrCreate(

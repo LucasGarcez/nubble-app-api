@@ -19,7 +19,7 @@ export default class PostCommentController {
 
     const createService = container.resolve(CreatePostCommentService)
 
-    const postComment = await createService.run({ ...data, user_id: currentUser?.id?.toString() })
+    const postComment = await createService.run({ ...data, user_id: currentUser?.id })
 
     return response.json(postComment)
   }
@@ -57,12 +57,13 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
-  public async destroy({ response, params, request }: HttpContextContract): Promise<void> {
+  public async destroy({ response, params,  auth }: HttpContextContract): Promise<void> {
     const { commentId } = params
-    const currentUser = request.input('user')
+
+    const currentUser = auth.user
 
     const deleteService = container.resolve(DeletePostCommentService)
-    await deleteService.run(commentId, currentUser.id)
+    await deleteService.run(commentId, currentUser?.id)
 
     return response.json({ message: 'Comment deleted.' })
   }

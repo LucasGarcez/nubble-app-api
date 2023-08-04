@@ -75,45 +75,10 @@ export default class PostComment extends BaseModel {
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
     query.preload('user')
   })
+  public static loadPost = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
+    query.preload('post')
+  })
 
-  // public static loadReply = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-  //   query.preload('replied', (builder) => {
-  //     builder.withScopes((scopes) => {
-  //       scopes.loadUser()
-  //     })
-  //   })
-  // })
-
-  // public static loadReplyCount = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-  //   query.withCount('replies', (query) => {
-  //     query.where('is_deleted', false)
-  //   })
-  // })
-
-  // public static reactionCount = scope((query: ModelQueryBuilderContract<typeof PostComment>) => {
-  //   query
-  //     .preload('reaction_count', (builder) => {
-  //       builder.select('emoji_type').groupBy('emoji_type', 'post_comment_id').count('*')
-  //     })
-  //     .withCount('reactions', (builder) => {
-  //       builder.where('is_deleted', false).as('post_reactions_count')
-  //     })
-  // })
-
-  // public static loadAlreadyReact = scope(
-  //   (query: ModelQueryBuilderContract<typeof PostComment>, userId: number) => {
-  //     query.withAggregate('reactions', (builder) => {
-  //       builder
-  //         .max('emoji_type')
-  //         .where('user_id', userId)
-  //         .where('is_deleted', false)
-  //         .groupBy('id', 'user_id', 'post_comment_id', 'emoji_type')
-  //         .orderBy('id', 'desc')
-  //         .limit(1)
-  //         .as('already_reacted')
-  //     })
-  //   }
-  // )
 
   /**
    * ------------------------------------------------------
