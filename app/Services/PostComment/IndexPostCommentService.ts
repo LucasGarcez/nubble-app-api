@@ -14,16 +14,12 @@ export class IndexPostCommentService {
   public async run(
     page: number,
     postId: number | null,
-    postCommentId: number | null,
-    userId: number,
     perPage: number
   ): Promise<ModelPaginatorContract<PostComment>> {
     try {
       const comments = await this.postCommentRepository.index(
         page,
         postId,
-        postCommentId,
-        userId,
         perPage
       )
 
