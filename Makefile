@@ -10,7 +10,7 @@ docker-start: ## Iniciar Docker
 docker-build: ## Iniciar Docker com build
 	docker compose up -d --build
 
-docker-stop: ## Desligar Docker
+docker-down: ## Desligar e Remove Docker
 	docker compose down
 
 docker-rebuild-all: ## Rebuild em todos os containers

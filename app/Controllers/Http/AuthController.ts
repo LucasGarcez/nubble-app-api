@@ -28,7 +28,7 @@ export default class AuthController {
         .use('api')
         .attempt(userDto.email, userDto.password);
 
-      return response.json({ auth: token })
+      return response.json({ auth: token, user: auth.user})
     } catch (error) {
       throw new AuthorizationException(
         'Unable to login, please check your credentials or try again later.'
