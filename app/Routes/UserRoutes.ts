@@ -27,4 +27,6 @@ Route.group(() => {
   Route.post('/forgot-password', 'AuthController.forgotPassword').as('auth.forgotPassword')
   Route.get('/reset-password/:tempToken/:email', 'AuthController.resetPassword').as('auth.resetPassword')
   Route.post('/refresh-token', 'AuthController.refreshToken').as('auth.refreshToken')
+  Route.get('/validate-username', 'AuthController.isUsernameAvailable').as('auth.isUsernameAvailable')
+  Route.get('/validate-email', 'AuthController.isEmailAvailable').as('auth.isEmailAvailable')
 })

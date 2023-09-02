@@ -53,6 +53,48 @@ export default class AuthController {
     return response.json({ message: 'Logout successfully' })
   }
 
+  
+  public async isUsernameAvailable({ request, response }: HttpContextContract) {
+    try {
+      const username = request.input('username')
+
+      if (!username) {
+        return response.status(400).json({ message: 'username is required' })
+      }
+
+      // Check if the username already exists in the database
+      const existingUser = await User.findBy('username', username)
+
+      if (existingUser) {
+        return response.status(200).json({ message: 'username is not available', isAvailable: false })
+      } else {username
+        return response.status(200).json({ message: 'username is available',  isAvailable: true })
+      }
+    } catch (error) {
+      return response.status(500).json({ message: 'Internal server error' })
+    }
+  }
+  public async isEmailAvailable({ request, response }: HttpContextContract) {
+    try {
+      const email = request.input('email')
+
+      if (!email) {
+        return response.status(400).json({ message: 'email is required' })
+      }
+
+      // Check if the email already exists in the database
+      const existingUser = await User.findBy('email', email)
+
+      if (existingUser) {
+        return response.status(200).json({ message: 'email is not available' })
+      } else {email
+        return response.status(200).json({ message: 'email is available' })
+      }
+    } catch (error) {
+      return response.status(500).json({ message: 'Internal server error' })
+    }
+  }
+
   /**
    * @register
    * @summary Register endpoint

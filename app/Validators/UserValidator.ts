@@ -15,7 +15,7 @@ export const StoreUserSchema = schema.create({
     rules.requiredIfNotExists('email'),
     rules.unique({ table: 'users', column: 'email', whereNot: { is_deleted: true } }),
   ]),
-  password: schema.string({ escape: true, trim: true }, [rules.confirmed()]),
+  password: schema.string({ escape: true, trim: true },[rules.minLength(4)]),
 })
 
 export const EditUserSchema = schema.create({
