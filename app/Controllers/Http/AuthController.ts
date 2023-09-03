@@ -86,9 +86,9 @@ export default class AuthController {
       const existingUser = await User.findBy('email', email)
 
       if (existingUser) {
-        return response.status(200).json({ message: 'email is not available' })
+        return response.status(200).json({ message: 'email is not available', isAvailable: false })
       } else {email
-        return response.status(200).json({ message: 'email is available' })
+        return response.status(200).json({ message: 'email is available', isAvailable: true })
       }
     } catch (error) {
       return response.status(500).json({ message: 'Internal server error' })
