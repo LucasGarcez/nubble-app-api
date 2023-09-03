@@ -29,13 +29,13 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 399
+          example: 599
         sender_id:
           type: "number"
-          example: 96
+          example: 389
         recipient_id:
           type: "number"
-          example: 104
+          example: 706
         message:
           type: "string"
           example: "string"
@@ -58,13 +58,13 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 946
+          example: 290
         text:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 175
+          example: 608
         image_url:
           type: "string"
           example: "string"
@@ -120,22 +120,22 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 342
+          example: 376
         message:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 118
+          example: 757
         post_id:
           type: "number"
-          example: 141
+          example: 819
         reply_comment_id:
           type: "number"
-          example: 219
+          example: 336
         hub_event_id:
           type: "number"
-          example: 797
+          example: 461
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -180,19 +180,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 168
+          example: 580
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 195
+          example: 217
         post_comment_id:
           type: "number"
-          example: 857
+          example: 672
         hub_event_id:
           type: "number"
-          example: 790
+          example: 446
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -219,7 +219,7 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 471
+          example: 158
         content_url:
           type: "string"
           example: "string"
@@ -234,13 +234,13 @@ components:
           example: "string"
         width:
           type: "number"
-          example: 174
+          example: 891
         height:
           type: "number"
-          example: 827
+          example: 63
         hub_event_id:
           type: "number"
-          example: 79
+          example: 767
         user:
           $ref: "#/components/schemas/User"
           example: "string"
@@ -256,19 +256,19 @@ components:
           example: "string"
         id:
           type: "number"
-          example: 326
+          example: 536
         emoji_type:
           type: "string"
           example: "string"
         user_id:
           type: "number"
-          example: 860
+          example: 17
         post_id:
           type: "number"
-          example: 404
+          example: 498
         hub_event_id:
           type: "number"
-          example: 238
+          example: 965
         created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -315,12 +315,18 @@ components:
           type: "string"
           example: "johndoe@example.com"
           format: "email"
+        temp_token:
+          type: "string"
+          example: "string"
         remember_me_token:
           type: "string"
           example: "string"
         is_online:
           type: "boolean"
           example: true
+        temp_token_created_at:
+          $ref: "#/components/schemas/Date"
+          example: "string"
         remember_me_token_created_at:
           type: "string"
           example: "2021-03-23T16:13:08.489+01:00"
@@ -420,9 +426,69 @@ paths:
       security:
         - BearerAuth:
             - "access"
+  /profile/edit-password:
+    post:
+      summary: "Edit Password endpoint (AuthController::editPassword)"
+      description: ""
+      parameters: []
+      tags:
+        - "EDIT-PASSWORD"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Password changed successfully"
+          description: "OK: {\"message\": \"Password changed successfully\"}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                errors:
+                  - message: "User not found"
+          description: "Unauthorized: {\"errors\": [{\"message\": \"User not found\"}]}"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+            example:
+              password: "string"
+  /profile/logout:
+    get:
+      summary: "Logout endpoint (AuthController::logout)"
+      description: "OK: {\"message\": \"Logout successfully\"}"
+      parameters: []
+      tags:
+        - "LOGOUT"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Logout successfully"
+          description: "OK: {\"message\": \"Logout successfully\"}"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+      security:
+        - BearerAuth:
+            - "access"
   /register:
     post:
-      summary: "Lorem ipsum dolor sit amet (AuthController::register)"
+      summary: "Register endpoint (AuthController::register)"
       description: ""
       parameters:
         - in: "path"
@@ -461,12 +527,14 @@ paths:
               username: "string"
               profile_url: "string"
               email: "johndoe@example.com"
+              temp_token: "string"
               remember_me_token: "string"
               is_online: true
+              temp_token_created_at: {}
               remember_me_token_created_at: "2021-03-23T16:13:08.489+01:00"
   /login:
     post:
-      summary: "Lorem ipsum dolor sit amet (AuthController::login)"
+      summary: "Login endpoint (AuthController::login)"
       description: ""
       parameters: []
       tags: []
@@ -477,8 +545,18 @@ paths:
               schema:
                 type: "object"
               example:
-                token: "xxxxxxx"
-          description: "OK: {\"token\": \"xxxxxxx\"}"
+                auth:
+                  type: "string"
+                  token: "string"
+          description: "OK: { \"auth\": {\"type\": \"string\", \"token\": \"string\"}}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Unable to login, please check your credentials or try again later."
+          description: "Unauthorized: {\"message\": \"Unable to login, please check your credentials or try again later.\"}"
       security: []
       requestBody:
         content:
@@ -488,6 +566,74 @@ paths:
             example:
               email: "string"
               password: "string"
+  /forgot-password:
+    post:
+      summary: "Forgot Password endpoint (AuthController::forgotPassword)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Token sent to your email"
+          description: "OK: {\"message\": \"Token sent to your email\"}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                errors:
+                  - message: "User not found"
+          description: "Unauthorized: {\"errors\": [{\"message\": \"User not found\"}]}"
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+            example:
+              email: "string"
+  /reset-password/{tempToken}/{email}:
+    get:
+      summary: "Reset Password endpoint (AuthController::resetPassword)"
+      description: "OK: {\"message\": \"Password changed successfully\"}"
+      parameters:
+        - in: "path"
+          name: "tempToken"
+          schema:
+            type: "string"
+          required: true
+        - in: "path"
+          name: "email"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - ":TEMPTOKEN"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                message: "Password changed successfully"
+          description: "OK: {\"message\": \"Password changed successfully\"}"
+        401:
+          content:
+            application/json:
+              schema:
+                type: "object"
+              example:
+                errors:
+                  - message: "User not found"
+          description: "Unauthorized: {\"errors\": [{\"message\": \"User not found\"}]}"
+      security: []
   /refresh-token:
     post:
       summary: " (AuthController::refreshToken)"
@@ -920,11 +1066,29 @@ paths:
       requestBody:
         content:
           application/json: {}
+  /:
+    get:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json: {}
+      security: []
 tags:
   - name: "*"
     description: "Everything related to *"
   - name: ":ID"
     description: "Everything related to :ID"
+  - name: "EDIT-PASSWORD"
+    description: "Everything related to EDIT-PASSWORD"
+  - name: "LOGOUT"
+    description: "Everything related to LOGOUT"
+  - name: ":TEMPTOKEN"
+    description: "Everything related to :TEMPTOKEN"
   - name: "POST"
     description: "Everything related to POST"
   - name: "POST_REACTION"

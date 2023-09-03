@@ -1,64 +1,76 @@
 ## Configuração de Ambiente
-
-#### Instalar o docker
+### Instalar o docker
 
 https://www.docker.com/
 
-#### Instalar Beekeeper Studio (Community Edition)
+### Instalar Beekeeper Studio (Community Edition)
 
 https://github.com/beekeeper-studio/beekeeper-studio
 
-#### Rodar o docker
 
-```
-docker run -d --name nubble-database -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres
-```
+### Iniciar Backend
 
-#### Instalar dependências
+**1. Criar arquivo .env** 
+Criei um arquivo como o nome de `.env` na raiz do projeto. Dentro desse arquivo, copie e cole o conteúdo que está dentro do arquivo [.env.example](./.env.example).
 
-```
+**2. Instalar dependências**
+```shell script
+# Instalar dependências de desenvolvimento
 yarn
 ```
 
-#### Criar arquivo .env
-
-Criei um arquivo como o nome de `.env` na raiz do projeto:
-
+**2. Iniciar Docker Containers**
+```shell script
+# Iniciar containers
+make docker-start
 ```
-# App
-PORT=3333
-HOST=0.0.0.0
-NODE_ENV=development
-APP_KEY=nNXnQq0_HbeqMI3V2iibFcpfb_Ci2fJN
-DRIVE_DISK=local
-DB_CONNECTION=pg
+Abra o Docker Dashboard para verificar se todos os containers foram criados.
+![docker images](./docs/images/docker-containers.png)
+**3. Conectar Banco de dados**
+Chegou a hora de conectar o banco de dados. Abra o Beekeeper Studio e crie uma nova conexão.
 
-# Database
-PG_HOST=localhost
-PG_PORT=5432
-PG_USER=postgres
-PG_PASSWORD=123456
-PG_DB_NAME=nubble_db_development
-```
+- Selecione Postgres
+- Mantenha Host (localhost) e Port padrão (5432)
+- Credenciais
+     Campo | Valor
+    --- | ---
+    User | nubble
+    Password | nubble
+    Default Database | nubble_db_development
+- Dê um nove para a conexão. Ex "Nubble" e pressione "Save".
 
-#### Criar Banco de Dados
+**4. Criar tabelas e popular o banco de dados**
 
-Conectar PostgreSQL através do beekeeper studio e criar DB com o nome de **nubble_db_development**
-
-#### Resetar banco de dados e rodar seeds
-
-```
-yarn reset
+```shell script
+# Resetar banco de dados e rodar seeds
+make reset-docker
 ```
 
-## Rodar o projeto
+**5. Pronto! A Nubble API está pronta para uso**
 
-#### Ligar servidor
-Rode o comando abaixo para poder conectar a API, o terminal deve ficar aberto com o processo rodando o tempo todo.
-```
-yarn dev
-```
+Aplicações | URL
+--- | ---
+App - NodeJs | <http://localhost:3333>
+Documentação - Swagger | <http://localhost:3333/docs>
+Postgres - pgAdmin | <http://localhost:8030>
+E-mail - Mailpit | <http://localhost:8040>
 
-#### Acesse a documentação da API (Swagger)
+### Tecnologias Utilizada
 
-http://localhost:3333/docs
+
+- [Docker][l-docker]
+- [NodeJs v18.17.0][l-nodejs]
+- [Adonis v5][l-adonis]
+- [Postgres v14][l-postgres]
+- [pgAdmin][l-pgadmin]
+- [Mailtip][l-mailpit]
+- [Adonis Auto Swagger][l-swagger]
+
+
+[l-docker]: https://www.docker.com
+[l-nodejs]: https://nodejs.org
+[l-adonis]: https://adonisjs.com
+[l-postgres]: https://hub.docker.com/_/postgres
+[l-pgadmin]: https://www.pgadmin.org
+[l-mailpit]: https://github.com/axllent/mailpit
+[l-swagger]: https://github.com/ad-on-is/adonis-autoswagger

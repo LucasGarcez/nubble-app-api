@@ -13,6 +13,10 @@ import 'App/Routes/UserRoutes'
 import 'App/Routes/PostRoutes'
 import 'App/Routes/MessageRoutes'
 
+Route.get('/', () => {
+  return 'Hello world'
+})
+
 Route.get('/swagger', async () => {
   return AutoSwagger.docs(Route.toJSON(), swagger)
 })
