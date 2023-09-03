@@ -8,14 +8,6 @@ https://www.docker.com/
 https://github.com/beekeeper-studio/beekeeper-studio
 
 
-- [Docker][l-docker]
-- [NodeJs v18.17.0][l-nodejs]
-- [Adonis v5][l-adonis]
-- [Postgres v14][l-postgres]
-- [pgAdmin][l-pgadmin]
-- [Mailtip][l-mailpit]
-- [Adonis Auto Swagger][l-swagger]
-
 ### Iniciar Backend
 
 **1. Criar arquivo .env** 
@@ -62,6 +54,17 @@ App - NodeJs | <http://localhost:3333>
 Documentação - Swagger | <http://localhost:3333/docs>
 Postgres - pgAdmin | <http://localhost:8030>
 E-mail - Mailpit | <http://localhost:8040>
+
+### Tecnologias Utilizada
+
+
+- [Docker][l-docker]
+- [NodeJs v18.17.0][l-nodejs]
+- [Adonis v5][l-adonis]
+- [Postgres v14][l-postgres]
+- [pgAdmin][l-pgadmin]
+- [Mailtip][l-mailpit]
+- [Adonis Auto Swagger][l-swagger]
 
 
 [l-docker]: https://www.docker.com
