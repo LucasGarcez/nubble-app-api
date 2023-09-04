@@ -26,6 +26,7 @@ make docker-start
 ```
 Abra o Docker Dashboard para verificar se todos os containers foram criados.
 ![docker images](./docs/images/docker-containers.png)
+
 **3. Conectar Banco de dados**
 Chegou a hora de conectar o banco de dados. Abra o Beekeeper Studio e crie uma nova conexão.
 
