@@ -16,9 +16,10 @@ export default class AuthController {
   /**
    * @login
    * @summary Login endpoint
-   * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
+   * @responseBody 200 - { "auth": {"type": "bearer", "token": "string"}}
+   * @responseBody 422 - { "errors": [{"rule": "required", "field": "email", "message": "required validation failed"}]}
    * @responseBody 401 - {"message": "Unable to login, please check your credentials or try again later."}
-   * @requestBody {"email": "string", "password": "string"}
+   * @requestBody {"email": "mariajulia@coffstack.com", "password": "password"}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     try {
@@ -40,6 +41,7 @@ export default class AuthController {
    * @logout
    * @summary Logout endpoint
    * @responseBody 200 - {"message": "Logout successfully"}
+   * @responseBody 401 - {"errors": [{"message": "E_UNAUTHORIZED_ACCESS: Unauthorized access"}]}
    */
   public async logout({ auth, response }: HttpContextContract): Promise<void> {
     const userId: any = auth.user?.id
@@ -53,7 +55,14 @@ export default class AuthController {
     return response.json({ message: 'Logout successfully' })
   }
 
-  
+  /**
+   * @isUsernameAvailable
+   * @summary ValidateUsername endpoint
+   * @responseBody 200 - {"message": ["username is not available", "OR", "username is available"], "isAvailable": ["false","OR", "true"]}
+   * @responseBody 400 - {"message": "username is required"}
+   * @responseBody 500 - {"message": "Internal server error"}
+   * @requestBody {"username": "lucas123"}
+   */
   public async isUsernameAvailable({ request, response }: HttpContextContract) {
     try {
       const username = request.input('username')
@@ -99,8 +108,9 @@ export default class AuthController {
    * @register
    * @summary Register endpoint
    * @paramPath provider - The login provider to be used - @enum(google, facebook, apple)
-   * @responseBody 200 - {"token": "xxxxxxx"}
-   * @requestBody <User>
+   * @responseBody 200 - {"first_name": "Lucas","last_name": "Garcez","username": "lucas123","email": "lucas123@gmail.com","full_name": "Lucas Garcez","id": "number"}
+   * @responseBody 422 - { "errors": [{"rule": "unique", "field": "username", "message": "unique validation failure"}]}
+   * @requestBody {"firstName": "Lucas","lastName": "Garcez","username": "lucas123","email": "lucas123@gmail.com","password": "password","password_confirmation": "password"}
    */
   public async register({ request, response }: HttpContextContract): Promise<void> {
     const userDto: IUser.DTOs.Store = await request.validate({ schema: StoreUserSchema })
