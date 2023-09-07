@@ -54,8 +54,8 @@ export default class User extends BaseModel {
   @column()
   public temp_token?: string | null
 
-  @column()
-  public remember_me_token?: string | null
+  @column({ columnName: 'remember_me_token' })
+  public rememberMeToken: string | null
 
   @column()
   public is_online: boolean
@@ -68,9 +68,6 @@ export default class User extends BaseModel {
 
   @column()
   public temp_token_created_at?: Date | null
-
-  @column.dateTime()
-  public remember_me_token_created_at?: DateTime | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   public created_at: DateTime
@@ -138,12 +135,9 @@ export default class User extends BaseModel {
   })
 
   public static async findByValidRefreshToken(refreshToken: string): Promise<User | null> {
-    const maxAge = 1000 * 60 * 60 * 24 * 30
-    const validFrom = DateTime.local().minus({ milliseconds: maxAge }).toString()
 
     const user = await this.query()
       .where('remember_me_token', refreshToken)
-      .andWhere('remember_me_token_created_at', '>', validFrom)
       .first()
 
     return user

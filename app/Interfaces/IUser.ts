@@ -30,7 +30,8 @@ export namespace IUser {
 
     export type Login = {
       email: string
-      password: string
+      password: string,
+      rememberMe?: boolean
     }
 
     export type ForgotPassword = {

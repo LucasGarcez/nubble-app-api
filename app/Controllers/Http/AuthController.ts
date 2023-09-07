@@ -11,14 +11,17 @@ import User from 'App/Models/User'
 import crypto from 'crypto'
 import generator from 'generate-password'
 import { isAfter, addHours } from 'date-fns'
+import Database from '@ioc:Adonis/Lucid/Database'
+import { OpaqueTokenContract } from '@ioc:Adonis/Addons/Auth'
 
 export default class AuthController {
+
   /**
    * @login
    * @summary Login endpoint
    * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
    * @responseBody 401 - {"message": "Unable to login, please check your credentials or try again later."}
-   * @requestBody {"email": "string", "password": "string"}
+   * @requestBody {"email": "string", "password": "string", "rememberMe": "boolean"}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     try {
@@ -26,9 +29,19 @@ export default class AuthController {
 
       const token = await auth
         .use('api')
-        .attempt(userDto.email, userDto.password);
+        .attempt(
+          userDto.email,
+          userDto.password,
+          userDto.rememberMe ? {
+            expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30 days'
+          } : {
+            expiresIn: '7 days'
+          })
 
-      return response.json({ auth: token, user: auth.user})
+        const user = auth.use('api').user as User
+        const userPayload = await this.generateRememberToken(user, token)
+
+      return response.json({ auth: token.toJSON(), user: userPayload})
     } catch (error) {
       throw new AuthorizationException(
         'Unable to login, please check your credentials or try again later.'
@@ -42,18 +55,25 @@ export default class AuthController {
    * @responseBody 200 - {"message": "Logout successfully"}
    */
   public async logout({ auth, response }: HttpContextContract): Promise<void> {
-    const userId: any = auth.user?.id
-    const user = await User.query().where('id', userId).firstOrFail()
-    user.remember_me_token = null
-    user.save()
+    const user = auth.use('api').user as User
+    this.generateRememberToken(user, null)
 
     await auth.use('api').revoke()
+    await Database.from('api_tokens').where('user_id', user.id).delete()
     auth.use('api').isLoggedOut
 
     return response.json({ message: 'Logout successfully' })
   }
 
-  
+  /**
+   * @isUsernameAvailable
+   * @summary Check if username is available endpoint
+   * @requestBody {"username": "string"}
+   * @responseBody 400 - {"message": "username is required"}
+   * @responseBody 200 - {"message": "username is not available", "isAvailable": false}
+   * @responseBody 200 - {"message": "username is available", "isAvailable": true}
+   * @responseBody 500 - {"message": "Internal server error"}
+   */
   public async isUsernameAvailable({ request, response }: HttpContextContract) {
     try {
       const username = request.input('username')
@@ -74,6 +94,16 @@ export default class AuthController {
       return response.status(500).json({ message: 'Internal server error' })
     }
   }
+
+  /**
+   * @isEmailAvailable
+   * @summary Check if email is available endpoint
+   * @requestBody {"email": "string"}
+   * @responseBody 400 - {"message": "email is required"}
+   * @responseBody 200 - {"message": "email is not available", "isAvailable": false}
+   * @responseBody 200 - {"message": "email is available", "isAvailable": true}
+   * @responseBody 500 - {"message": "Internal server error"}
+   */
   public async isEmailAvailable({ request, response }: HttpContextContract) {
     try {
       const email = request.input('email')
@@ -247,4 +277,33 @@ export default class AuthController {
     return response.status(200).json({ message: 'Password changed successfully' })
   }
 
+  /**
+   * @refreshToken
+   * @summary Refresh Token endpoint
+   * @responseBody 200 - {"message": "Password changed successfully"}
+   * @responseBody 401 - {"errors": [{"message": "User not found"}]}
+   */
+  public async refreshToken({ auth, response }: HttpContextContract): Promise<void> {
+    const user : User = auth.use('api').user as User
+    const token = await auth.use('api').generate(user, {
+      expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30 days'
+    })
+
+    const userPayload = await this.generateRememberToken(user, token)
+
+    return response.json({ auth: token.toJSON(), user: userPayload})
+  }
+
+  /**
+   * Generate remember token
+   * @param user
+   * @param token
+   * @returns User
+   */
+  private async generateRememberToken(user: User, token: OpaqueTokenContract<User>|null): Promise<User> {
+    user.rememberMeToken = token ? token.toJSON().token : null
+    user.save()
+
+    return user
+  }
 }

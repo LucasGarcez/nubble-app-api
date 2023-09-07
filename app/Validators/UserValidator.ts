@@ -42,6 +42,7 @@ export const EditUserSchema = schema.create({
 export const LoginSchema = schema.create({
   email: schema.string({ trim: true }, [rules.email()]),
   password: schema.string({ trim: true }),
+  rememberMe: schema.boolean.optional(),
 })
 
 export const ForgotPasswordSchema = schema.create({
