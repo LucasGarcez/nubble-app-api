@@ -12,7 +12,7 @@ import crypto from 'crypto'
 import generator from 'generate-password'
 import { isAfter, addHours } from 'date-fns'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { OpaqueTokenContract } from '@ioc:Adonis/Addons/Auth'
+import { JWTTokenContract } from '@ioc:Adonis/Addons/Jwt'
 
 export default class AuthController {
 
@@ -27,21 +27,23 @@ export default class AuthController {
     try {
       const userDto: IUser.DTOs.Login = await request.validate({ schema: LoginSchema })
 
-      const token = await auth
-        .use('api')
+      const jwt = await auth
+        .use('jwt')
         .attempt(
           userDto.email,
           userDto.password,
           userDto.rememberMe ? {
-            expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30 days'
+            expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
+            refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
           } : {
-            expiresIn: '7 days'
+            expiresIn: '10m',
+            refreshTokenExpiresIn: '10d'
           })
 
-        const user = auth.use('api').user as User
-        const userPayload = await this.generateRememberToken(user, token)
+      const user = auth.use('jwt').user as User
+      const userPayload = await this.generateRememberToken(user, jwt)
 
-      return response.json({ auth: token.toJSON(), user: userPayload})
+      return response.json({ auth: jwt, user: userPayload})
     } catch (error) {
       throw new AuthorizationException(
         'Unable to login, please check your credentials or try again later.'
@@ -55,14 +57,25 @@ export default class AuthController {
    * @responseBody 200 - {"message": "Logout successfully"}
    */
   public async logout({ auth, response }: HttpContextContract): Promise<void> {
-    const user = auth.use('api').user as User
-    this.generateRememberToken(user, null)
+    try {
+      const user = auth.use('jwt').user as User
 
-    await auth.use('api').revoke()
-    await Database.from('api_tokens').where('user_id', user.id).delete()
-    auth.use('api').isLoggedOut
+      await auth.use('jwt').revoke({
+        refreshToken: user?.rememberMeToken ?? '',
+      })
 
-    return response.json({ message: 'Logout successfully' })
+      this.generateRememberToken(user, null)
+
+      await Database.from('jwt_tokens').where('user_id', user.id).delete()
+      auth.use('jwt').isLoggedOut
+
+      return response.json({ message: 'Logout successfully' })
+
+    } catch (error) {
+      throw new AuthorizationException(
+        'Unable to logout, please try again later.'
+      )
+    }
   }
 
   /**
@@ -280,28 +293,38 @@ export default class AuthController {
   /**
    * @refreshToken
    * @summary Refresh Token endpoint
-   * @responseBody 200 - {"message": "Password changed successfully"}
-   * @responseBody 401 - {"errors": [{"message": "User not found"}]}
+   * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
+   * @responseBody 401 - {"errors": [{"message": "Unable to refresh token, please try again later."}]}
+   * @requestBody {"refreshToken": "string"}
    */
-  public async refreshToken({ auth, response }: HttpContextContract): Promise<void> {
-    const user : User = auth.use('api').user as User
-    const token = await auth.use('api').generate(user, {
-      expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30 days'
-    })
+  public async refreshToken({ auth, response, request }: HttpContextContract): Promise<void> {
+    try {
+      const refreshToken = request.input("refreshToken");
 
-    const userPayload = await this.generateRememberToken(user, token)
+      const jwt = await auth.use('jwt').loginViaRefreshToken(refreshToken, {
+        expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
+        refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
+      });
 
-    return response.json({ auth: token.toJSON(), user: userPayload})
+      const user = auth.use('jwt').user as User
+      const userPayload = await this.generateRememberToken(user, jwt)
+
+      return response.json({ auth: jwt, user: userPayload})
+    } catch (error) {
+      throw new AuthorizationException(
+        'Unable to refresh token, please try again later.'
+      )
+    }
   }
 
   /**
    * Generate remember token
    * @param user
-   * @param token
+   * @param jwt
    * @returns User
    */
-  private async generateRememberToken(user: User, token: OpaqueTokenContract<User>|null): Promise<User> {
-    user.rememberMeToken = token ? token.toJSON().token : null
+  private async generateRememberToken(user: User, jwt: JWTTokenContract<User>|null): Promise<User> {
+    user.rememberMeToken = jwt?.toJSON().refreshToken.toString() ?? null
     user.save()
 
     return user

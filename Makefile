@@ -10,10 +10,13 @@ docker-start: ## Iniciar Docker
 docker-build: ## Iniciar Docker com build
 	docker compose up -d --build
 
-docker-down: ## Desligar e Remove Docker
+docker-stop: ## Desligar e Remove Docker
 	docker compose down
 
-docker-rebuild-all: ## Rebuild em todos os containers
+docker-restart: ## Reinicia todos os containers
+	make docker-stop docker-start
+
+docker-rebuild: ## Rebuild em todos os containers
 	make docker-stop docker-build
 
 docker-rebuild-postgres: ## Rebuild Postgres

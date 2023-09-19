@@ -23,6 +23,12 @@ export default Env.rules({
   DRIVE_DISK: Env.schema.enum(['local'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
 
+  /** JWT */
+  JWT_PUBLIC_KEY: Env.schema.string(),
+  JWT_PRIVATE_KEY: Env.schema.string(),
+  TOKEN_EXPIRES_IN: Env.schema.string(),
+  REFRESH_TOKEN_EXPIRES_IN: Env.schema.string(),
+
   /** Database */
   PG_HOST: Env.schema.string({ format: 'host' }),
   PG_PORT: Env.schema.number(),

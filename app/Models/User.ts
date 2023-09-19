@@ -134,15 +134,6 @@ export default class User extends BaseModel {
     return query.whereRaw(`(${sql})`)
   })
 
-  public static async findByValidRefreshToken(refreshToken: string): Promise<User | null> {
-
-    const user = await this.query()
-      .where('remember_me_token', refreshToken)
-      .first()
-
-    return user
-  }
-
   /**
    * ------------------------------------------------------
    * Misc
