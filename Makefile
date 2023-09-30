@@ -4,6 +4,11 @@
 CONTAINER = nubble
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
+docker-install: ## Iniciar projeto com Docker
+	cp .env.example .env \
+	&& make docker-build migration-docker reset-docker generate-docs-docker \
+	&& yarn
+
 docker-start: ## Iniciar Docker
 	docker compose up -d
 
@@ -79,6 +84,9 @@ generate-manifest: ## Gerar Manifest Adonis
 
 generate-docs: ## Gerar Documentação Swagger
 	node ace docs:generate
+
+generate-docs-docker: ## Gerar Documentação Swagger no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make generate-docs"
 
 build: ## Iniciar Build Adonis
 	node ace build --production
