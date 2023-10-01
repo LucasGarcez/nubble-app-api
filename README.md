@@ -1,33 +1,45 @@
-## Configuração de Ambiente
-### Instalar o docker
+# Configuração de Ambiente
+## Instalar o docker
 
 https://www.docker.com/
 
-### Instalar Beekeeper Studio (Community Edition)
+## Instalar Beekeeper Studio (Community Edition)
 
 https://github.com/beekeeper-studio/beekeeper-studio
 
+## Iniciar Backend
+Todas as etapas para criar o backend estão reunidas em um único comando: 
 
-### Iniciar Backend
-
-**1. Criar arquivo .env** 
-Criei um arquivo como o nome de `.env` na raiz do projeto. Dentro desse arquivo, copie e cole o conteúdo que está dentro do arquivo [.env.example](./.env.example).
-
-**2. Instalar dependências**
+#### 1. Criar arquivo .env
 ```shell script
 # Instalar dependências de desenvolvimento
+maker docker-install
+```
+O comando acima é um atalho para realizar as seguintes tarefas:
+```shell script
+# Command 1: Copy .env.example to .env
+cp .env.example .env
+
+# Command 2: Build Docker containers
+make docker-build
+
+# Command 3: Run database migrations in Docker
+make migration-docker
+
+# Command 4: Reset Database and run seeds
+make reset-docker
+
+# Command 5: Install project dependencies with Yarn
 yarn
+
+# Command 6: Generate Swagger documentation
+make generate-docs
 ```
 
-**2. Iniciar Docker Containers**
-```shell script
-# Iniciar containers
-make docker-start
-```
 Abra o Docker Dashboard para verificar se todos os containers foram criados.
 ![docker images](./docs/images/docker-containers.png)
 
-**3. Conectar Banco de dados**
+#### 2. Conectar Banco de dados
 Chegou a hora de conectar o banco de dados. Abra o Beekeeper Studio e crie uma nova conexão.
 
 - Selecione Postgres
@@ -40,14 +52,13 @@ Chegou a hora de conectar o banco de dados. Abra o Beekeeper Studio e crie uma n
     Default Database | nubble_db_development
 - Dê um nove para a conexão. Ex "Nubble" e pressione "Save".
 
-**4. Criar tabelas e popular o banco de dados**
+
+#### 3. Rodar Servidor
 
 ```shell script
-# Resetar banco de dados e rodar seeds
-make reset-docker
+yarn dev
 ```
-
-**5. Pronto! A Nubble API está pronta para uso**
+**Pronto! A Nubble API está pronta para ser utilizada! 🥳**
 
 Aplicações | URL
 --- | ---
