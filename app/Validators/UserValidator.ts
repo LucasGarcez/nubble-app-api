@@ -52,3 +52,11 @@ export const ForgotPasswordSchema = schema.create({
 export const EditPasswordSchema = schema.create({
   password: schema.string({ trim: true }, [rules.confirmed()]),
 })
+
+export const ForgotPasswordSchema = schema.create({
+  email: schema.string({ trim: true }, [rules.email()]),
+})
+
+export const EditPasswordSchema = schema.create({
+  password: schema.string({ trim: true }, [rules.confirmed()]),
+})
