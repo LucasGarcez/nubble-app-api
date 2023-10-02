@@ -9,24 +9,26 @@ Route.group(() => {
   Route.delete('/:id', 'UsersController.delete').as('users.delete')
 })
 .prefix('/users')
-.middleware(['auth:api', 'refreshToken'])
-
-Route.group(() => {
-  /** Profile - Routes */
-  Route.post('/edit-password', 'AuthController.editPassword').as('auth.editPassword')
-  Route.get('/logout', 'AuthController.logout').as('auth.logout')
-})
-.prefix('/profile')
-.middleware('auth:api')
+.middleware(['auth'])
 
 /** Public Routes */
 Route.group(() => {
-  /** Login - Routes */
+  /** Auth - Routes */
   Route.post('/register', 'AuthController.register').as('auth.register')
   Route.post('/login', 'AuthController.login').as('auth.login')
   Route.post('/forgot-password', 'AuthController.forgotPassword').as('auth.forgotPassword')
   Route.get('/reset-password/:tempToken/:email', 'AuthController.resetPassword').as('auth.resetPassword')
-  Route.post('/refresh-token', 'AuthController.refreshToken').as('auth.refreshToken')
   Route.get('/validate-username', 'AuthController.isUsernameAvailable').as('auth.isUsernameAvailable')
   Route.get('/validate-email', 'AuthController.isEmailAvailable').as('auth.isEmailAvailable')
+  Route.post('/refresh-token', 'AuthController.refreshToken').as('auth.refreshToken')
+
+  /** Private  Routes */
+  Route.group(() => {
+    /** Auth/Profile - Routes */
+    Route.post('/edit-password', 'AuthController.editPassword').as('auth.editPassword')
+    Route.get('/logout', 'AuthController.logout').as('auth.logout')
+  })
+  .prefix('/profile')
+  .middleware(['auth'])
 })
+.prefix('/auth')

@@ -33,4 +33,4 @@ Route.group(() => {
   Route.get('post_comment/:commentId', new PostCommentController().show)
 })
   .prefix('user')
-  .middleware(['auth:api', 'refreshToken'])
+  .middleware(['auth'])
