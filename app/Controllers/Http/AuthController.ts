@@ -27,12 +27,14 @@ export default class AuthController {
     try {
       const userDto: IUser.DTOs.Login = await request.validate({ schema: LoginSchema })
 
+      const rememberMe = userDto.rememberMe === undefined ? true : userDto.rememberMe
+
       const jwt = await auth
         .use('jwt')
         .attempt(
           userDto.email,
           userDto.password,
-          userDto.rememberMe ? {
+          rememberMe ? {
             expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
             refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
           } : {
