@@ -10,7 +10,6 @@ https://github.com/beekeeper-studio/beekeeper-studio
 ## Iniciar Backend
 Todas as etapas para criar o backend estão reunidas em um único comando: 
 
-#### 1. Criar arquivo .env
 ```shell script
 # Instalar dependências de desenvolvimento
 maker docker-install
