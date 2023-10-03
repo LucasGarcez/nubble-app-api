@@ -12,7 +12,7 @@ Todas as etapas para criar o backend estão reunidas em um único comando:
 
 ```shell script
 # Instalar dependências de desenvolvimento
-maker docker-install
+make docker-install
 ```
 O comando acima é um atalho para realizar as seguintes tarefas:
 ```shell script
