@@ -103,7 +103,10 @@ export default class Post extends BaseModel {
 
 
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-    query.preload('user')
+  
+    query.preload('user', (builder) => {
+      builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
+    })
   )
 
   public static loadUserForAdmin = scope((query: ModelQueryBuilderContract<typeof Post>) =>
