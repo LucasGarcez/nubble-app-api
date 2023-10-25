@@ -1,43 +1,60 @@
-// app/Shared/Middleware/RefreshTokenMiddleware.ts
-
+import { JWTCustomPayloadData } from '@ioc:Adonis/Addons/Jwt';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import { DateTime } from 'luxon'
-import { randomBytes } from 'crypto'
+import Env from '@ioc:Adonis/Core/Env'
+import jwt_decode from "jwt-decode";
 
+/**
+ * ------------------------------------------------------
+ * Refresh Token Middleware
+ * ------------------------------------------------------
+ * - This middleware is responsible for refresh JWT token
+ * - I recommend using Refresh Token on the front end
+ * - Usage: Route.middleware('refreshToken')
+ *
+ * @class RefreshTokenMiddleware
+ * ------------------------------------------------------
+ **/
 export default class RefreshTokenMiddleware {
   public async handle({ auth, request, response }: HttpContextContract, next: () => Promise<void>) {
     try {
       await next()
     } catch (error) {
-      if (error.code === 'E_INVALID_API_TOKEN') {
-        const refreshToken = request.input('refresh_token')
+      if (error.code === 'E_UNAUTHORIZED_ACCESS') {
+        let refreshToken = request.header('authorization')
+            refreshToken = refreshToken?.slice(7)
 
         if (!refreshToken) {
-          return response.unauthorized({ message: 'Token inválido ou expirado' })
+          return response.unauthorized({ message: 'Token não informado' })
         }
 
         try {
-          const user = await User.findByValidRefreshToken(refreshToken)
+          // Get payload data from JWT expired
+          const { data: jwtData } = jwt_decode(refreshToken) as JWTCustomPayloadData;
 
-          if (!user) {
-            return response.unauthorized({ message: 'Token inválido ou expirado' })
+          // Get user data from user id in JWT payload
+          const userData = await User.find(jwtData.userId)
+
+          if (!userData) {
+            return response.unauthorized({ message: 'Usuário não encontrado' })
           }
 
-          // Gere um novo refresh token e armazene no banco de dados
-          const newRefreshToken = randomBytes(32).toString('hex')
-          user.rememberMeToken = newRefreshToken
-          user.rememberMeTokenCreatedAt = DateTime.local()
-          await user.save()
+          if (userData.rememberMeToken) {
+            // Generate new JWT and refresh token by find user rememberMeToken in database
+            const jwt = await auth.use('jwt').loginViaRefreshToken(userData.rememberMeToken, {
+              expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
+              refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
+            });
 
-          const newToken = await auth.use('api').generate(user)
+            const user = auth.use('jwt').user as User
+            user.rememberMeToken = jwt?.toJSON().refreshToken.toString() ?? null
+            await user.save()
 
-          response.ok({
-            access_token: newToken.token,
-            refresh_token: newRefreshToken,
-          })
+            return response.ok({ auth: jwt, user })
+          }
+
         } catch (error) {
-          response.unauthorized({ message: 'Token inválido ou expirado' })
+          return response.unauthorized({ message: 'Token inválido ou expirado' })
         }
       } else {
         throw error

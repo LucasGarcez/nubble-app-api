@@ -7,5 +7,5 @@ Route.group(() => {
   Route.put('/:id', 'MessageController.update')
   Route.delete('/:id', 'MessageController.destroy')
 })
-  .middleware(['auth:api', 'refreshToken'])
+  .middleware(['auth'])
   .prefix('/messages')

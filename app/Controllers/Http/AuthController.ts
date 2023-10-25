@@ -11,24 +11,41 @@ import User from 'App/Models/User'
 import crypto from 'crypto'
 import generator from 'generate-password'
 import { isAfter, addHours } from 'date-fns'
+import Database from '@ioc:Adonis/Lucid/Database'
+import { JWTTokenContract } from '@ioc:Adonis/Addons/Jwt'
 
 export default class AuthController {
+
   /**
    * @login
    * @summary Login endpoint
    * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
    * @responseBody 401 - {"message": "Unable to login, please check your credentials or try again later."}
-   * @requestBody {"email": "string", "password": "string"}
+   * @requestBody {"email": "string", "password": "string", "rememberMe": "boolean"}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     try {
       const userDto: IUser.DTOs.Login = await request.validate({ schema: LoginSchema })
 
-      const token = await auth
-        .use('api')
-        .attempt(userDto.email, userDto.password);
+      const rememberMe = userDto.rememberMe === undefined ? true : userDto.rememberMe
 
-      return response.json({ auth: token, user: auth.user})
+      const jwt = await auth
+        .use('jwt')
+        .attempt(
+          userDto.email,
+          userDto.password,
+          rememberMe ? {
+            expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
+            refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
+          } : {
+            expiresIn: '10m',
+            refreshTokenExpiresIn: '10d'
+          })
+
+      const user = auth.use('jwt').user as User
+      const userPayload = await this.generateRememberToken(user, jwt)
+
+      return response.json({ auth: jwt, user: userPayload})
     } catch (error) {
       throw new AuthorizationException(
         'Unable to login, please check your credentials or try again later.'
@@ -42,18 +59,36 @@ export default class AuthController {
    * @responseBody 200 - {"message": "Logout successfully"}
    */
   public async logout({ auth, response }: HttpContextContract): Promise<void> {
-    const userId: any = auth.user?.id
-    const user = await User.query().where('id', userId).firstOrFail()
-    user.remember_me_token = null
-    user.save()
+    try {
+      const user = auth.use('jwt').user as User
 
-    await auth.use('api').revoke()
-    auth.use('api').isLoggedOut
+      await auth.use('jwt').revoke({
+        refreshToken: user?.rememberMeToken ?? '',
+      })
 
-    return response.json({ message: 'Logout successfully' })
+      this.generateRememberToken(user, null)
+
+      await Database.from('jwt_tokens').where('user_id', user.id).delete()
+      auth.use('jwt').isLoggedOut
+
+      return response.json({ message: 'Logout successfully' })
+
+    } catch (error) {
+      throw new AuthorizationException(
+        'Unable to logout, please try again later.'
+      )
+    }
   }
 
-  
+  /**
+   * @isUsernameAvailable
+   * @summary Check if username is available endpoint
+   * @requestBody {"username": "string"}
+   * @responseBody 400 - {"message": "username is required"}
+   * @responseBody 200 - {"message": "username is not available", "isAvailable": false}
+   * @responseBody 200 - {"message": "username is available", "isAvailable": true}
+   * @responseBody 500 - {"message": "Internal server error"}
+   */
   public async isUsernameAvailable({ request, response }: HttpContextContract) {
     try {
       const username = request.input('username')
@@ -74,6 +109,16 @@ export default class AuthController {
       return response.status(500).json({ message: 'Internal server error' })
     }
   }
+
+  /**
+   * @isEmailAvailable
+   * @summary Check if email is available endpoint
+   * @requestBody {"email": "string"}
+   * @responseBody 400 - {"message": "email is required"}
+   * @responseBody 200 - {"message": "email is not available", "isAvailable": false}
+   * @responseBody 200 - {"message": "email is available", "isAvailable": true}
+   * @responseBody 500 - {"message": "Internal server error"}
+   */
   public async isEmailAvailable({ request, response }: HttpContextContract) {
     try {
       const email = request.input('email')
@@ -247,4 +292,43 @@ export default class AuthController {
     return response.status(200).json({ message: 'Password changed successfully' })
   }
 
+  /**
+   * @refreshToken
+   * @summary Refresh Token endpoint
+   * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
+   * @responseBody 401 - {"errors": [{"message": "Unable to refresh token, please try again later."}]}
+   * @requestBody {"refreshToken": "string"}
+   */
+  public async refreshToken({ auth, response, request }: HttpContextContract): Promise<void> {
+    try {
+      const refreshToken = request.input("refreshToken");
+
+      const jwt = await auth.use('jwt').loginViaRefreshToken(refreshToken, {
+        expiresIn: Env.get('TOKEN_EXPIRES_IN') || '30m',
+        refreshTokenExpiresIn: Env.get('REFRESH_TOKEN_EXPIRES_IN') || '30d'
+      });
+
+      const user = auth.use('jwt').user as User
+      const userPayload = await this.generateRememberToken(user, jwt)
+
+      return response.json({ auth: jwt, user: userPayload})
+    } catch (error) {
+      throw new AuthorizationException(
+        'Unable to refresh token, please try again later.'
+      )
+    }
+  }
+
+  /**
+   * Generate remember token
+   * @param user
+   * @param jwt
+   * @returns User
+   */
+  private async generateRememberToken(user: User, jwt: JWTTokenContract<User>|null): Promise<User> {
+    user.rememberMeToken = jwt?.toJSON().refreshToken.toString() ?? null
+    user.save()
+
+    return user
+  }
 }

@@ -4,16 +4,24 @@
 CONTAINER = nubble
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
+docker-install: ## Iniciar projeto com Docker
+	cp .env.example .env \
+	&& make docker-build migration-docker reset-docker generate-docs-docker \
+	&& yarn
+
 docker-start: ## Iniciar Docker
 	docker compose up -d
 
 docker-build: ## Iniciar Docker com build
 	docker compose up -d --build
 
-docker-down: ## Desligar e Remove Docker
+docker-stop: ## Desligar e Remove Docker
 	docker compose down
 
-docker-rebuild-all: ## Rebuild em todos os containers
+docker-restart: ## Reinicia todos os containers
+	make docker-stop docker-start
+
+docker-rebuild: ## Rebuild em todos os containers
 	make docker-stop docker-build
 
 docker-rebuild-postgres: ## Rebuild Postgres
@@ -76,6 +84,9 @@ generate-manifest: ## Gerar Manifest Adonis
 
 generate-docs: ## Gerar Documentação Swagger
 	node ace docs:generate
+
+generate-docs-docker: ## Gerar Documentação Swagger no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make generate-docs"
 
 build: ## Iniciar Build Adonis
 	node ace build --production
