@@ -1,21 +1,31 @@
 import { container } from 'tsyringe'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import { EditPostSchema, StorePostSchema } from 'App/Validators/PostValidator'
+import { EditPostSchema, StorePostSchema, ValidateImageSchema } from 'App/Validators/PostValidator'
 
 import PostServices from 'App/Services/PostService'
 import { IPost } from 'App/Interfaces/IPost'
-import PostRepository from 'App/Repositories/PostsRepository'
 
-export default class PostController {
-  public async store({ request, response }: HttpContextContract): Promise<void> {
+export default class PostsController {
+
+  /**
+   * @store
+   * @summary New post
+   * @requestBody <Post>.exclude(id, image_url, static_table_posts, serialize_extras_true).append("imageCover": "binary")
+   */
+  public async store({ request, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
     const postDto: IPost.DTO.Store = await request.validate({ schema: StorePostSchema })
-    const postsRepository = new PostRepository()
+    const image = await request.validate({ schema: ValidateImageSchema })
 
-    const post = await postsRepository.store(postDto)
+    const postsService = container.resolve(PostServices)
+    postDto.user_id = userId
+    const post = await postsService.store(postDto, image)
 
     return response.json(post)
   }
+
   public async list({ request, response }: HttpContextContract): Promise<void> {
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
@@ -33,11 +43,19 @@ export default class PostController {
     return response.json(post)
   }
 
+  /**
+   * @edit
+   * @summary Edit post
+   * @requestBody <Post>.exclude(id, user_id, static_table_posts, serialize_extras_true)
+   */
   public async edit({ request, params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
-    const postDto = await request.validate({ schema: EditPostSchema })
+    const postDto: IPost.DTO.Store = await request.validate({ schema: EditPostSchema })
+    const image = await request.validate({ schema: ValidateImageSchema })
+
     const postsService = container.resolve(PostServices)
-    const post = await postsService.edit(postId, postDto)
+
+    const post = await postsService.edit(postId, postDto, image)
     return response.json(post)
   }
 
