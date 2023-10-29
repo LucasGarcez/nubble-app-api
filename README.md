@@ -80,6 +80,11 @@ S3_SECRET='Secret Key'
 
 ---
 
+## Importar Endpoits da API para o [Insomnia][l-Insomnia]
+[![Importar Insomnia}][i-Insomnia-Run]][l-Insomnia-Import]
+
+---
+
 **Pronto! A Nubble API está pronta para ser utilizada! 🥳**
 
 Aplicações | URL | User | Password
@@ -111,3 +116,7 @@ Minio - S3 | <http://localhost:8900> | nubble | nubble-pass
 [l-mailpit]: https://github.com/axllent/mailpit
 [l-minio]: https://min.io
 [l-swagger]: https://github.com/ad-on-is/adonis-autoswagger
+[l-Insomnia]: https://insomnia.rest/download
+[l-Insomnia-Import]: https://insomnia.rest/run/?label=Nubble%20API&uri=https://github.com/LucasGarcez/nubble-app-api/blob/f0594a698a7ff00ed96b06acd10da2f75712b5d7/docs/files/Insomnia.json
+
+[i-Insomnia-Run]: https://insomnia.rest/images/run.svg "Importar Insomnia"
