@@ -1,0 +1,40 @@
+_id: req_fa9e4269d7bb4451b8c5dcf87b2c8b58
+type: Request
+parentId: fld_d724cee112c34c6b9a9255ebc177191c
+modified: 1698614096851
+created: 1698610727223
+url: "{{ api_url }}/user/post/42"
+name: Post Edit
+description: ""
+method: PUT
+body:
+  mimeType: multipart/form-data
+  params:
+    - id: pair_907e4eb2468e4846b5e00d8d869079ef
+      name: text
+      value: Testando o Post
+      description: ""
+    - id: pair_0e2b62fe594041c599e370e68c9477f6
+      name: imageCover
+      value: ""
+      description: ""
+      type: file
+      fileName: /Users/joaopinheiro/Pictures/adonis.png
+parameters: []
+headers:
+  - name: Content-Type
+    value: multipart/form-data
+  - name: User-Agent
+    value: insomnia/8.3.0
+authentication:
+  type: bearer
+  token: "{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f',
+    'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"
+metaSortKey: -1696180018719.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
