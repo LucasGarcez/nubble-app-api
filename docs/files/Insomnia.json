@@ -1,1 +1,239 @@
-{"_type":"export","__export_format":4,"__export_date":"2023-10-29T22:26:28.901Z","__export_source":"insomnia.desktop.app:v8.3.0","resources":[{"_id":"req_00eb6fd10c1845bd9b914e2c9270a34f","parentId":"fld_9bbb1398c9fc4b9899b24ab47c5d6072","modified":1698596631147,"created":1698595937130,"url":"{{ api_url }}/auth/login","name":"Login","description":"","method":"POST","body":{"mimeType":"application/json","text":"{\n\t\"email\": \"mariajulia@coffstack.com\",\n  \"password\": \"supersecret\",\n  \"rememberMe\": true\n}"},"parameters":[],"headers":[{"name":"Content-Type","value":"application/json"},{"name":"User-Agent","value":"insomnia/8.3.0"}],"authentication":{},"metaSortKey":-1698595937130,"isPrivate":false,"settingStoreCookies":true,"settingSendCookies":true,"settingDisableRenderRequestBody":false,"settingEncodeUrl":true,"settingRebuildPath":true,"settingFollowRedirects":"global","_type":"request"},{"_id":"fld_9bbb1398c9fc4b9899b24ab47c5d6072","parentId":"wrk_3d917404c4cb427c887118369256d078","modified":1698595909874,"created":1698595909874,"name":"Auth/Register","description":"","environment":{},"environmentPropertyOrder":null,"metaSortKey":-1698595909874,"_type":"request_group"},{"_id":"wrk_3d917404c4cb427c887118369256d078","parentId":null,"modified":1698595687458,"created":1698595687458,"name":"Nubble","description":"","scope":"collection","_type":"workspace"},{"_id":"req_26f60c3468c64e78a224c9cf30c2cb35","parentId":"fld_d724cee112c34c6b9a9255ebc177191c","modified":1698616921829,"created":1698614876140,"url":"{{ api_url }}/user/post","name":"Post List","description":"","method":"GET","body":{},"parameters":[{"id":"pair_22fdd7b44811442a9a75827fcce46a95","name":"page","value":"1","description":""},{"id":"pair_1af7fc9ee6a345498fccad8c2b332ed7","name":"per_page","value":"20","description":""}],"headers":[{"name":"User-Agent","value":"insomnia/8.3.0"}],"authentication":{"type":"bearer","token":"{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"},"metaSortKey":-1698595731983,"isPrivate":false,"settingStoreCookies":true,"settingSendCookies":true,"settingDisableRenderRequestBody":false,"settingEncodeUrl":true,"settingRebuildPath":true,"settingFollowRedirects":"global","_type":"request"},{"_id":"fld_d724cee112c34c6b9a9255ebc177191c","parentId":"wrk_3d917404c4cb427c887118369256d078","modified":1698595722975,"created":1698595722975,"name":"Posts","description":"","environment":{},"environmentPropertyOrder":null,"metaSortKey":-1698595722975,"_type":"request_group"},{"_id":"req_80fd27ba1cca45b0a9644430669b9458","parentId":"fld_d724cee112c34c6b9a9255ebc177191c","modified":1698617349979,"created":1698595694326,"url":"{{ api_url }}/user/post","name":"Post Create","description":"","method":"POST","body":{"mimeType":"multipart/form-data","params":[{"id":"pair_907e4eb2468e4846b5e00d8d869079ef","name":"text","value":"Testando o Post","description":""},{"id":"pair_0e2b62fe594041c599e370e68c9477f6","name":"imageCover","value":"","description":"","type":"file","fileName":"/Users/joaopinheiro/Pictures/936378.jpg"}]},"parameters":[],"headers":[{"name":"Content-Type","value":"multipart/form-data"},{"name":"User-Agent","value":"insomnia/8.3.0"}],"authentication":{"type":"bearer","token":"{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"},"metaSortKey":-1698595731883,"isPrivate":false,"settingStoreCookies":true,"settingSendCookies":true,"settingDisableRenderRequestBody":false,"settingEncodeUrl":true,"settingRebuildPath":true,"settingFollowRedirects":"global","_type":"request"},{"_id":"req_fa9e4269d7bb4451b8c5dcf87b2c8b58","parentId":"fld_d724cee112c34c6b9a9255ebc177191c","modified":1698614096851,"created":1698610727223,"url":"{{ api_url }}/user/post/42","name":"Post Edit","description":"","method":"PUT","body":{"mimeType":"multipart/form-data","params":[{"id":"pair_907e4eb2468e4846b5e00d8d869079ef","name":"text","value":"Testando o Post","description":""},{"id":"pair_0e2b62fe594041c599e370e68c9477f6","name":"imageCover","value":"","description":"","type":"file","fileName":"/Users/joaopinheiro/Pictures/adonis.png"}]},"parameters":[],"headers":[{"name":"Content-Type","value":"multipart/form-data"},{"name":"User-Agent","value":"insomnia/8.3.0"}],"authentication":{"type":"bearer","token":"{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"},"metaSortKey":-1696180018719.5,"isPrivate":false,"settingStoreCookies":true,"settingSendCookies":true,"settingDisableRenderRequestBody":false,"settingEncodeUrl":true,"settingRebuildPath":true,"settingFollowRedirects":"global","_type":"request"},{"_id":"env_14037882b0cf95d959706d543bdeb6b89e8431e1","parentId":"wrk_3d917404c4cb427c887118369256d078","modified":1698596249687,"created":1698595687461,"name":"Base Environment","data":{},"dataPropertyOrder":{},"color":null,"isPrivate":false,"metaSortKey":1698595687461,"_type":"environment"},{"_id":"jar_14037882b0cf95d959706d543bdeb6b89e8431e1","parentId":"wrk_3d917404c4cb427c887118369256d078","modified":1698595687463,"created":1698595687463,"name":"Default Jar","cookies":[],"_type":"cookie_jar"},{"_id":"env_623415a8b6f64d91b4d14bd9d720f826","parentId":"env_14037882b0cf95d959706d543bdeb6b89e8431e1","modified":1698596290150,"created":1698596220079,"name":"Development","data":{"api_url":"http://localhost:3333"},"dataPropertyOrder":{"&":["api_url"]},"color":"#2ebf2b","isPrivate":false,"metaSortKey":1698596220079,"_type":"environment"}]}
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2023-10-29T22:26:28.901Z",
+  "__export_source": "insomnia.desktop.app:v8.3.0",
+  "resources": [
+    {
+      "_id": "req_00eb6fd10c1845bd9b914e2c9270a34f",
+      "parentId": "fld_9bbb1398c9fc4b9899b24ab47c5d6072",
+      "modified": 1698596631147,
+      "created": 1698595937130,
+      "url": "{{ api_url }}/auth/login",
+      "name": "Login",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"mariajulia@coffstack.com\",\n  \"password\": \"supersecret\",\n  \"rememberMe\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "User-Agent", "value": "insomnia/8.3.0" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1698595937130,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_9bbb1398c9fc4b9899b24ab47c5d6072",
+      "parentId": "wrk_3d917404c4cb427c887118369256d078",
+      "modified": 1698595909874,
+      "created": 1698595909874,
+      "name": "Auth/Register",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1698595909874,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_3d917404c4cb427c887118369256d078",
+      "parentId": null,
+      "modified": 1698595687458,
+      "created": 1698595687458,
+      "name": "Nubble",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_26f60c3468c64e78a224c9cf30c2cb35",
+      "parentId": "fld_d724cee112c34c6b9a9255ebc177191c",
+      "modified": 1698616921829,
+      "created": 1698614876140,
+      "url": "{{ api_url }}/user/post",
+      "name": "Post List",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_22fdd7b44811442a9a75827fcce46a95",
+          "name": "page",
+          "value": "1",
+          "description": ""
+        },
+        {
+          "id": "pair_1af7fc9ee6a345498fccad8c2b332ed7",
+          "name": "per_page",
+          "value": "20",
+          "description": ""
+        }
+      ],
+      "headers": [{ "name": "User-Agent", "value": "insomnia/8.3.0" }],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"
+      },
+      "metaSortKey": -1698595731983,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_d724cee112c34c6b9a9255ebc177191c",
+      "parentId": "wrk_3d917404c4cb427c887118369256d078",
+      "modified": 1698595722975,
+      "created": 1698595722975,
+      "name": "Posts",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1698595722975,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_80fd27ba1cca45b0a9644430669b9458",
+      "parentId": "fld_d724cee112c34c6b9a9255ebc177191c",
+      "modified": 1698617349979,
+      "created": 1698595694326,
+      "url": "{{ api_url }}/user/post",
+      "name": "Post Create",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "id": "pair_907e4eb2468e4846b5e00d8d869079ef",
+            "name": "text",
+            "value": "Testando o Post",
+            "description": ""
+          },
+          {
+            "id": "pair_0e2b62fe594041c599e370e68c9477f6",
+            "name": "imageCover",
+            "value": "",
+            "description": "",
+            "type": "file",
+            "fileName": "/Users/joaopinheiro/Pictures/936378.jpg"
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "multipart/form-data" },
+        { "name": "User-Agent", "value": "insomnia/8.3.0" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"
+      },
+      "metaSortKey": -1698595731883,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_fa9e4269d7bb4451b8c5dcf87b2c8b58",
+      "parentId": "fld_d724cee112c34c6b9a9255ebc177191c",
+      "modified": 1698614096851,
+      "created": 1698610727223,
+      "url": "{{ api_url }}/user/post/42",
+      "name": "Post Edit",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "id": "pair_907e4eb2468e4846b5e00d8d869079ef",
+            "name": "text",
+            "value": "Testando o Post",
+            "description": ""
+          },
+          {
+            "id": "pair_0e2b62fe594041c599e370e68c9477f6",
+            "name": "imageCover",
+            "value": "",
+            "description": "",
+            "type": "file",
+            "fileName": "/Users/joaopinheiro/Pictures/adonis.png"
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "multipart/form-data" },
+        { "name": "User-Agent", "value": "insomnia/8.3.0" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_00eb6fd10c1845bd9b914e2c9270a34f', 'b64::JC5hdXRoLnRva2Vu::46b', 'never', 60 %}"
+      },
+      "metaSortKey": -1696180018719.5,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_14037882b0cf95d959706d543bdeb6b89e8431e1",
+      "parentId": "wrk_3d917404c4cb427c887118369256d078",
+      "modified": 1698596249687,
+      "created": 1698595687461,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": {},
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1698595687461,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_14037882b0cf95d959706d543bdeb6b89e8431e1",
+      "parentId": "wrk_3d917404c4cb427c887118369256d078",
+      "modified": 1698595687463,
+      "created": 1698595687463,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "env_623415a8b6f64d91b4d14bd9d720f826",
+      "parentId": "env_14037882b0cf95d959706d543bdeb6b89e8431e1",
+      "modified": 1698596290150,
+      "created": 1698596220079,
+      "name": "Development",
+      "data": { "api_url": "http://localhost:3333" },
+      "dataPropertyOrder": { "&": ["api_url"] },
+      "color": "#2ebf2b",
+      "isPrivate": false,
+      "metaSortKey": 1698596220079,
+      "_type": "environment"
+    }
+  ]
+}
