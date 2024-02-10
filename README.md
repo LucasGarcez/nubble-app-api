@@ -8,6 +8,12 @@ https://www.docker.com/
 
 https://github.com/beekeeper-studio/beekeeper-studio
 
+## Instalar dependências
+```shell script
+# Instalar dependências de desenvolvimento
+yarn
+```
+
 ## Iniciar Backend
 
 Todas as etapas para criar o backend estão reunidas em um único comando:
