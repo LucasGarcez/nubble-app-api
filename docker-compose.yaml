@@ -8,9 +8,9 @@ services:
     restart: always
     environment:
       DATABASE_HOST: ${PG_HOST:-localhost}
-      POSTGRES_USER: ${PG_USER:-api_coffstack}
-      POSTGRES_PASSWORD: ${PG_PASSWORD:-api_coffstack}
-      POSTGRES_DB: ${PG_DB_NAME:-api_coffstack_db_testing}
+      POSTGRES_USER: ${PG_USER:-nubble}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-nubble}
+      POSTGRES_DB: ${PG_DB_NAME:-nubble_db_development}
       TZ: ${CONTAINER_TIMEZONE:-America/Sao_Paulo}
       PGTZ: ${CONTAINER_TIMEZONE:-America/Sao_Paulo}
     ports:
@@ -65,10 +65,25 @@ services:
     volumes:
       - mailpit_storage:/data
     ports:
-      - '${MAIL_PORT:-1025}:1025'
+      - '${SMTP_PORT:-1025}:1025'
       - '${MAILPIT_DASHBOARD_PORT:-8040}:8025'
     networks:
       - backend
+
+  minio:
+    container_name: ${CONTAINER_NAME}-minio
+    image: minio/minio:latest
+    ports:
+        - '${FORWARD_MINIO_PORT:-9000}:9000'
+        - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+    environment:
+        MINIO_ROOT_USER: ${MINIO_ROOT_USER:-nubble}
+        MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-nubble-pass}
+    volumes:
+        - minio_storage:/data/minio
+    networks:
+        - backend
+    command: 'minio server /data/minio --console-address ":8900"'
 
 networks:
   backend:
@@ -77,4 +92,8 @@ networks:
 
 volumes:
   pg_storage:
+    driver: local
   mailpit_storage:
+    driver: local
+  minio_storage:
+    driver: local

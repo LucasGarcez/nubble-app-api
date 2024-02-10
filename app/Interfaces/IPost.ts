@@ -38,6 +38,7 @@ export namespace IPost {
 
     export interface Store {
       text?: string
+      imageUrl?: string
       user_id?: number
       is_fixed?: boolean
       fixed_date?: DateTime

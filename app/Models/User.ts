@@ -23,7 +23,7 @@ export default class User extends BaseModel {
    * - column typing struct
    */
   @column({ isPrimary: true })
-  public id: string
+  public id: number
 
   @computed()
   public get full_name() {
