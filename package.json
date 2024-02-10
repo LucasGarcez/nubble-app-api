@@ -9,7 +9,8 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "make": "chmod +x ./scripts/make.sh && ./scripts/make.sh"
   },
   "eslintConfig": {
     "extends": [
