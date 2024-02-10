@@ -1,4 +1,7 @@
 import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
+import sharp from 'sharp'
+import Drive from '@ioc:Adonis/Core/Drive'
+import Env from '@ioc:Adonis/Core/Env'
 
 import IBaseRepository, {
   ContextParams,
@@ -107,5 +110,27 @@ export default class BaseRepository<Model extends LucidModel> implements IBaseRe
     }
 
     return model.first()
+  }
+
+  public async uploadImage(localSave: string, image: any) {
+    const s3 = Drive.use('s3')
+
+    const resizedImageData = await sharp(image.tmpPath).resize(1024).toBuffer()
+
+    return await s3.put(localSave, resizedImageData, {
+      visibility: 'public',
+      contentType: `image/${image.extname}`
+    })
+    .then(() => {
+      return s3.getUrl(localSave)
+    })
+  }
+
+  public async deleteImage(localSave: string) {
+    const s3 = Drive.use('s3')
+
+    const imageUrl = localSave.replace(Env.get('S3_CDN_URL'), '')
+
+    return await s3.delete(imageUrl)
   }
 }

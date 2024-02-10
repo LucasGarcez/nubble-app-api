@@ -55,6 +55,9 @@ interface Helpers<Model extends LucidModel> {
     value: any,
     params?: ContextParams<Model>
   ): Promise<InstanceType<Model> | null>
+
+  uploadImage(localSave: string, imageCover: any): Promise<string>
+  deleteImage(imageUrl: string): Promise<void>
 }
 
 /**

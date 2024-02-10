@@ -32,6 +32,7 @@ export default class Post extends BaseModel {
   public imageUrl: string
 
   @computed()
+  // @no-swagger
   public get status() {
     if (!this.is_activated) return 'disabled'
     else return 'published'
@@ -44,15 +45,19 @@ export default class Post extends BaseModel {
   public is_activated: boolean
 
   @column({ serializeAs: null })
+  // @no-swagger
   public is_deleted: boolean
 
   @column.dateTime({ autoCreate: true })
+  // @no-swagger
   public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // @no-swagger
   public updated_at: DateTime
 
   @column.dateTime({ serializeAs: null })
+  // @no-swagger
   public deleted_at: DateTime
 
   @belongsTo(() => User, {
@@ -103,7 +108,6 @@ export default class Post extends BaseModel {
 
 
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-  
     query.preload('user', (builder) => {
       builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
     })

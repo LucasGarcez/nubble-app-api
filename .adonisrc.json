@@ -25,6 +25,7 @@
     "@adonisjs/auth",
     "@adonisjs/mail",
     "@adonisjs/view",
+    "@adonisjs/drive-s3",
     "adonis5-jwt"
   ],
   "aceProviders": [

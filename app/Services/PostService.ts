@@ -9,7 +9,7 @@ import { IPost } from 'App/Interfaces/IPost';
 import Post from 'App/Models/Post';
 
 @injectable()
-export default class UserServices {
+export default class PostServices {
   constructor(
     @inject('PostRepository')
     private postRepository: IPost.Repository
@@ -23,13 +23,13 @@ export default class UserServices {
     return this.postRepository.listWithPagination({
       page,
       perPage,
+      orders: [{ column: 'created_at', direction: 'desc' }],
       scopes: (scopes) => {
         scopes.searchQueryScope(search);
         scopes.loadUser()
         scopes.likeCount()
         scopes.favoriteCount()
         scopes.commentCount()
-        
       },
     });
   }
@@ -40,24 +40,50 @@ export default class UserServices {
     return post;
   }
 
-  public async store(data: DTOs.Store): Promise<Post> {
+  public async store(data: DTOs.Store, image: any): Promise<Post> {
     const { ...postDto } = data;
 
     const post = await this.postRepository.store(postDto);
 
+    if (image) {
+      await this.editImage(post, image)
+    }
+
     return post.refresh();
   }
 
-  public async edit(id: string, data: any): Promise<Post> {
+  public async edit(id: string, data: any, image: any): Promise<Post> {
     const post = await this.postRepository.findBy('id', id);
     if (!post) throw new NotFoundException('Post not found or not available.');
 
     const { ...postDto } = data;
 
     post.merge(postDto);
+
     await this.postRepository.save(post);
 
+    if (image) {
+      await this.editImage(post, image)
+    }
+
     return post.refresh();
+  }
+
+  public async editImage(post: Post, image: any): Promise<void> {
+
+    const localSave = `uploads/posts/${post.id}/${Date.now()}.${image.imageCover.extname}`
+
+    if(post.imageUrl) {
+      await this.postRepository.deleteImage(post.imageUrl)
+    }
+
+    const postImage = await this.postRepository.uploadImage(localSave, image.imageCover)
+
+    post.merge({
+      imageUrl: postImage
+    });
+
+    await this.postRepository.save(post);
   }
 
   public async delete(id: string): Promise<void> {
