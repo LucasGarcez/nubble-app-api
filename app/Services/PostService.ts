@@ -49,6 +49,8 @@ export default class PostServices {
       await this.editImage(post, image)
     }
 
+    await post.load('user');
+    
     return post.refresh();
   }
 
