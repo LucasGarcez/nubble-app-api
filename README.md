@@ -79,6 +79,20 @@ S3_SECRET='Secret Key'
 
 ---
 
+### 4. Criar o Bucket no Minio
+
+- Ao acessar o [Minio](http://localhost:8900) pela primeira vez, clique em Create a Bucket, em Bucket Name informe: *nubble*
+- Após criar o Bucket altere o Access Policy para Public
+- Em Access Keys clique em Create Access Key
+- Copie suas chaves para o arquivo .env
+
+```text
+S3_KEY='Access Key'
+S3_SECRET='Secret Key'
+```
+
+---
+
 ## Importar Endpoits da API para o [Insomnia][l-Insomnia]
 [![Importar Insomnia}][i-Insomnia-Run]][l-Insomnia-Import]
 
