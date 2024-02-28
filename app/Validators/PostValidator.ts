@@ -6,8 +6,8 @@ export const StorePostSchema = schema.create({
 
 export const ValidateImageSchema = schema.create({
   imageCover: schema.file({
-    size: '5mb',
-    extnames: ['jpg', 'jpeg', 'png', 'webp']
+    size: '10mb',
+    extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp', 'WEBP']
   }),
 })
 
