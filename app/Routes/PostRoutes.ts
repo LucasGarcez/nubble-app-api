@@ -3,30 +3,45 @@ import Route from '@ioc:Adonis/Core/Route'
 /** Private  routes */
 Route.group(() => {
   /**
-   *  Post  - Routes
+   *  Posts - Routes
    */
-  Route.get('post', 'PostsController.list').as('post.user.list')
-  Route.get('post/:id', 'PostsController.get').as('post.user.get')
-  Route.post('post', 'PostsController.store').as('post.user.store')
-  Route.put('post/:id', 'PostsController.edit').as('post.user.save')
-  Route.delete('post/:id', 'PostsController.delete').as('post.user.delete')
+  Route.group(() => {
+    Route.get('/', 'PostsController.list').as('post.user.list')
+    Route.get('/:id', 'PostsController.get').as('post.user.get')
+    Route.post('/', 'PostsController.store').as('post.user.store')
+    Route.put('/:id', 'PostsController.edit').as('post.user.save')
+    Route.delete('/:id', 'PostsController.delete').as('post.user.delete')
+  })
+    .prefix('/posts')
 
   /**
-   *  Post Reaction - Routes
+   *  Post - Routes
    */
-  Route.post('post_reaction', 'PostReactionController.store')
-  Route.delete('post_reaction/x:postId', 'PostReactionController.destroy')
-  Route.put('post_reaction', 'PostReactionController.update')
-  Route.get('post_reaction', 'PostReactionController.index')
+  Route.group(() => {
+    /**
+     *  Post Reaction - Routes
+     */
+    Route.group(() => {
+      Route.post('/', 'PostReactionController.store')
+      Route.delete('/x:postId', 'PostReactionController.destroy')
+      Route.put('/', 'PostReactionController.update')
+      Route.get('/', 'PostReactionController.index')
+    })
+      .prefix('/reactions')
 
-  /**
-   *  Post Comment - Routes
-   */
-  Route.post('post_comment', 'PostCommentController.store')
-  Route.get('post_comment', 'PostCommentController.index')
-  Route.delete('post_comment/:commentId', 'PostCommentController.destroy')
-  Route.put('post_comment/:commentId', 'PostCommentController.update')
-  Route.get('post_comment/:commentId', 'PostCommentController.show')
+    /**
+     *  Post Comment - Routes
+     */
+    Route.group(() => {
+      Route.post('/', 'PostCommentController.store')
+      Route.get('/', 'PostCommentController.index')
+      Route.delete('/:commentId', 'PostCommentController.destroy')
+      Route.put('/:commentId', 'PostCommentController.update')
+      Route.get('/:commentId', 'PostCommentController.show')
+    })
+      .prefix('/comments')
+  })
+    .prefix('/post')
+
 })
-  .prefix('user')
   .middleware(['auth'])

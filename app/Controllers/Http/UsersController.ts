@@ -7,6 +7,11 @@ import UserServices from 'App/Services/UserServices'
 
 export default class UsersController {
 
+  /**
+   * @list
+   * @summary List users
+   * @tag Users
+   */
   public async list({ request, response }: HttpContextContract): Promise<void> {
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
@@ -16,6 +21,11 @@ export default class UsersController {
     return response.json(users)
   }
 
+  /**
+   * @get
+   * @summary Show user
+   * @tag Users
+   */
   public async get({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
     const userServices = container.resolve(UserServices)
@@ -23,6 +33,11 @@ export default class UsersController {
     return response.json(user)
   }
 
+  /**
+   * @edit
+   * @summary Edit user
+   * @tag Users
+   */
   public async edit({ request, params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
     const userDto = await request.validate({ schema: EditUserSchema })
@@ -31,6 +46,11 @@ export default class UsersController {
     return response.json(user)
   }
 
+  /**
+   * @delete
+   * @summary Delete user
+   * @tag Users
+   */
   public async delete({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
     const userServices = container.resolve(UserServices)

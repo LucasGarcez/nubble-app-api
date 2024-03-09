@@ -50,7 +50,7 @@ export default class PostServices {
     }
 
     await post.load('user');
-    
+
     return post.refresh();
   }
 

@@ -1,9 +1,10 @@
 export default {
   path: __dirname + '../',
   title: 'api-nubble',
+  description: 'Nubble API',
   version: '1.0.0',
-  tagIndex: 2,
-  ignore: ['/swagger', '/docs', '/v1', '/health'],
+  tagIndex: 1,
+  ignore: ['/', '/uploads/*', '/swagger', '/docs', '/health'],
   snakeCase: true,
   common: {
     parameters: {

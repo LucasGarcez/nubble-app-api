@@ -10,9 +10,13 @@ import {
 } from 'App/Services/PostComment'
 import { PostCommentValidators } from 'App/Validators/PostCommentValidators'
 
-/** --- services --- */
-
 export default class PostCommentController {
+
+  /**
+   * @store
+   * @summary New post comment
+   * @tag PostComment
+   **/
   public async store({ request, response, auth }: HttpContextContract): Promise<void> {
     const data = await request.validate(PostCommentValidators.Store)
     const currentUser = auth.user
@@ -24,6 +28,11 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
+  /**
+   * @update
+   * @summary Edit post comment
+   * @tag PostComment
+   **/
   public async update({ request, response, params }: HttpContextContract): Promise<void> {
     const data = await request.validate(PostCommentValidators.Update)
     const { commentId } = params
@@ -35,6 +44,11 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
+  /**
+   * @show
+   * @summary Show post comment
+   * @tag PostComment
+   **/
   public async show({ request, response, params }: HttpContextContract): Promise<void> {
     const { commentId } = params
     const currentUser = request.input('user')
@@ -45,6 +59,11 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
+  /**
+   * @index
+   * @summary List post comments
+   * @tag PostComment
+   **/
   public async index({ request, response }: HttpContextContract): Promise<void> {
 
     const page = request.input('page', 1)
@@ -57,6 +76,11 @@ export default class PostCommentController {
     return response.json(postComment)
   }
 
+  /**
+   * @destroy
+   * @summary Delete post comment
+   * @tag PostComment
+   **/
   public async destroy({ response, params,  auth }: HttpContextContract): Promise<void> {
     const { commentId } = params
 
