@@ -10,6 +10,7 @@ export default class PostsRepository implements IPostReaction.Repository {
 
   public async index(
     page: number,
+    perPage: number,
     postId: number,
     reactionType: string
   ): Promise<ModelPaginatorContract<PostReaction>> {
@@ -23,7 +24,7 @@ export default class PostsRepository implements IPostReaction.Repository {
 
     if (reactionType) baseQuery = baseQuery.where('emoji_type', reactionType)
 
-    return baseQuery.orderBy('id', 'desc').paginate(page)
+    return baseQuery.orderBy('id', 'desc').paginate(page, perPage)
   }
 
   public async show(timeline_category_id: string): Promise<PostReaction | null> {

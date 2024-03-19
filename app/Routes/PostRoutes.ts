@@ -6,11 +6,11 @@ Route.group(() => {
    *  Posts - Routes
    */
   Route.group(() => {
-    Route.get('/', 'PostsController.list').as('post.user.list')
-    Route.get('/:id', 'PostsController.get').as('post.user.get')
+    Route.get('/', 'PostsController.index').as('post.user.index')
+    Route.get('/:id', 'PostsController.show').as('post.user.show')
     Route.post('/', 'PostsController.store').as('post.user.store')
-    Route.put('/:id', 'PostsController.edit').as('post.user.save')
-    Route.delete('/:id', 'PostsController.delete').as('post.user.delete')
+    Route.put('/:id', 'PostsController.update').as('post.user.update')
+    Route.delete('/:id', 'PostsController.destroy').as('post.user.destroy')
   })
     .prefix('/posts')
 
@@ -22,10 +22,10 @@ Route.group(() => {
      *  Post Reaction - Routes
      */
     Route.group(() => {
-      Route.post('/', 'PostReactionController.store')
-      Route.delete('/x:postId', 'PostReactionController.destroy')
-      Route.put('/', 'PostReactionController.update')
       Route.get('/', 'PostReactionController.index')
+      Route.post('/', 'PostReactionController.store')
+      Route.put('/', 'PostReactionController.update')
+      Route.delete('/x:postId', 'PostReactionController.destroy')
     })
       .prefix('/reactions')
 
@@ -33,11 +33,11 @@ Route.group(() => {
      *  Post Comment - Routes
      */
     Route.group(() => {
-      Route.post('/', 'PostCommentController.store')
       Route.get('/', 'PostCommentController.index')
-      Route.delete('/:commentId', 'PostCommentController.destroy')
-      Route.put('/:commentId', 'PostCommentController.update')
       Route.get('/:commentId', 'PostCommentController.show')
+      Route.post('/', 'PostCommentController.store')
+      Route.put('/:commentId', 'PostCommentController.update')
+      Route.delete('/:commentId', 'PostCommentController.destroy')
     })
       .prefix('/comments')
   })

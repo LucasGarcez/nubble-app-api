@@ -91,12 +91,12 @@ export default class Post extends BaseModel {
 
   public static likeCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'like') .as('like_count')
+        builder.where('is_deleted', false).where('emoji_type', 'like').as('like_count')
       )
   )
   public static favoriteCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'favorite') .as('favorite_count')
+        builder.where('is_deleted', false).where('emoji_type', 'favorite').as('favorite_count')
       )
   )
 

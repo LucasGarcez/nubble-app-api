@@ -23,4 +23,10 @@ export namespace PostReactionValidators {
       emoji_type: schema.string(),
     })
   }
+
+  export class Delete {
+    public schema = schema.create({
+      post_id: schema.number([rules.exists({ table: 'posts', column: 'id' })]),
+    })
+  }
 }

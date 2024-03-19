@@ -9,6 +9,35 @@ import { IPost } from 'App/Interfaces/IPost'
 export default class PostsController {
 
   /**
+   * @index
+   * @summary List posts
+   * @tag Posts
+   */
+  public async index({ request, response }: HttpContextContract): Promise<void> {
+    const page = request.input('page', 1)
+    const perPage = request.input('per_page', 10)
+    const search = request.input('search', '')
+
+    const postsService = container.resolve(PostServices)
+    const posts = await postsService.list({ page, perPage, search })
+    return response.json(posts)
+  }
+
+  /**
+   * @show
+   * @summary Show post
+   * @tag Posts
+   */
+  public async show({ params, response }: HttpContextContract): Promise<void> {
+    const { id: postId } = params
+    const postsService = container.resolve(PostServices)
+    const post = await postsService.get(postId)
+
+    console.log(post)
+    return response.json(post)
+  }
+
+  /**
    * @store
    * @summary New post
    * @tag Posts
@@ -28,39 +57,12 @@ export default class PostsController {
   }
 
   /**
-   * @list
-   * @summary List posts
-   * @tag Posts
-   */
-  public async list({ request, response }: HttpContextContract): Promise<void> {
-    const page = request.input('page', 1)
-    const perPage = request.input('per_page', 10)
-    const search = request.input('search', '')
-
-    const postsService = container.resolve(PostServices)
-    const posts = await postsService.list({ page, perPage, search })
-    return response.json(posts)
-  }
-
-  /**
-   * @get
-   * @summary Show post
-   * @tag Posts
-   */
-  public async get({ params, response }: HttpContextContract): Promise<void> {
-    const { id: postId } = params
-    const postsService = container.resolve(PostServices)
-    const post = await postsService.get(postId)
-    return response.json(post)
-  }
-
-  /**
-   * @edit
+   * @update
    * @summary Edit post
    * @tag Posts
    * @requestBody <Post>.exclude(id, user_id, static_table_posts, serialize_extras_true)
    */
-  public async edit({ request, params, response }: HttpContextContract): Promise<void> {
+  public async update({ request, params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
     const postDto: IPost.DTO.Store = await request.validate({ schema: EditPostSchema })
     const image = await request.validate({ schema: ValidateImageSchema })
@@ -72,11 +74,11 @@ export default class PostsController {
   }
 
   /**
-   * @delete
+   * @destroy
    * @summary Delete post
    * @tag Posts
    */
-  public async delete({ params, response }: HttpContextContract): Promise<void> {
+  public async destroy({ params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
     const postsService = container.resolve(PostServices)
     await postsService.delete(postId)

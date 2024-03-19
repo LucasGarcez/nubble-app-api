@@ -35,7 +35,18 @@ export default class PostServices {
   }
 
   public async get(id: string): Promise<Post> {
-    const post = await this.postRepository.findBy('id', id);
+    const post = await this.postRepository.findBy(
+      'id',
+      id,
+      {
+        scopes: (scopes) => {
+          scopes.loadUser()
+          scopes.likeCount()
+          scopes.favoriteCount()
+          scopes.commentCount()
+        },
+      }
+      );
     if (!post) throw new NotFoundException('Post not found or not available.');
     return post;
   }

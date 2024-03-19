@@ -13,6 +13,38 @@ import { PostCommentValidators } from 'App/Validators/PostCommentValidators'
 export default class PostCommentController {
 
   /**
+   * @index
+   * @summary List post comments
+   * @tag PostComment
+   **/
+  public async index({ request, response }: HttpContextContract): Promise<void> {
+
+    const page = request.input('page', 1)
+    const perPage = request.input('per_page', 10)
+    const postId = request.input('post_id', null)
+
+    const indexService = container.resolve(IndexPostCommentService)
+    const postComment = await indexService.run(page, postId, perPage)
+
+    return response.json(postComment)
+  }
+
+  /**
+   * @show
+   * @summary Show post comment
+   * @tag PostComment
+   **/
+  public async show({ request, response, params }: HttpContextContract): Promise<void> {
+    const { commentId } = params
+    const currentUser = request.input('user')
+
+    const showService = container.resolve(ShowPostCommentService)
+    const postComment = await showService.run(commentId, currentUser.id)
+
+    return response.json(postComment)
+  }
+
+  /**
    * @store
    * @summary New post comment
    * @tag PostComment
@@ -40,38 +72,6 @@ export default class PostCommentController {
 
     const updateService = container.resolve(UpdatePostCommentService)
     const postComment = await updateService.run({ ...data }, commentId, currentUser.id)
-
-    return response.json(postComment)
-  }
-
-  /**
-   * @show
-   * @summary Show post comment
-   * @tag PostComment
-   **/
-  public async show({ request, response, params }: HttpContextContract): Promise<void> {
-    const { commentId } = params
-    const currentUser = request.input('user')
-
-    const showService = container.resolve(ShowPostCommentService)
-    const postComment = await showService.run(commentId, currentUser.id)
-
-    return response.json(postComment)
-  }
-
-  /**
-   * @index
-   * @summary List post comments
-   * @tag PostComment
-   **/
-  public async index({ request, response }: HttpContextContract): Promise<void> {
-
-    const page = request.input('page', 1)
-    const perPage = request.input('per_page', 10)
-    const postId = request.input('post_id', null)
-
-    const indexService = container.resolve(IndexPostCommentService)
-    const postComment = await indexService.run(page, postId, perPage)
 
     return response.json(postComment)
   }

@@ -13,11 +13,12 @@ export class IndexPostReactionService {
 
   public async run(
     page: number,
-    userId: number,
+    perPage: number,
+    postId: number,
     reactionType: string
   ): Promise<ModelPaginatorContract<PostReaction>> {
     try {
-      const reactions = await this.postReactionRepository.index(page, userId, reactionType)
+      const reactions = await this.postReactionRepository.index(page, perPage, postId, reactionType)
 
       return reactions
     } catch (err) {

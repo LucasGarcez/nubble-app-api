@@ -8,6 +8,7 @@ export namespace IPostReaction {
 
     index(
       page: number,
+      perPage: number,
       postId: number,
       reactionType: string
     ): Promise<ModelPaginatorContract<PostReaction>>
