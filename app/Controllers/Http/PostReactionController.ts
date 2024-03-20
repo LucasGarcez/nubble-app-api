@@ -2,10 +2,9 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { container } from 'tsyringe'
 
 import {
-  CreatePostReactionService,
+  CreateUpdatePostReactionService,
   DeletePostReactionService,
   IndexPostReactionService,
-  UpdatePostReactionService,
 } from 'App/Services/PostReaction'
 import { PostReactionValidators } from 'App/Validators/PostReactionValidators'
 
@@ -35,31 +34,21 @@ export default class PostReactionController {
   }
 
   /**
-   * @store
+   * @storeUpdate
    * @summary New reaction post
    * @tag PostReaction
+   * @paramPath postId - Post id - @example(1) @type(integer) @required
+   * @paramPath emojiType - Emoji type - @enum(like, favorite) @required
    **/
-  public async store({ request, response, auth }: HttpContextContract): Promise<void> {
+  public async storeUpdate({ request, params, response, auth }: HttpContextContract): Promise<void> {
     const userId = auth.user?.id!
+    request.updateBody({ post_id: params.postId, user_id: userId, emoji_type: params.emojiType })
 
-    const data = await request.validate(PostReactionValidators.Store)
-    const createService = container.resolve(CreatePostReactionService)
-    const postReaction = await createService.run({ ...data, user_id: userId })
+    const data = await request.validate(PostReactionValidators.StoreUpdate)
 
-    return response.json(postReaction)
-  }
+    const createService = container.resolve(CreateUpdatePostReactionService)
 
-  /**
-   * @update
-   * @summary Edit reaction post
-   * @tag PostReaction
-   **/
-  public async update({ request, response, auth }: HttpContextContract): Promise<void> {
-    const userId = auth.user?.id!
-
-    const data = await request.validate(PostReactionValidators.Update)
-    const updateService = container.resolve(UpdatePostReactionService)
-    const postReaction = await updateService.run({ ...data, user_id: userId })
+    const postReaction = await createService.run({ ...data })
 
     return response.json(postReaction)
   }
@@ -68,13 +57,17 @@ export default class PostReactionController {
    * @destroy
    * @summary Delete reaction post
    * @tag PostReaction
+   * @paramPath postId - Post id - @example(1) @type(integer) @required
+   * @paramPath emojiType - Emoji type - @enum(like, favorite) @required
    **/
-  public async destroy({ request, response, auth }: HttpContextContract): Promise<void> {
+  public async destroy({ request, params, response, auth }: HttpContextContract): Promise<void> {
     const userId = auth.user?.id!
+    request.updateBody({ post_id: params.postId, user_id: userId, emoji_type: params.emojiType })
+
     const data = await request.validate(PostReactionValidators.Delete)
     const deleteService = container.resolve(DeletePostReactionService)
 
-    await deleteService.run(data.post_id, userId)
+    await deleteService.run(data.post_id, data.user_id, data.emoji_type)
 
     return response.json({ message: 'Reaction deleted.' })
   }

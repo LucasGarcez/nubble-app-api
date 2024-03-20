@@ -35,8 +35,8 @@ export default class PostReaction extends BaseModel {
   @column()
   public hub_event_id: number | null
 
-  @column({ serializeAs: null })
-  public is_deleted: boolean
+  @column()
+  public is_checked: boolean
 
   @column.dateTime({ autoCreate: true })
   public created_at: DateTime

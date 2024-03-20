@@ -1,4 +1,3 @@
-export * from './CreatePostReactionService'
+export * from './CreateUpdatePostReactionService'
 export * from './DeletePostReactionService'
-export * from './UpdatePostReactionService'
 export * from './IndexPostReactionService'

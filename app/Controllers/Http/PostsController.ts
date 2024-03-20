@@ -12,6 +12,9 @@ export default class PostsController {
    * @index
    * @summary List posts
    * @tag Posts
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   * @paramQuery search - Search - @example(Bom dia) @type(string)
    */
   public async index({ request, response }: HttpContextContract): Promise<void> {
     const page = request.input('page', 1)
@@ -27,6 +30,7 @@ export default class PostsController {
    * @show
    * @summary Show post
    * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
    */
   public async show({ params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
@@ -60,6 +64,7 @@ export default class PostsController {
    * @update
    * @summary Edit post
    * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
    * @requestBody <Post>.exclude(id, user_id, static_table_posts, serialize_extras_true)
    */
   public async update({ request, params, response }: HttpContextContract): Promise<void> {
@@ -77,6 +82,7 @@ export default class PostsController {
    * @destroy
    * @summary Delete post
    * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
    */
   public async destroy({ params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params

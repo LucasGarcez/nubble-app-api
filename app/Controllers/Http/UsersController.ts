@@ -11,6 +11,9 @@ export default class UsersController {
    * @list
    * @summary List users
    * @tag Users
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   * @paramQuery search - Search - @example(tsilva@coffstack.com) @type(string)
    */
   public async list({ request, response }: HttpContextContract): Promise<void> {
     const page = request.input('page', 1)
@@ -25,6 +28,7 @@ export default class UsersController {
    * @get
    * @summary Show user
    * @tag Users
+   * @paramPath id - User id - @example(1) @type(integer)
    */
   public async get({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
@@ -37,6 +41,7 @@ export default class UsersController {
    * @edit
    * @summary Edit user
    * @tag Users
+   * @paramPath id - User id - @example(1) @type(integer)
    */
   public async edit({ request, params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
@@ -50,6 +55,7 @@ export default class UsersController {
    * @delete
    * @summary Delete user
    * @tag Users
+   * @paramPath id - User id - @example(1) @type(integer)
    */
   public async delete({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
