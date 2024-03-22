@@ -23,6 +23,7 @@ Route.group(() => {
      */
     Route.group(() => {
       Route.get('/', 'PostReactionController.index')
+      Route.get('/my-reactions', 'PostReactionController.myReactions')
       Route.post('/:postId/:emojiType', 'PostReactionController.storeUpdate')
       Route.delete('/:postId/:emojiType', 'PostReactionController.destroy')
     })

@@ -16,13 +16,15 @@ export default class PostsController {
    * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
    * @paramQuery search - Search - @example(Bom dia) @type(string)
    */
-  public async index({ request, response }: HttpContextContract): Promise<void> {
+  public async index({ request, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
     const search = request.input('search', '')
 
     const postsService = container.resolve(PostServices)
-    const posts = await postsService.list({ page, perPage, search })
+    const posts = await postsService.list({ page, perPage, search, userId })
     return response.json(posts)
   }
 
@@ -32,10 +34,12 @@ export default class PostsController {
    * @tag Posts
    * @paramPath id - Post id - @example(1) @type(integer)
    */
-  public async show({ params, response }: HttpContextContract): Promise<void> {
+  public async show({ params, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
     const { id: postId } = params
     const postsService = container.resolve(PostServices)
-    const post = await postsService.get(postId)
+    const post = await postsService.get(postId, userId)
 
     console.log(post)
     return response.json(post)

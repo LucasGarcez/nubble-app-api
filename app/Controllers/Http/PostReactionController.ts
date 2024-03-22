@@ -16,11 +16,38 @@ export default class PostReactionController {
    * @tag PostReaction
    * @paramQuery page - Page number - @example(1) @type(integer) @required
    * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
-   * @paramQuery post_id - Post id - @example(1) @type(integer) @required
-   * @paramQuery reaction_type - Reaction type - @enum(like, favorite) @required
+   * @paramQuery post_id - Post id - @example(1) @type(integer)
+   * @paramQuery user_id - User id - @example(1) @type(integer)
+   * @paramQuery reaction_type - Reaction type - @enum(like, favorite)
    * @responseBody 200 - <PostReaction[]>.exclude(static_table_post_reactions, post, static_table_posts, static_table_users, serialize_extras_true).with(relations)
    */
   public async index({ request, response }: HttpContextContract): Promise<void> {
+    const page = request.input('page', 1)
+    const perPage = request.input('per_page', 10)
+    const postId = request.input('post_id', null)
+    const userId = request.input('user_id', null)
+    const reactionType = request.input('reaction_type', null)
+
+    const postsReactionService = container.resolve(IndexPostReactionService)
+
+    const posts = await postsReactionService.run(page, perPage, postId, userId, reactionType)
+
+    return response.json(posts)
+  }
+
+  /**
+   * @myReactions
+   * @summary List reactions post by user
+   * @tag PostReaction
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   * @paramQuery post_id - Post id - @example(1) @type(integer)
+   * @paramQuery reaction_type - Reaction type - @enum(like, favorite)
+   * @responseBody 200 - <PostReaction[]>.exclude(static_table_post_reactions, post, static_table_posts, static_table_users, serialize_extras_true).with(relations)
+   */
+  public async myReactions({ request, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
     const postId = request.input('post_id', null)
@@ -28,14 +55,15 @@ export default class PostReactionController {
 
     const postsReactionService = container.resolve(IndexPostReactionService)
 
-    const posts = await postsReactionService.run(page, perPage, postId, reactionType)
+    const posts = await postsReactionService.run(page, perPage, postId, userId, reactionType)
 
     return response.json(posts)
   }
 
+
   /**
    * @storeUpdate
-   * @summary New reaction post
+   * @summary Create or Update reaction post
    * @tag PostReaction
    * @paramPath postId - Post id - @example(1) @type(integer) @required
    * @paramPath emojiType - Emoji type - @enum(like, favorite) @required

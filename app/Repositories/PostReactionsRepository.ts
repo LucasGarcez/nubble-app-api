@@ -8,15 +8,19 @@ export default class PostsRepository implements IPostReaction.Repository {
     page: number,
     perPage: number,
     postId: number,
+    userId: number,
     reactionType: string
   ): Promise<ModelPaginatorContract<PostReaction>> {
     let baseQuery = PostReaction.query()
       .withScopes((scopes) => {
         scopes.loadUser()
+        scopes.loadPost()
       })
-      .where({
-        post_id: postId,
-      })
+      .where('is_checked', true)
+
+    if (postId) baseQuery = baseQuery.where('post_id', postId)
+
+    if (userId) baseQuery = baseQuery.where('user_id', userId)
 
     if (reactionType) baseQuery = baseQuery.where('emoji_type', reactionType)
 

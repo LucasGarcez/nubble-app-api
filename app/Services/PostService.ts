@@ -19,7 +19,9 @@ export default class PostServices {
     page = 1,
     perPage = 10,
     search,
+    userId = 0,
   }: DTOs.List): Promise<PaginateContractType<typeof Post>> {
+
     return this.postRepository.listWithPagination({
       page,
       perPage,
@@ -27,22 +29,20 @@ export default class PostServices {
       scopes: (scopes) => {
         scopes.searchQueryScope(search);
         scopes.loadUser()
-        scopes.likeCount()
-        scopes.favoriteCount()
+        scopes.reactionCount(userId)
         scopes.commentCount()
       },
     });
   }
 
-  public async get(id: string): Promise<Post> {
+  public async get(id: string, userId: number): Promise<Post> {
     const post = await this.postRepository.findBy(
       'id',
       id,
       {
         scopes: (scopes) => {
           scopes.loadUser()
-          scopes.likeCount()
-          scopes.favoriteCount()
+          scopes.reactionCount(userId)
           scopes.commentCount()
         },
       }

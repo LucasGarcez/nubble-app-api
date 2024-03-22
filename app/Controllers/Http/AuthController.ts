@@ -22,7 +22,7 @@ export default class AuthController {
    * @tag Auth
    * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
    * @responseBody 401 - {"message": "Unable to login, please check your credentials or try again later."}
-   * @requestBody {"email": "string", "password": "string", "rememberMe": "boolean"}
+   * @requestBody {"email": "mariajulia@coffstack.com", "password": "supersecret", "rememberMe": true}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     try {

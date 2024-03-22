@@ -76,6 +76,12 @@ export default class PostReaction extends BaseModel {
     })
   })
 
+  public static loadPost = scope((query: ModelQueryBuilderContract<typeof PostReaction>) => {
+    query.preload('post', (builder) => {
+      builder.select(['id', 'text', 'image_url'])
+    })
+  })
+
   /**
    * ------------------------------------------------------
    * Misc

@@ -9,6 +9,7 @@ export namespace IPostReaction {
       page: number,
       perPage: number,
       postId: number,
+      userId: number,
       reactionType: string
     ): Promise<ModelPaginatorContract<PostReaction>>
 
