@@ -12,9 +12,9 @@ export class ShowPostCommentService {
     private postCommentRepository: IPostComment.Repository
   ) {}
 
-  public async run(commentId: number, userId: number): Promise<PostComment> {
+  public async run(commentId: number): Promise<PostComment> {
     try {
-      const comment = await this.postCommentRepository.show(commentId, userId)
+      const comment = await this.postCommentRepository.show(commentId)
 
       if (!comment)
         throw new NotFoundException('Not found comment with this id or comment is not available.')

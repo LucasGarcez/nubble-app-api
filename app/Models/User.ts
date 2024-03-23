@@ -67,6 +67,7 @@ export default class User extends BaseModel {
   public is_deleted: boolean
 
   @column()
+  // @no-swagger
   public temp_token_created_at?: Date | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })

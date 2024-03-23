@@ -12,7 +12,7 @@ export namespace IPostComment {
       perPage: number
     ): Promise<ModelPaginatorContract<PostComment>>
 
-    show(postCommentId: number, userId: number): Promise<PostComment | null>
+    show(postCommentId: number): Promise<PostComment | null>
   }
 
   export interface Helpers {

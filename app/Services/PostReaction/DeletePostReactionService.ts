@@ -9,9 +9,9 @@ export class DeletePostReactionService {
     private postReactionRepository: IPostReaction.Repository
   ) {}
 
-  public async run(postId: number, userId: number): Promise<boolean> {
+  public async run(postId: number, userId: number, emojiType: string): Promise<boolean> {
     try {
-      await this.postReactionRepository.deleteFromPost(postId, userId)
+      await this.postReactionRepository.deleteFromPost(postId, userId, emojiType)
 
       return true
     } catch (err) {

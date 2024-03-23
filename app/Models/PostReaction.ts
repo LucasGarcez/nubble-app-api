@@ -35,8 +35,8 @@ export default class PostReaction extends BaseModel {
   @column()
   public hub_event_id: number | null
 
-  @column({ serializeAs: null })
-  public is_deleted: boolean
+  @column()
+  public is_checked: boolean
 
   @column.dateTime({ autoCreate: true })
   public created_at: DateTime
@@ -71,7 +71,15 @@ export default class PostReaction extends BaseModel {
    * ------------------------------------------------------
    */
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof PostReaction>) => {
-    query.preload('user')
+    query.preload('user', (builder) => {
+      builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
+    })
+  })
+
+  public static loadPost = scope((query: ModelQueryBuilderContract<typeof PostReaction>) => {
+    query.preload('post', (builder) => {
+      builder.select(['id', 'text', 'image_url'])
+    })
   })
 
   /**
