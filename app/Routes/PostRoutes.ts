@@ -3,25 +3,18 @@ import Route from '@ioc:Adonis/Core/Route'
 /** Private  routes */
 Route.group(() => {
   /**
-   *  Posts - Routes
+   *  Post  - Routes
    */
-  Route.group(() => {
-    Route.get('/', 'PostsController.index').as('post.user.index')
-    Route.get('/:id', 'PostsController.show').as('post.user.show')
-    Route.post('/', 'PostsController.store').as('post.user.store')
-    Route.put('/:id', 'PostsController.update').as('post.user.update')
-    Route.delete('/:id', 'PostsController.destroy').as('post.user.destroy')
-  })
-    .prefix('/posts')
+  Route.get('post', 'PostsController.list').as('post.user.list')
+  Route.get('post/:id', 'PostsController.get').as('post.user.get')
+  Route.post('post', 'PostsController.store').as('post.user.store')
+  Route.put('post/:id', 'PostsController.edit').as('post.user.save')
+  Route.delete('post/:id', 'PostsController.delete').as('post.user.delete')
 
   /**
-   *  Post - Routes
+   *  Post Reaction - Routes
    */
   Route.group(() => {
-    /**
-     *  Post Reaction - Routes
-     */
-    Route.group(() => {
       Route.get('/', 'PostReactionController.index')
       Route.get('/my-reactions', 'PostReactionController.myReactions')
       Route.post('/:postId/:emojiType', 'PostReactionController.storeUpdate')
@@ -29,19 +22,14 @@ Route.group(() => {
     })
       .prefix('/reactions')
 
-    /**
-     *  Post Comment - Routes
-     */
-    Route.group(() => {
-      Route.get('/', 'PostCommentController.index')
-      Route.get('/:commentId', 'PostCommentController.show')
-      Route.post('/', 'PostCommentController.store')
-      Route.put('/:commentId', 'PostCommentController.update')
-      Route.delete('/:commentId', 'PostCommentController.destroy')
-    })
-      .prefix('/comments')
-  })
-    .prefix('/post')
-
+  /**
+   *  Post Comment - Routes
+   */
+  Route.post('post_comment', 'PostCommentController.store')
+  Route.get('post_comment', 'PostCommentController.index')
+  Route.delete('post_comment/:commentId', 'PostCommentController.destroy')
+  Route.put('post_comment/:commentId', 'PostCommentController.update')
+  Route.get('post_comment/:commentId', 'PostCommentController.show')
 })
+  .prefix('user')
   .middleware(['auth'])

@@ -8,8 +8,8 @@ Route.group(() => {
   Route.put('/:id', 'UsersController.edit').as('users.edit')
   Route.delete('/:id', 'UsersController.delete').as('users.delete')
 })
-  .prefix('/users')
-  .middleware(['auth'])
+.prefix('/users')
+.middleware(['auth'])
 
 /** Public Routes */
 Route.group(() => {
@@ -22,12 +22,13 @@ Route.group(() => {
   Route.get('/validate-email', 'AuthController.isEmailAvailable').as('auth.isEmailAvailable')
   Route.post('/refresh-token', 'AuthController.refreshToken').as('auth.refreshToken')
 
+  /** Private  Routes */
   Route.group(() => {
     /** Auth/Profile - Routes */
     Route.post('/edit-password', 'AuthController.editPassword').as('auth.editPassword')
     Route.get('/logout', 'AuthController.logout').as('auth.logout')
   })
-    .prefix('/profile')
-    .middleware(['auth'])
+  .prefix('/profile')
+  .middleware(['auth'])
 })
-  .prefix('/auth')
+.prefix('/auth')
