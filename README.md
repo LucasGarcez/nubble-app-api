@@ -67,31 +67,24 @@ Chegou a hora de conectar o banco de dados. Abra o Beekeeper Studio e crie uma n
 
 ### 3. Criar o Bucket no Minio
 
-- Ao acessar o [Minio](http://localhost:8900) pela primeira vez, clique em Create a Bucket, em Bucket Name informe: *nubble*
-- Após criar o Bucket altere o Access Policy para Public
-- Em Access Keys clique em Create Access Key
-- Copie suas chaves para o arquivo .env
+- Acesse o Minio ma porta [http://localhost:8900](http://localhost:8900)
+    - username: `nubble`
+    - password: `nubble-pass`
+- 
 
-```text
-S3_KEY='Access Key'
-S3_SECRET='Secret Key'
-```
-
----
-
-### 4. Criar o Bucket no Minio
-
-- Ao acessar o [Minio](http://localhost:8900) pela primeira vez, clique em Create a Bucket, em Bucket Name informe: *nubble*
-- Após criar o Bucket altere o Access Policy para Public
-- Em Access Keys clique em Create Access Key
-- Copie suas chaves para o arquivo .env
-
-```text
-S3_KEY='Access Key'
-S3_SECRET='Secret Key'
-```
+- Clique em **Create a Bucket**, em Bucket Name informe: **nubble**
+- Após criar o Bucket altere o **Access Policy** para **Public**
+- Em **Access Keys** clique em **Create Access Key**
+- Copie suas chaves para o arquivo **.env**
+    - `S3_KEY='Access Key`
+    - `S3_SECRET='Secret Key`
+- ative o túnel HTTPS com o ngrok usando o seu **Static domain**
+    - ` ngrok http --domain=hugely-usable-swan.ngrok-free.app http://localhost:9000`
+- Substitua no arquivo `.env` o valor da `S3_CDN_URL` de `http://localhost:9000` pela sua nova URL. Por exemplo: ` https://hugely-usable-swan.ngrok-free.app`
+- rode o comando `make docker-rebuild` para subir a atualização do S3
 
 ---
+
 
 ## Importar Endpoits da API para o [Insomnia][l-Insomnia]
 [![Importar Insomnia}][i-Insomnia-Run]][l-Insomnia-Import]
