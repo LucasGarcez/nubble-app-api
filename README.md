@@ -106,7 +106,7 @@ Minio - S3 | <http://localhost:8900> | nubble | nubble-pass
 ### Tecnologias Utilizada
 
 - [Docker][l-docker]
-- [NodeJs v18.17.0][l-nodejs]
+- [NodeJs v20.12.2][l-nodejs]
 - [Adonis v5][l-adonis]
 - [Postgres v14][l-postgres]
 - [pgAdmin][l-pgadmin]
