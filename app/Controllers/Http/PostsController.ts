@@ -41,7 +41,6 @@ export default class PostsController {
     const postsService = container.resolve(PostServices)
     const post = await postsService.get(postId, userId)
 
-    console.log(post)
     return response.json(post)
   }
 
