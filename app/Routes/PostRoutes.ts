@@ -5,7 +5,7 @@ Route.group(() => {
   /**
    *  Post  - Routes
    */
-  Route.get('post', 'PostsController.list').as('post.user.list')
+  Route.get('post', 'PostsController.index').as('post.user.list')
   Route.get('post/:id', 'PostsController.get').as('post.user.get')
   Route.post('post', 'PostsController.store').as('post.user.store')
   Route.put('post/:id', 'PostsController.edit').as('post.user.save')
@@ -14,10 +14,13 @@ Route.group(() => {
   /**
    *  Post Reaction - Routes
    */
-  Route.post('post_reaction', 'PostReactionController.store')
-  Route.delete('post_reaction/x:postId', 'PostReactionController.destroy')
-  Route.put('post_reaction', 'PostReactionController.update')
-  Route.get('post_reaction', 'PostReactionController.index')
+  Route.group(() => {
+      Route.get('/', 'PostReactionController.index')
+      Route.get('/my-reactions', 'PostReactionController.myReactions')
+      Route.post('/:postId/:emojiType', 'PostReactionController.storeUpdate')
+      Route.delete('/:postId/:emojiType', 'PostReactionController.destroy')
+    })
+      .prefix('/reactions')
 
   /**
    *  Post Comment - Routes

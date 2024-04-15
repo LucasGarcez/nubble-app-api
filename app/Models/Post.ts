@@ -72,31 +72,20 @@ export default class Post extends BaseModel {
   @hasMany(() => PostReaction, { foreignKey: 'post_id' })
   public reactions: HasMany<typeof PostReaction>
 
-  @hasMany(() => PostReaction, { foreignKey: 'post_id' })
-  public reaction_count: HasMany<typeof PostReaction>
-
   @hasMany(() => PostComment, { foreignKey: 'post_id' })
   public comments: HasMany<typeof PostComment>
 
 
-  public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
+  public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>, userId: number) =>
     query
-      .preload('reaction_count', (builder) =>
-        builder.select('emoji_type').groupBy('emoji_type', 'post_id').count('*')
+      .preload('reactions', (builder) =>
+        builder.distinct('emoji_type').where('user_id', userId).where('is_checked', true)
       )
       .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).as('post_reactions_count')
+        builder.where('is_checked', true).where('emoji_type', 'like').as('like_count')
       )
-  )
-
-  public static likeCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-    query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'like') .as('like_count')
-      )
-  )
-  public static favoriteCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-    query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'favorite') .as('favorite_count')
+      .withCount('reactions', (builder) =>
+        builder.where('is_checked', true).where('emoji_type', 'favorite').as('favorite_count')
       )
   )
 
@@ -124,12 +113,12 @@ export default class Post extends BaseModel {
   )
 
   public static loadAlreadyReact = scope(
-    (query: ModelQueryBuilderContract<typeof Post>, userId: number | string) =>
+    (query: ModelQueryBuilderContract<typeof Post>, userId: number) =>
       query.withAggregate('reactions', (builder) =>
         builder
           .max('emoji_type')
           .where('user_id', userId)
-          .where('is_deleted', false)
+          .where('is_checked', true)
           .groupBy('id', 'user_id', 'post_id', 'emoji_type')
           .orderBy('id', 'desc')
           .limit(1)
