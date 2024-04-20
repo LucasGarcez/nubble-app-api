@@ -9,7 +9,7 @@ Route.group(() => {
   Route.get('post/:id', 'PostsController.show').as('post.user.get')
   Route.post('post', 'PostsController.store').as('post.user.store')
   Route.put('post/:id', 'PostsController.edit').as('post.user.save')
-  Route.delete('post/:id', 'PostsController.delete').as('post.user.delete')
+  Route.delete('post/:id', 'PostsController.destroy').as('post.user.delete')
 
   /**
    *  Post Reaction - Routes
