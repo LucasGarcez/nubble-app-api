@@ -13,8 +13,9 @@ export default class PostsRepository implements IPostReaction.Repository {
   ): Promise<ModelPaginatorContract<PostReaction>> {
     let baseQuery = PostReaction.query()
       .withScopes((scopes) => {
-        scopes.loadUser()
-        scopes.loadPost()
+        //scopes.loadUser()
+        scopes.loadPostUser()
+        //scopes.loadPost()
       })
       .where('is_checked', true)
 
@@ -24,7 +25,22 @@ export default class PostsRepository implements IPostReaction.Repository {
 
     if (reactionType) baseQuery = baseQuery.where('emoji_type', reactionType)
 
-    return baseQuery.orderBy('id', 'desc').paginate(page, perPage)
+    const result = await baseQuery.orderBy('id', 'desc').paginate(page, perPage)
+
+    // Solução para corrigir o problema preloading do usuário do post
+    const dataProperty = Object.keys(result).find((key) => Array.isArray(result[key]))
+
+    if (dataProperty) {
+      result[dataProperty] = result[dataProperty].map((reaction) => {
+        if (reaction.$preloaded.post) {
+          reaction.$preloaded.user = reaction.$preloaded.post.$preloaded.user
+          delete reaction.$preloaded.post.$preloaded.user
+        }
+        return reaction
+      })
+    }
+
+    return result
   }
 
   public async show(timeline_category_id: string): Promise<PostReaction | null> {
