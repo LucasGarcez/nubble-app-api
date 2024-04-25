@@ -82,6 +82,15 @@ export default class PostReaction extends BaseModel {
     })
   })
 
+  public static loadPostUser = scope((query: ModelQueryBuilderContract<typeof PostReaction>) => {
+    query.preload('post', (builder) => {
+      builder.select(['id', 'text', 'image_url', 'user_id'])
+      builder.preload('user', (builder) => {
+        builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
+      })
+    })
+  })
+
   /**
    * ------------------------------------------------------
    * Misc
