@@ -1,14 +1,33 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 /** Private  Routes */
+
+/**
+ * Users - Routes
+ */
 Route.group(() => {
-  /** Users - Routes */
   Route.get('/', 'UsersController.list')
   Route.get('/:id', 'UsersController.get').as('users.get')
   Route.put('/:id', 'UsersController.edit').as('users.edit')
   Route.delete('/:id', 'UsersController.delete').as('users.delete')
 })
 .prefix('/users')
+.middleware(['auth'])
+
+/**
+ * User - Routes
+ */
+Route.group(() => {
+  /** Follow - Routes */
+  Route.group(() => {
+    Route.get('/follower', 'FollowController.listFollower').as('user.listFollower')
+    Route.get('/followed', 'FollowController.listFollowed').as('user.listFollowed')
+    Route.post('/', 'FollowController.storeFollower').as('user.storeFollower')
+    Route.delete('/:id', 'FollowController.deleteFollower').as('user.deleteFollower')
+  })
+  .prefix('/follow')
+})
+.prefix('/user')
 .middleware(['auth'])
 
 /** Public Routes */
