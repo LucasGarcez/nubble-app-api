@@ -13,7 +13,7 @@ export default class FollowServices {
     private followRepository: IFollow.Repository
   ) {}
 
-  public async listFollower({
+  public async listFollowing({
     page = 1,
     perPage = 10,
     userId = 0
@@ -27,7 +27,7 @@ export default class FollowServices {
     })
   }
 
-  public async listFollowed({
+  public async listFollower({
     page = 1,
     perPage = 10,
     userId = 0

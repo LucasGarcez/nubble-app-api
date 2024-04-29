@@ -7,8 +7,24 @@ import { FollowValidators } from 'App/Validators/FollowValidators'
 export default class FollowController {
 
   /**
-   * @listFollower
+   * @listFollowing
    * @summary List followers
+   * @tag Follow
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   */
+  public async listFollowing({ request, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
+    const { page, perPage } = request.qs()
+    const listFollowerService = container.resolve(FollowServices)
+    const followers = await listFollowerService.listFollowing({ page, perPage, userId })
+    return response.json(followers)
+  }
+
+  /**
+   * @listFollower
+   * @summary List followed
    * @tag Follow
    * @paramQuery page - Page number - @example(1) @type(integer) @required
    * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
@@ -17,24 +33,8 @@ export default class FollowController {
     const userId = auth.user?.id!
 
     const { page, perPage } = request.qs()
-    const listFollowerService = container.resolve(FollowServices)
-    const followers = await listFollowerService.listFollower({ page, perPage, userId })
-    return response.json(followers)
-  }
-
-  /**
-   * @listFollowed
-   * @summary List followed
-   * @tag Follow
-   * @paramQuery page - Page number - @example(1) @type(integer) @required
-   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
-   */
-  public async listFollowed({ request, response, auth }: HttpContextContract): Promise<void> {
-    const userId = auth.user?.id!
-
-    const { page, perPage } = request.qs()
     const listFollowedService = container.resolve(FollowServices)
-    const followed = await listFollowedService.listFollowed({ page, perPage, userId })
+    const followed = await listFollowedService.listFollower({ page, perPage, userId })
     return response.json(followed)
   }
 
