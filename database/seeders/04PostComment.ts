@@ -5,9 +5,6 @@ import {subDays, formatISO} from 'date-fns'
 import { DateTime } from 'luxon'
 
 export default class PostCommentSeeder extends BaseSeeder {
-
-
-
   public async run() {
     await PostComment.createMany(createPostComments())
   }
@@ -15,7 +12,7 @@ export default class PostCommentSeeder extends BaseSeeder {
 
 
 function createPostComments() {
-  const postComments:  Partial<PostComment>[] = []   
+  const postComments:  Partial<PostComment>[] = []
 
   //TODO: add createAt and updateAt
   for(let i = 0; i < 100; i++) {

@@ -32,8 +32,17 @@ export default class UserServices {
   }
 
   public async get(id: string): Promise<User> {
-    const user = await this.usersRepository.findBy('id', id)
+    const user = await this.usersRepository.findBy(
+      'id', id,
+      {
+        scopes: (scopes) => {
+          scopes.followersCount()
+          scopes.followedCount()
+        },
+      }
+    )
     if (!user) throw new NotFoundException('User not found or not available.')
+
     return user
   }
 

@@ -15,6 +15,7 @@ import PostContent from 'App/Models/PostContent'
 import PostReaction from 'App/Models/PostReaction'
 import BaseModel from 'App/Shared/Models/BaseModel'
 import User from './User'
+import Follow from './Follow'
 
 export default class Post extends BaseModel {
   public static table = 'posts'
@@ -60,9 +61,7 @@ export default class Post extends BaseModel {
   // @no-swagger
   public deleted_at: DateTime
 
-  @belongsTo(() => User, {
-    foreignKey: 'user_id',
-  })
+  @belongsTo(() => User, { foreignKey: 'user_id' })
   public user: BelongsTo<typeof User>
 
   /** has-many relationships */
@@ -74,6 +73,12 @@ export default class Post extends BaseModel {
 
   @hasMany(() => PostComment, { foreignKey: 'post_id' })
   public comments: HasMany<typeof PostComment>
+
+  @hasMany(() => Follow, { localKey: 'user_id', foreignKey: 'follower_user_id' })
+  public follower: HasMany<typeof Follow>
+
+  @hasMany(() => Follow, { localKey: 'user_id', foreignKey: 'followed_user_id' })
+  public followed: HasMany<typeof Follow>
 
 
   public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>, userId: number) =>
@@ -99,6 +104,12 @@ export default class Post extends BaseModel {
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query.preload('user', (builder) => {
       builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
+      .withCount('follower', (builder) =>
+        builder.as('follower_count')
+      )
+      .withCount('followed', (builder) =>
+        builder.as('followed_count')
+      )
     })
   )
 
