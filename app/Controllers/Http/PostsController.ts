@@ -15,6 +15,7 @@ export default class PostsController {
    * @paramQuery page - Page number - @example(1) @type(integer) @required
    * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
    * @paramQuery search - Search - @example(Bom dia) @type(string)
+   * @paramQuery user_id - Author id - @example(1) @type(integer)
    */
   public async index({ request, response, auth }: HttpContextContract): Promise<void> {
     const userId = auth.user?.id!
@@ -22,9 +23,10 @@ export default class PostsController {
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
     const search = request.input('search', '')
+    const authorId = request.input('user_id', '')
 
     const postsService = container.resolve(PostServices)
-    const posts = await postsService.list({ page, perPage, search, userId })
+    const posts = await postsService.list({ page, perPage, search, userId, authorId })
     return response.json(posts)
   }
 

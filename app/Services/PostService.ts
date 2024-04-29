@@ -20,7 +20,8 @@ export default class PostServices {
     perPage = 10,
     search,
     userId = 0,
-  }: DTOs.List): Promise<PaginateContractType<typeof Post>> {
+    authorId
+  }: DTOs.List & {authorId?: number}): Promise<PaginateContractType<typeof Post>> {
 
     return this.postRepository.listWithPagination({
       page,
@@ -31,6 +32,9 @@ export default class PostServices {
         scopes.loadUser()
         scopes.reactionCount(userId)
         scopes.commentCount()
+        if (authorId) {
+          scopes.authorIdScope(authorId);
+        }
       },
     });
   }

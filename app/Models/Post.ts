@@ -151,6 +151,12 @@ export default class Post extends BaseModel {
       builder.whereRaw(`(${sql})`).orWhereNull('text')
     })
   })
+  
+  public static authorIdScope = scope((query, authorId) => {
+    return query.where((builder) => {
+      builder.where('user_id', '=', authorId);
+    })
+  })
 
   public static orderQueryScope = scope(
     (
