@@ -145,13 +145,13 @@ export default class User extends BaseModel {
 
   public static followersCount = scope((query: ModelQueryBuilderContract<typeof User>) =>
     query.withCount('follower', (builder) =>
-      builder.as('followers_count')
+      builder.as('following_count')
     )
   )
 
   public static followedCount = scope((query: ModelQueryBuilderContract<typeof User>) =>
     query.withCount('followed', (builder) =>
-      builder.as('followed_count')
+      builder.as('followers_count')
     )
   )
 

@@ -105,10 +105,10 @@ export default class Post extends BaseModel {
     query.preload('user', (builder) => {
       builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
       .withCount('follower', (builder) =>
-        builder.as('follower_count')
+        builder.as('following_count')
       )
       .withCount('followed', (builder) =>
-        builder.as('followed_count')
+        builder.as('followers_count')
       )
     })
   )
