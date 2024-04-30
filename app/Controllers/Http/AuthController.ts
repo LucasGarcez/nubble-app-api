@@ -288,12 +288,12 @@ export default class AuthController {
 
     const currentPasswordIsValid = await Hash.verify(user.password, userDto.currentPassword)
     if (!currentPasswordIsValid) {
-      return response.status(401).json({ errors: [{ message: 'Current password is wrong' }] })
+      return response.status(400).json({ errors: [{ message: 'Current password is wrong' }] })
     }
 
     const newsIsEqualsToCurrent = await Hash.verify(user.password, userDto.newPassword)
     if(newsIsEqualsToCurrent) {
-      return response.status(401).json({ errors: [{ message: 'New password is equal to current password' }] })
+      return response.status(400).json({ errors: [{ message: 'New password is equal to current password' }] })
     }
 
     user.password = userDto.newPassword
