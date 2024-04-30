@@ -39,7 +39,8 @@ export namespace IUser {
     }
 
     export type EditPassword = {
-      password: string
+      currentPassword: string
+      newPassword: string
     }
   }
 }

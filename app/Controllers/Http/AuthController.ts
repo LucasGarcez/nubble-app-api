@@ -276,24 +276,27 @@ export default class AuthController {
    * @tag Auth
    * @responseBody 200 - {"message": "Password changed successfully"}
    * @responseBody 401 - {"errors": [{"message": "User not found"}]}
-   * @requestBody {"password": "string"}
+   * @requestBody {"currentPassword": "string", "newPassword": "string"}
    */
   public async editPassword({ request, auth, response }: HttpContextContract): Promise<void> {
     const userDto: IUser.DTOs.EditPassword = await request.validate({ schema: EditPasswordSchema })
 
     const user = await User.findBy('id', auth.user?.id)
-
     if (!user) {
       return response.status(401).json({ errors: [{ message: 'User not found' }] })
     }
 
-    const samePassword = await Hash.verify(user.password, userDto.password)
-
-    if (!samePassword) {
+    const currentPasswordIsValid = await Hash.verify(user.password, userDto.currentPassword)
+    if (!currentPasswordIsValid) {
       return response.status(401).json({ errors: [{ message: 'Current password is wrong' }] })
     }
 
-    user.password = userDto.password
+    const newsIsEqualsToCurrent = await Hash.verify(user.password, userDto.newPassword)
+    if(newsIsEqualsToCurrent) {
+      return response.status(401).json({ errors: [{ message: 'New password is equal to current password' }] })
+    }
+
+    user.password = userDto.newPassword
 
     await user.save()
 

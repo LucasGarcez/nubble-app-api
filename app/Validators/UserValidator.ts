@@ -50,13 +50,10 @@ export const ForgotPasswordSchema = schema.create({
 })
 
 export const EditPasswordSchema = schema.create({
-  password: schema.string({ trim: true }, [rules.confirmed()]),
+  currentPassword: schema.string({ trim: true }),
+  newPassword: schema.string({ trim: true }, [rules.minLength(8)]),
 })
 
-export const ForgotPasswordSchema = schema.create({
-  email: schema.string({ trim: true }, [rules.email()]),
-})
 
-export const EditPasswordSchema = schema.create({
-  password: schema.string({ trim: true }, [rules.confirmed()]),
-})
+
+
