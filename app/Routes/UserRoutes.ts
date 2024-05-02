@@ -8,8 +8,8 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.get('/', 'UsersController.list')
   Route.get('/:id', 'UsersController.get').as('users.get')
-  Route.put('/:id', 'UsersController.edit').as('users.edit')
-  Route.delete('/:id', 'UsersController.delete').as('users.delete')
+  Route.put('/', 'UsersController.edit').as('users.edit')
+  // Route.delete('/:id', 'UsersController.delete').as('users.delete')
 })
 .prefix('/users')
 .middleware(['auth'])

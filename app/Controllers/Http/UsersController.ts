@@ -41,10 +41,10 @@ export default class UsersController {
    * @edit
    * @summary Edit user
    * @tag Users
-   * @paramPath id - User id - @example(1) @type(integer)
+   * @requestBody {"firstName": "string", "lastName": "string", "username": "string"}
    */
-  public async edit({ request, params, response }: HttpContextContract): Promise<void> {
-    const { id: userId } = params
+  public async edit({ request, auth, response }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
     const userDto = await request.validate({ schema: EditUserSchema })
     const userServices = container.resolve(UserServices)
     const user = await userServices.edit(userId, userDto)

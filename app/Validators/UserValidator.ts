@@ -28,15 +28,8 @@ export const EditUserSchema = schema.create({
     rules.maxLength(80),
   ]),
   username: schema.string.optional({ escape: true, trim: true }, [
-    rules.requiredIfNotExists('email'),
     rules.unique({ table: 'users', column: 'username', whereNot: { is_deleted: true } }),
   ]),
-  email: schema.string.optional({ escape: true, trim: true }, [
-    rules.email(),
-    rules.requiredIfNotExists('username'),
-    rules.unique({ table: 'users', column: 'email', whereNot: { is_deleted: true } }),
-  ]),
-  password: schema.string.optional({ escape: true, trim: true }, [rules.confirmed()]),
 })
 
 export const LoginSchema = schema.create({

@@ -54,7 +54,7 @@ export default class UserServices {
     return user.refresh()
   }
 
-  public async edit(id: string, data: DTOs.Edit): Promise<User> {
+  public async edit(id: number, data: DTOs.Edit): Promise<User> {
     const user = await this.usersRepository.findBy('id', id)
     if (!user) throw new NotFoundException('User not found or not available.')
 
