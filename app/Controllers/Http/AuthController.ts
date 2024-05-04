@@ -18,10 +18,11 @@ export default class AuthController {
 
   /**
    * @login
-   * @summary Login endpoint
+   * @summary Login
+   * @tag Auth
    * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
    * @responseBody 401 - {"message": "Unable to login, please check your credentials or try again later."}
-   * @requestBody {"email": "string", "password": "string", "rememberMe": "boolean"}
+   * @requestBody {"email": "mariajulia@coffstack.com", "password": "supersecret", "rememberMe": true}
    */
   public async login({ request, auth, response }: HttpContextContract): Promise<void> {
     try {
@@ -55,7 +56,8 @@ export default class AuthController {
 
   /**
    * @logout
-   * @summary Logout endpoint
+   * @summary Logout
+   * @tag Auth
    * @responseBody 200 - {"message": "Logout successfully"}
    */
   public async logout({ auth, response }: HttpContextContract): Promise<void> {
@@ -82,7 +84,8 @@ export default class AuthController {
 
   /**
    * @isUsernameAvailable
-   * @summary Check if username is available endpoint
+   * @summary Check if username is available
+   * @tag Auth
    * @requestBody {"username": "string"}
    * @responseBody 400 - {"message": "username is required"}
    * @responseBody 200 - {"message": "username is not available", "isAvailable": false}
@@ -112,7 +115,8 @@ export default class AuthController {
 
   /**
    * @isEmailAvailable
-   * @summary Check if email is available endpoint
+   * @summary Check if email is available
+   * @tag Auth
    * @requestBody {"email": "string"}
    * @responseBody 400 - {"message": "email is required"}
    * @responseBody 200 - {"message": "email is not available", "isAvailable": false}
@@ -142,7 +146,8 @@ export default class AuthController {
 
   /**
    * @register
-   * @summary Register endpoint
+   * @summary Register
+   * @tag Auth
    * @paramPath provider - The login provider to be used - @enum(google, facebook, apple)
    * @responseBody 200 - {"token": "xxxxxxx"}
    * @requestBody <User>
@@ -158,7 +163,8 @@ export default class AuthController {
 
   /**
    * @forgotPassword
-   * @summary Forgot Password endpoint
+   * @summary Forgot Password
+   * @tag Auth
    * @responseBody 200 - {"message": "Token sent to your email"}
    * @responseBody 401 - {"errors": [{"message": "User not found"}]}
    * @requestBody {"email": "string"}
@@ -217,7 +223,8 @@ export default class AuthController {
 
   /**
    * @resetPassword
-   * @summary Reset Password endpoint
+   * @summary Reset Password
+   * @tag Auth
    * @responseBody 200 - {"message": "Password changed successfully"}
    * @responseBody 401 - {"errors": [{"message": "User not found"}]}
    * @requestBody {"token": "string", "email": "string"}
@@ -265,27 +272,31 @@ export default class AuthController {
 
   /**
    * @editPassword
-   * @summary Edit Password endpoint
+   * @summary Edit Password
+   * @tag Auth
    * @responseBody 200 - {"message": "Password changed successfully"}
    * @responseBody 401 - {"errors": [{"message": "User not found"}]}
-   * @requestBody {"password": "string"}
+   * @requestBody {"currentPassword": "string", "newPassword": "string"}
    */
   public async editPassword({ request, auth, response }: HttpContextContract): Promise<void> {
     const userDto: IUser.DTOs.EditPassword = await request.validate({ schema: EditPasswordSchema })
 
     const user = await User.findBy('id', auth.user?.id)
-
     if (!user) {
       return response.status(401).json({ errors: [{ message: 'User not found' }] })
     }
 
-    const samePassword = await Hash.verify(user.password, userDto.password)
-
-    if (!samePassword) {
-      return response.status(401).json({ errors: [{ message: 'Current password is wrong' }] })
+    const currentPasswordIsValid = await Hash.verify(user.password, userDto.currentPassword)
+    if (!currentPasswordIsValid) {
+      return response.status(400).json({ errors: [{ message: 'Current password is wrong' }] })
     }
 
-    user.password = userDto.password
+    const newsIsEqualsToCurrent = await Hash.verify(user.password, userDto.newPassword)
+    if(newsIsEqualsToCurrent) {
+      return response.status(400).json({ errors: [{ message: 'New password is equal to current password' }] })
+    }
+
+    user.password = userDto.newPassword
 
     await user.save()
 
@@ -294,7 +305,8 @@ export default class AuthController {
 
   /**
    * @refreshToken
-   * @summary Refresh Token endpoint
+   * @summary Refresh Token
+   * @tag Auth
    * @responseBody 200 - { "auth": {"type": "string", "token": "string"}}
    * @responseBody 401 - {"errors": [{"message": "Unable to refresh token, please try again later."}]}
    * @requestBody {"refreshToken": "string"}

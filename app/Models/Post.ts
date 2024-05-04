@@ -15,6 +15,7 @@ import PostContent from 'App/Models/PostContent'
 import PostReaction from 'App/Models/PostReaction'
 import BaseModel from 'App/Shared/Models/BaseModel'
 import User from './User'
+import Follow from './Follow'
 
 export default class Post extends BaseModel {
   public static table = 'posts'
@@ -60,9 +61,7 @@ export default class Post extends BaseModel {
   // @no-swagger
   public deleted_at: DateTime
 
-  @belongsTo(() => User, {
-    foreignKey: 'user_id',
-  })
+  @belongsTo(() => User, { foreignKey: 'user_id' })
   public user: BelongsTo<typeof User>
 
   /** has-many relationships */
@@ -72,31 +71,26 @@ export default class Post extends BaseModel {
   @hasMany(() => PostReaction, { foreignKey: 'post_id' })
   public reactions: HasMany<typeof PostReaction>
 
-  @hasMany(() => PostReaction, { foreignKey: 'post_id' })
-  public reaction_count: HasMany<typeof PostReaction>
-
   @hasMany(() => PostComment, { foreignKey: 'post_id' })
   public comments: HasMany<typeof PostComment>
 
+  @hasMany(() => Follow, { localKey: 'user_id', foreignKey: 'follower_user_id' })
+  public follower: HasMany<typeof Follow>
 
-  public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
+  @hasMany(() => Follow, { localKey: 'user_id', foreignKey: 'followed_user_id' })
+  public followed: HasMany<typeof Follow>
+
+
+  public static reactionCount = scope((query: ModelQueryBuilderContract<typeof Post>, userId: number) =>
     query
-      .preload('reaction_count', (builder) =>
-        builder.select('emoji_type').groupBy('emoji_type', 'post_id').count('*')
+      .preload('reactions', (builder) =>
+        builder.distinct('emoji_type').where('user_id', userId).where('is_checked', true)
       )
       .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).as('post_reactions_count')
+        builder.where('is_checked', true).where('emoji_type', 'like').as('like_count')
       )
-  )
-
-  public static likeCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-    query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'like') .as('like_count')
-      )
-  )
-  public static favoriteCount = scope((query: ModelQueryBuilderContract<typeof Post>) =>
-    query .withCount('reactions', (builder) =>
-        builder.where('is_deleted', false).where('emoji_type', 'favorite') .as('favorite_count')
+      .withCount('reactions', (builder) =>
+        builder.where('is_checked', true).where('emoji_type', 'favorite').as('favorite_count')
       )
   )
 
@@ -110,6 +104,12 @@ export default class Post extends BaseModel {
   public static loadUser = scope((query: ModelQueryBuilderContract<typeof Post>) =>
     query.preload('user', (builder) => {
       builder.select(['id', 'first_name', 'last_name', 'username', 'email', 'profile_url', 'is_online'])
+      .withCount('follower', (builder) =>
+        builder.as('following_count')
+      )
+      .withCount('followed', (builder) =>
+        builder.as('followers_count')
+      )
     })
   )
 
@@ -124,12 +124,12 @@ export default class Post extends BaseModel {
   )
 
   public static loadAlreadyReact = scope(
-    (query: ModelQueryBuilderContract<typeof Post>, userId: number | string) =>
+    (query: ModelQueryBuilderContract<typeof Post>, userId: number) =>
       query.withAggregate('reactions', (builder) =>
         builder
           .max('emoji_type')
           .where('user_id', userId)
-          .where('is_deleted', false)
+          .where('is_checked', true)
           .groupBy('id', 'user_id', 'post_id', 'emoji_type')
           .orderBy('id', 'desc')
           .limit(1)
@@ -160,6 +160,12 @@ export default class Post extends BaseModel {
 
     return query.where((builder) => {
       builder.whereRaw(`(${sql})`).orWhereNull('text')
+    })
+  })
+  
+  public static authorIdScope = scope((query, authorId) => {
+    return query.where((builder) => {
+      builder.where('user_id', '=', authorId);
     })
   })
 

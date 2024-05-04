@@ -7,6 +7,14 @@ import UserServices from 'App/Services/UserServices'
 
 export default class UsersController {
 
+  /**
+   * @list
+   * @summary List users
+   * @tag Users
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   * @paramQuery search - Search - @example(tsilva@coffstack.com) @type(string)
+   */
   public async list({ request, response }: HttpContextContract): Promise<void> {
     const page = request.input('page', 1)
     const perPage = request.input('per_page', 10)
@@ -16,6 +24,12 @@ export default class UsersController {
     return response.json(users)
   }
 
+  /**
+   * @get
+   * @summary Show user
+   * @tag Users
+   * @paramPath id - User id - @example(1) @type(integer)
+   */
   public async get({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
     const userServices = container.resolve(UserServices)
@@ -23,14 +37,26 @@ export default class UsersController {
     return response.json(user)
   }
 
-  public async edit({ request, params, response }: HttpContextContract): Promise<void> {
-    const { id: userId } = params
+  /**
+   * @edit
+   * @summary Edit user
+   * @tag Users
+   * @requestBody {"firstName": "string", "lastName": "string", "username": "string"}
+   */
+  public async edit({ request, auth, response }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
     const userDto = await request.validate({ schema: EditUserSchema })
     const userServices = container.resolve(UserServices)
     const user = await userServices.edit(userId, userDto)
     return response.json(user)
   }
 
+  /**
+   * @delete
+   * @summary Delete user
+   * @tag Users
+   * @paramPath id - User id - @example(1) @type(integer)
+   */
   public async delete({ params, response }: HttpContextContract): Promise<void> {
     const { id: userId } = params
     const userServices = container.resolve(UserServices)

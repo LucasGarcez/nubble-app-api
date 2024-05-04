@@ -43,6 +43,12 @@ migration: ## Executar Migrations
 migration-docker: ## Executar Migrations no docker
 	docker exec -ti $(CONTAINER)-web sh -c "make migration"
 
+migration-status: ## Verificar Status de Migrations
+	node ace migration:status
+
+migration-status-docker: ## Verificar Status de Migrations no docker
+	docker exec -ti $(CONTAINER)-web sh -c "make migration-status"
+
 migration-test: ## Executar Teste de Migrations
 	node ace migration:run --dry-run
 

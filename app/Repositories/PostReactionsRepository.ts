@@ -4,26 +4,43 @@ import { IPostReaction } from 'App/Interfaces/IPostReaction'
 import PostReaction from 'App/Models/PostReaction'
 
 export default class PostsRepository implements IPostReaction.Repository {
-  public async create(timelineDTO: IPostReaction.DTO.Store): Promise<PostReaction> {
-    return PostReaction.create(timelineDTO)
-  }
-
   public async index(
     page: number,
+    perPage: number,
     postId: number,
+    userId: number,
     reactionType: string
   ): Promise<ModelPaginatorContract<PostReaction>> {
     let baseQuery = PostReaction.query()
       .withScopes((scopes) => {
-        scopes.loadUser()
+        //scopes.loadUser()
+        scopes.loadPostUser()
+        //scopes.loadPost()
       })
-      .where({
-        post_id: postId,
-      })
+      .where('is_checked', true)
+
+    if (postId) baseQuery = baseQuery.where('post_id', postId)
+
+    if (userId) baseQuery = baseQuery.where('user_id', userId)
 
     if (reactionType) baseQuery = baseQuery.where('emoji_type', reactionType)
 
-    return baseQuery.orderBy('id', 'desc').paginate(page)
+    const result = await baseQuery.orderBy('id', 'desc').paginate(page, perPage)
+
+    // Solução para corrigir o problema preloading do usuário do post
+    const dataProperty = Object.keys(result).find((key) => Array.isArray(result[key]))
+
+    if (dataProperty) {
+      result[dataProperty] = result[dataProperty].map((reaction) => {
+        if (reaction.$preloaded.post) {
+          reaction.$preloaded.user = reaction.$preloaded.post.$preloaded.user
+          delete reaction.$preloaded.post.$preloaded.user
+        }
+        return reaction
+      })
+    }
+
+    return result
   }
 
   public async show(timeline_category_id: string): Promise<PostReaction | null> {
@@ -34,8 +51,19 @@ export default class PostsRepository implements IPostReaction.Repository {
     return PostReaction.create(data)
   }
 
-  public async update(timeline_category: PostReaction): Promise<PostReaction> {
-    return timeline_category.save()
+  public async update(data: PostReaction): Promise<PostReaction> {
+    return data.save()
+  }
+
+  public async exists(data: IPostReaction.DTO.Show): Promise<PostReaction | null> {
+    let baseQuery = PostReaction.query()
+      .where({
+        post_id: data.post_id,
+        user_id: data.user_id,
+        emoji_type: data.emoji_type
+      })
+
+    return baseQuery.first()
   }
 
   /* ---------------------------- HELPERS ---------------------------- */
@@ -44,19 +72,10 @@ export default class PostsRepository implements IPostReaction.Repository {
     return PostReaction.findBy(findKey, findValue)
   }
 
-  public async findOrCreate(
-    searchPayload: IPostReaction.DTO.Update,
-    createPayload: IPostReaction.DTO.Store
-  ): Promise<PostReaction | null> {
-    return PostReaction.firstOrCreate(searchPayload, createPayload)
-  }
-
-  public async deleteFromPost(postId: number, userId: number): Promise<object> {
+  public async deleteFromPost(postId: number, userId: number, emojiType: string): Promise<object> {
     return PostReaction.query()
-      .where({ post_id: postId, user_id: userId, is_deleted: false })
-      .update({
-        is_deleted: true,
-      })
+      .where({ post_id: postId, user_id: userId, emoji_type: emojiType})
+      .delete()
   }
 
   public async getReactionCountBetweenDate(

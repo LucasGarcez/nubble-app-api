@@ -9,8 +9,47 @@ import { IPost } from 'App/Interfaces/IPost'
 export default class PostsController {
 
   /**
+   * @index
+   * @summary List posts
+   * @tag Posts
+   * @paramQuery page - Page number - @example(1) @type(integer) @required
+   * @paramQuery per_page - Number of items per page - @example(10) @type(integer)
+   * @paramQuery search - Search - @example(Bom dia) @type(string)
+   * @paramQuery user_id - Author id - @example(1) @type(integer)
+   */
+  public async index({ request, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
+    const page = request.input('page', 1)
+    const perPage = request.input('per_page', 10)
+    const search = request.input('search', '')
+    const authorId = request.input('user_id', '')
+
+    const postsService = container.resolve(PostServices)
+    const posts = await postsService.list({ page, perPage, search, userId, authorId })
+    return response.json(posts)
+  }
+
+  /**
+   * @show
+   * @summary Show post
+   * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
+   */
+  public async show({ params, response, auth }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
+    const { id: postId } = params
+    const postsService = container.resolve(PostServices)
+    const post = await postsService.get(postId, userId)
+
+    return response.json(post)
+  }
+
+  /**
    * @store
    * @summary New post
+   * @tag Posts
    * @requestBody <Post>.exclude(id, image_url, static_table_posts, serialize_extras_true).append("imageCover": "binary")
    */
   public async store({ request, response, auth }: HttpContextContract): Promise<void> {
@@ -26,29 +65,14 @@ export default class PostsController {
     return response.json(post)
   }
 
-  public async list({ request, response }: HttpContextContract): Promise<void> {
-    const page = request.input('page', 1)
-    const perPage = request.input('per_page', 10)
-    const search = request.input('search', '')
-
-    const postsService = container.resolve(PostServices)
-    const posts = await postsService.list({ page, perPage, search })
-    return response.json(posts)
-  }
-
-  public async get({ params, response }: HttpContextContract): Promise<void> {
-    const { id: postId } = params
-    const postsService = container.resolve(PostServices)
-    const post = await postsService.get(postId)
-    return response.json(post)
-  }
-
   /**
-   * @edit
+   * @update
    * @summary Edit post
+   * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
    * @requestBody <Post>.exclude(id, user_id, static_table_posts, serialize_extras_true)
    */
-  public async edit({ request, params, response }: HttpContextContract): Promise<void> {
+  public async update({ request, params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
     const postDto: IPost.DTO.Store = await request.validate({ schema: EditPostSchema })
     const image = await request.validate({ schema: ValidateImageSchema })
@@ -59,7 +83,13 @@ export default class PostsController {
     return response.json(post)
   }
 
-  public async delete({ params, response }: HttpContextContract): Promise<void> {
+  /**
+   * @destroy
+   * @summary Delete post
+   * @tag Posts
+   * @paramPath id - Post id - @example(1) @type(integer)
+   */
+  public async destroy({ params, response }: HttpContextContract): Promise<void> {
     const { id: postId } = params
     const postsService = container.resolve(PostServices)
     await postsService.delete(postId)

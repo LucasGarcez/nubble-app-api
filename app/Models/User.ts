@@ -8,10 +8,12 @@ import {
   beforeCreate,
   hasMany,
   HasMany,
+  ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import BaseModel from 'App/Shared/Models/BaseModel'
-import Message from './Message'
+import Message from 'App/Models/Message'
+import Follow from 'App/Models/Follow'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -67,6 +69,7 @@ export default class User extends BaseModel {
   public is_deleted: boolean
 
   @column()
+  // @no-swagger
   public temp_token_created_at?: Date | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
@@ -110,6 +113,12 @@ export default class User extends BaseModel {
   @hasMany(() => Message)
   public messages: HasMany<typeof Message>
 
+  @hasMany(() => Follow, { foreignKey: 'follower_user_id' })
+  public follower: HasMany<typeof Follow>
+
+  @hasMany(() => Follow, { foreignKey: 'followed_user_id' })
+  public followed: HasMany<typeof Follow>
+
   /**
    * ------------------------------------------------------
    * Query Scopes
@@ -134,9 +143,22 @@ export default class User extends BaseModel {
     return query.whereRaw(`(${sql})`)
   })
 
+  public static followersCount = scope((query: ModelQueryBuilderContract<typeof User>) =>
+    query.withCount('follower', (builder) =>
+      builder.as('following_count')
+    )
+  )
+
+  public static followedCount = scope((query: ModelQueryBuilderContract<typeof User>) =>
+    query.withCount('followed', (builder) =>
+      builder.as('followers_count')
+    )
+  )
+
   /**
    * ------------------------------------------------------
    * Misc
    * ------------------------------------------------------
    */
+  public serializeExtras = true
 }

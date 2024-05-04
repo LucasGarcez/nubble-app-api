@@ -32,8 +32,17 @@ export default class UserServices {
   }
 
   public async get(id: string): Promise<User> {
-    const user = await this.usersRepository.findBy('id', id)
+    const user = await this.usersRepository.findBy(
+      'id', id,
+      {
+        scopes: (scopes) => {
+          scopes.followersCount()
+          scopes.followedCount()
+        },
+      }
+    )
     if (!user) throw new NotFoundException('User not found or not available.')
+
     return user
   }
 
@@ -45,7 +54,7 @@ export default class UserServices {
     return user.refresh()
   }
 
-  public async edit(id: string, data: DTOs.Edit): Promise<User> {
+  public async edit(id: number, data: DTOs.Edit): Promise<User> {
     const user = await this.usersRepository.findBy('id', id)
     if (!user) throw new NotFoundException('User not found or not available.')
 
