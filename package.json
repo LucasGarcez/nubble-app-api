@@ -67,7 +67,7 @@
     "@adonisjs/mail": "^8.2.0",
     "@adonisjs/repl": "^3.1.11",
     "@adonisjs/view": "^6.2.0",
-    "adonis-autoswagger": "^1.8.1",
+    "adonis-autoswagger": "3.21.0",
     "adonis5-jwt": "^1.1.7",
     "crypto": "^1.0.1",
     "date-fns": "^2.30.0",
