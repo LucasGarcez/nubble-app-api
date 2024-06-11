@@ -22,6 +22,6 @@ export class CreatePostCommentService {
 
     await post.load('user')
 
-    return this.postCommentRepository.show(comment.id, commentDto.user_id)
+    return this.postCommentRepository.show(comment.id)
   }
 }
