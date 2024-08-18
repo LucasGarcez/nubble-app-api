@@ -10,7 +10,7 @@ export default class FollowRepository
     super(Follow)
   }
 
-  public async isFallowed(follower_user_id: number, followed_user_id: number): Promise<boolean> {
+  public async isFollowing(follower_user_id: number, followed_user_id: number): Promise<boolean> {
 
     if(follower_user_id === followed_user_id) return true
 

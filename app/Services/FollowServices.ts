@@ -41,10 +41,10 @@ export default class FollowServices {
     })
   }
 
-  public async isFallowed(data: DTOs.Store): Promise<boolean> {
+  public async isFollowing(data: DTOs.Store): Promise<boolean> {
     const { ...followDto } = data
 
-    return this.followRepository.isFallowed(
+    return this.followRepository.isFollowing(
        Number(followDto.follower_user_id),
       Number(followDto.followed_user_id)
   )}
