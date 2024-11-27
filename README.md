@@ -123,6 +123,6 @@ Minio - S3 | <http://localhost:8900> | nubble | nubble-pass
 [l-minio]: https://min.io
 [l-swagger]: https://github.com/ad-on-is/adonis-autoswagger
 [l-Insomnia]: https://insomnia.rest/download
-[l-Insomnia-Import]: https://insomnia.rest/run/?label=Nubble%20API&uri=https://github.com/LucasGarcez/nubble-app-api/blob/f0594a698a7ff00ed96b06acd10da2f75712b5d7/docs/files/Insomnia.json
+[l-Insomnia-Import]: https://insomnia.rest/run/?label=Nubble%20API&uri=https://github.com/LucasGarcez/nubble-app-api/blob/main/docs/files/Insomnia.json
 
 [i-Insomnia-Run]: https://insomnia.rest/images/run.svg "Importar Insomnia"
