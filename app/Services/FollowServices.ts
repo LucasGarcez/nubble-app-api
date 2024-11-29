@@ -41,10 +41,10 @@ export default class FollowServices {
     })
   }
 
-  public async isFallowed(data: DTOs.Store): Promise<boolean> {
+  public async isFollowing(data: DTOs.Store): Promise<boolean> {
     const { ...followDto } = data
 
-    return this.followRepository.isFallowed(
+    return this.followRepository.isFollowing(
        Number(followDto.follower_user_id),
       Number(followDto.followed_user_id)
   )}
@@ -65,10 +65,13 @@ export default class FollowServices {
     const { ...followDto } = data
 
     const follow = await this.followRepository.findBy('id', Number(followDto.id))
-
-    if (follow?.follower_user_id !== followDto.follower_user_id) throw new NotFoundException('User not found or not available.')
-
+    
     if (!follow) throw new NotFoundException('User not found or not available.')
+
+    
+    const canRemove = (followDto.follower_user_id == follow?.follower_user_id) || (followDto.follower_user_id == follow?.followed_user_id)
+
+    if (!canRemove) throw new NotFoundException('User not found or not available.')
 
     await follow.delete()
   }

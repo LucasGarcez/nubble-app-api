@@ -38,6 +38,28 @@ export default class FollowController {
     return response.json(followed)
   }
 
+
+   /**
+   * @isFollowing
+   * @summary Check if user is followed
+   * @tag Follow
+   * @paramPath id - User id - @example(1) @type(integer)
+   */
+   public async isFollowing({ response, auth, params }: HttpContextContract): Promise<void> {
+    const userId = auth.user?.id!
+
+    const { id: followed_user_id } = params
+
+    const createFollowService = container.resolve(FollowServices)
+
+    const isFollowing = await createFollowService.isFollowing({ follower_user_id: userId, followed_user_id });
+
+    return response.json({isFollowing})
+    
+  }
+
+
+
   /**
    * @storeFollower
    * @summary Create Follower
@@ -50,9 +72,9 @@ export default class FollowController {
     const { followed_user_id } = await request.validate(FollowValidators.Create)
     const createFollowService = container.resolve(FollowServices)
 
-    const isFallowed = await createFollowService.isFallowed({ follower_user_id: userId, followed_user_id });
+    const isFollowing = await createFollowService.isFollowing({ follower_user_id: userId, followed_user_id });
 
-    if (isFallowed) {
+    if (isFollowing) {
       return response.status(400).json({ message: 'You already follow this user' })
     }
 

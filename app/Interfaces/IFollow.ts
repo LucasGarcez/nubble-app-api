@@ -3,7 +3,7 @@ import Follow from 'App/Models/Follow'
 
 export namespace IFollow {
   export interface Repository extends BaseInterface<typeof Follow>, Helpers {
-    isFallowed(follower_user_id: number, followed_user_id: number): Promise<boolean>
+    isFollowing(follower_user_id: number, followed_user_id: number): Promise<boolean>
   }
 
   export interface Helpers { }

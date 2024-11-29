@@ -22,6 +22,7 @@ Route.group(() => {
   Route.group(() => {
     Route.get('/following', 'FollowController.listFollowing').as('user.listFollowing')
     Route.get('/followers', 'FollowController.listFollower').as('user.listFollower')
+    Route.get('/is-following/:id', 'FollowController.isFollowing').as('user.isFollowing')
     Route.post('/', 'FollowController.storeFollower').as('user.storeFollower')
     Route.delete('/:id', 'FollowController.deleteFollower').as('user.deleteFollower')
   })
